@@ -1,0 +1,90 @@
+name: OpenTofu Deployment
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'infrastructure/**'
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'infrastructure/**'
+  workflow_dispatch:
+    inputs:
+      target_path:
+        description: 'Path to OpenTofu configuration'
+        required: false
+        default: './infrastructure'
+      var_file:
+        description: 'Path to variables file'
+        required: false
+        default: ''
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install OpenTofu
+        uses: ./.github/actions/opentofu-install
+
+      - name: Lint configuration
+        uses: ./.github/actions/opentofu-lint
+        with:
+          target_path: ${{ github.event.inputs.target_path || './infrastructure' }}
+
+  plan:
+    name: Plan
+    runs-on: ubuntu-latest
+    needs: lint
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install OpenTofu
+        uses: ./.github/actions/opentofu-install
+
+      - name: Initialize OpenTofu
+        uses: ./.github/actions/opentofu-init
+        with:
+          target_path: ${{ github.event.inputs.target_path || './infrastructure' }}
+
+      - name: Plan changes
+        uses: ./.github/actions/opentofu-plan
+        with:
+          target_path: ${{ github.event.inputs.target_path || './infrastructure' }}
+          var_file: ${{ github.event.inputs.var_file }}
+
+  apply:
+    name: Apply
+    runs-on: ubuntu-latest
+    needs: plan
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    environment: production
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install OpenTofu
+        uses: ./.github/actions/opentofu-install
+
+      - name: Initialize OpenTofu
+        uses: ./.github/actions/opentofu-init
+        with:
+          target_path: ${{ github.event.inputs.target_path || './infrastructure' }}
+
+      - name: Apply changes
+        uses: ./.github/actions/opentofu-apply
+        with:
+          target_path: ${{ github.event.inputs.target_path || './infrastructure' }}
+          var_file: ${{ github.event.inputs.var_file }}
+          auto_approve: 'true'

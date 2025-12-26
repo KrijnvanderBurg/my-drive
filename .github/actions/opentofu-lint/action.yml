@@ -1,0 +1,14 @@
+name: 'OpenTofu Lint'
+description: 'Lint and validate OpenTofu configuration'
+inputs:
+  target_path:
+    description: 'Path to OpenTofu configuration directory'
+    required: false
+    default: './infrastructure'
+runs:
+  using: 'composite'
+  steps:
+    - name: Lint OpenTofu configuration
+      shell: bash
+      run: |
+        bash ${{ github.action_path }}/../../scripts/opentofu-lint.sh "${{ inputs.target_path }}"

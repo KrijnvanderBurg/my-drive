@@ -1,0 +1,22 @@
+name: 'OpenTofu Apply'
+description: 'Apply OpenTofu configuration changes'
+inputs:
+  target_path:
+    description: 'Path to OpenTofu configuration directory'
+    required: false
+    default: './infrastructure'
+  var_file:
+    description: 'Path to variables file'
+    required: false
+    default: ''
+  auto_approve:
+    description: 'Skip interactive approval of plan'
+    required: false
+    default: 'false'
+runs:
+  using: 'composite'
+  steps:
+    - name: Apply OpenTofu changes
+      shell: bash
+      run: |
+        bash ${{ github.action_path }}/../../scripts/opentofu-apply.sh "${{ inputs.target_path }}" "${{ inputs.var_file }}" "${{ inputs.auto_approve }}"

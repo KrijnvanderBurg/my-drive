@@ -1,0 +1,14 @@
+name: 'OpenTofu Init'
+description: 'Initialize OpenTofu working directory'
+inputs:
+  target_path:
+    description: 'Path to OpenTofu configuration directory'
+    required: false
+    default: './infrastructure'
+runs:
+  using: 'composite'
+  steps:
+    - name: Initialize OpenTofu
+      shell: bash
+      run: |
+        bash ${{ github.action_path }}/../../scripts/opentofu-init.sh "${{ inputs.target_path }}"
