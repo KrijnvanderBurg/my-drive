@@ -45,6 +45,14 @@ All steps performed to setup initial infrastructure and to current state.
      "subject": "repo:KrijnvanderBurg/my-drive:pull_request",
      "audiences": ["api://AzureADTokenExchange"]
    }'
+
+   # For dev environment deployments
+   az ad app federated-credential create --id "$APP_OBJECT_ID" --parameters '{
+     "name": "github-environment-dev",
+     "issuer": "https://token.actions.githubusercontent.com",
+     "subject": "repo:KrijnvanderBurg/my-drive:environment:dev",
+     "audiences": ["api://AzureADTokenExchange"]
+   }'
    ```
 7. **Granted Azure RBAC permissions:**
    ```bash
@@ -60,11 +68,15 @@ All steps performed to setup initial infrastructure and to current state.
      --role "Management Group Contributor" \
      --scope "/providers/Microsoft.Management/managementGroups/90d27970-b92c-43dc-9935-1ed557d8e20e"
    ```
-8. **Added GitHub Repository Secrets:**
-   
-   Navigate to `Settings > Secrets and variables > Actions` and add:
+8. **Added GitHub Secrets:**
+
+   **Repository Secrets** (`Settings > Secrets and variables > Actions`):
    | Secret Name | Value |
    |-------------|-------|
    | `AZURE_CLIENT_ID` | `9ad476c4-b845-40e3-a46f-0a77984b1a57` |
    | `AZURE_TENANT_ID` | `90d27970-b92c-43dc-9935-1ed557d8e20e` |
+
+   **Environment Secrets** (`Settings > Environments > dev`):
+   | Secret Name | Value |
+   |-------------|-------|
    | `AZURE_SUBSCRIPTION_ID` | `9312c5c5-b089-4b62-bb90-0d92d421d66c` |
