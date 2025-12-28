@@ -26,23 +26,15 @@ All steps performed to setup initial infrastructure and to current state.
    # Create service principal
    az ad sp create --id "9ad476c4-b845-40e3-a46f-0a77984b1a57"
    ```
-6. **Added Federated Credentials for GitHub OIDC:**
+6. **Added Federated Credential for GitHub OIDC:**
    ```bash
    APP_OBJECT_ID=$(az ad app show --id "9ad476c4-b845-40e3-a46f-0a77984b1a57" --query id -o tsv)
 
-   # For main branch deployments
+   # For environment-based deployments (works for both PRs and main branch)
    az ad app federated-credential create --id "$APP_OBJECT_ID" --parameters '{
-     "name": "github-main-branch",
+     "name": "github-environment-dev",
      "issuer": "https://token.actions.githubusercontent.com",
-     "subject": "repo:KrijnvanderBurg/my-cloud:ref:refs/heads/main",
-     "audiences": ["api://AzureADTokenExchange"]
-   }'
-
-   # For pull request plans
-   az ad app federated-credential create --id "$APP_OBJECT_ID" --parameters '{
-     "name": "github-pull-request",
-     "issuer": "https://token.actions.githubusercontent.com",
-     "subject": "repo:KrijnvanderBurg/my-cloud:pull_request",
+     "subject": "repo:KrijnvanderBurg/my-cloud:environment:dev",
      "audiences": ["api://AzureADTokenExchange"]
    }'
    ```
