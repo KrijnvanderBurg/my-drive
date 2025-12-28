@@ -7,12 +7,12 @@ data "azurerm_management_group" "tenant_root" {
   name = var.tenant_id
 }
 
-# Platform Management Group - for shared platform services
-module "platform_management_group" {
+# Drive Management Group - for shared drive services
+module "drive_management_group" {
   source = "../../modules/management-group"
 
-  name                       = "mg-platform-prd-glb-01"
-  display_name               = "Platform"
+  name                       = "mg-drive-prd-glb-01"
+  display_name               = "drive"
   parent_management_group_id = data.azurerm_management_group.tenant_root.id
 }
 
@@ -21,7 +21,7 @@ module "sandbox_management_group" {
   source = "../../modules/management-group"
 
   name                       = "mg-sandbox-dev-glb-01"
-  display_name               = "Sandbox"
+  display_name               = "sandbox"
   parent_management_group_id = data.azurerm_management_group.tenant_root.id
 }
 

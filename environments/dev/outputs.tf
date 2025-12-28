@@ -7,12 +7,12 @@ output "tenant_root_management_group_id" {
   value       = data.azurerm_management_group.tenant_root.id
 }
 
-output "platform_management_group" {
-  description = "Platform management group details"
+output "drive_management_group" {
+  description = "drive management group details"
   value = {
-    id           = module.platform_management_group.id
-    name         = module.platform_management_group.name
-    display_name = module.platform_management_group.display_name
+    id           = module.drive_management_group.id
+    name         = module.drive_management_group.name
+    display_name = module.drive_management_group.display_name
   }
 }
 
@@ -32,8 +32,7 @@ output "sandbox_management_group" {
 output "environment_info" {
   description = "Current environment configuration"
   value = {
-    environment = var.environment
-    location    = var.location
     tenant_id   = var.tenant_id
+    environment = var.environment
   }
 }

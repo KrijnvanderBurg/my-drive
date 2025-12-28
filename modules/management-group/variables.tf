@@ -11,5 +11,4 @@ variable "display_name" {
 variable "parent_management_group_id" {
   description = "Parent management group ID"
   type        = string
-  default     = null
 }

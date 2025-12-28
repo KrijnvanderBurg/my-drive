@@ -11,22 +11,14 @@ variable "tenant_id" {
 variable "environment" {
   description = "Environment name (dev, tst, prd)"
   type        = string
-  default     = "dev"
 
   validation {
-    condition     = contains(["dev", "tst", "prd"], var.environment)
-    error_message = "Environment must be one of: dev, tst, prd."
+    condition     = contains(["dev", "test", "accp", "prd"], var.environment)
+    error_message = "Environment must be one of: dev, test, accp, prod."
   }
-}
-
-variable "location" {
-  description = "Primary Azure region for resources"
-  type        = string
-  default     = "germanywestcentral"
 }
 
 variable "tags" {
   description = "Common tags to apply to all resources that support tagging"
   type        = map(string)
-  default     = {}
 }
