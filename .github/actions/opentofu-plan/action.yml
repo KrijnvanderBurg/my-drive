@@ -38,7 +38,7 @@ runs:
       shell: bash
       run: |
         bash ${{ github.workspace }}/.github/scripts/opentofu-plan.sh \
-          ${{ inputs.working_directory }} \
-          ${{ inputs.var_file }} \
-          ${{ inputs.plan_binary_file }} \
-          ${{ inputs.plan_text_file }}
+          "${{ inputs.working_directory }}" \
+          "${{ inputs.var_file }}" \
+          "${{ inputs.plan_binary_file }}" \
+          "${{ inputs.plan_text_file }}"
