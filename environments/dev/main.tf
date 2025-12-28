@@ -25,6 +25,15 @@ module "sandbox_management_group" {
   parent_management_group_id = data.azurerm_management_group.tenant_root.id
 }
 
+# Management Management Group - for management resources
+module "management_management_group" {
+  source = "../../modules/management-group"
+
+  name                       = "mg-management-prd-glb-01"
+  display_name               = "management"
+  parent_management_group_id = data.azurerm_management_group.tenant_root.id
+}
+
 # =============================================================================
 # Policy Definitions
 # =============================================================================
@@ -57,10 +66,13 @@ resource "azurerm_management_group_policy_assignment" "drive_deny_delete" {
 # Subscription Associations
 # =============================================================================
 
-# Uncomment and configure when you have subscriptions to associate
-# module "dev_subscription_association" {
-#   source = "../../modules/subscription-association"
-#
-#   management_group_id = module.sandbox_management_group.id
-#   subscription_id     = "/subscriptions/${var.dev_subscription_id}"
-# }
+# IMPORTANT: The management subscription (sub-management-dev-gwc-01) is the ONLY
+# subscription created manually outside of Terraform. This is required because it
+# contains the tfstate storage account used by this Terraform configuration.
+# All other subscriptions MUST be created and associated via Terraform.
+module "management_subscription_association" {
+  source = "../../modules/subscription-association"
+
+  management_group_id = module.management_management_group.id
+  subscription_id     = var.management_subscription_id
+}

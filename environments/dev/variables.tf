@@ -22,3 +22,8 @@ variable "tags" {
   description = "Common tags to apply to all resources that support tagging"
   type        = map(string)
 }
+
+variable "management_subscription_id" {
+  description = "Subscription ID for the management subscription (sub-management-dev-gwc-01)"
+  type        = string
+}

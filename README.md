@@ -39,6 +39,12 @@ All steps performed to setup initial infrastructure and to current state.
      --assignee "9ad476c4-b845-40e3-a46f-0a77984b1a57" \
      --role "Management Group Contributor" \
      --scope "/providers/Microsoft.Management/managementGroups/90d27970-b92c-43dc-9935-1ed557d8e20e"
+
+   # Resource Policy Contributor at tenant root (for policy definition operations)
+   az role assignment create \
+     --assignee "9ad476c4-b845-40e3-a46f-0a77984b1a57" \
+     --role "Resource Policy Contributor" \
+     --scope "/providers/Microsoft.Management/managementGroups/90d27970-b92c-43dc-9935-1ed557d8e20e"
    ```
 7. **Added Federated Credential for GitHub OIDC:**
    ```bash

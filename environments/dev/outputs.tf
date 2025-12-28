@@ -25,6 +25,28 @@ output "sandbox_management_group" {
   }
 }
 
+output "management_management_group" {
+  description = "Management management group details"
+  value = {
+    id           = module.management_management_group.id
+    name         = module.management_management_group.name
+    display_name = module.management_management_group.display_name
+  }
+}
+
+# =============================================================================
+# Subscription Association Outputs
+# =============================================================================
+
+output "management_subscription_association" {
+  description = "Management subscription association details"
+  value = {
+    id                  = module.management_subscription_association.id
+    management_group_id = module.management_subscription_association.management_group_id
+    subscription_id     = module.management_subscription_association.subscription_id
+  }
+}
+
 # =============================================================================
 # Environment Information
 # =============================================================================

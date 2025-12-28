@@ -22,7 +22,7 @@ runs:
       id: cache-tofu
       uses: actions/cache@v4
       with:
-        path: /usr/local/bin/tofu
+        path: /usr/bin/tofu
         key: opentofu-${{ runner.os }}-${{ inputs.tofu_version }}
 
     - name: Install OpenTofu
