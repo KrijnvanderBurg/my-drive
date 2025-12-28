@@ -85,5 +85,8 @@ module "drive_subscription" {
   name                = "sub-drive-${var.environment}-gwc-01"
   billing_scope_id    = "/providers/Microsoft.Billing/billingAccounts/ffbe90e4-4c92-51f3-62db-7a172bf13a15:6bd78d7c-050e-43d3-b328-5b78d77bd526_2019-05-31/billingProfiles/DYXR-KFLN-BG7-PGB/invoiceSections/VD3P-IQFM-PJA-PGB"
   management_group_id = module.drive_management_group.id
-  tags                = var.tags
+  tags = merge(
+    var.tags,
+    {}
+  )
 }
