@@ -23,14 +23,8 @@ repos:
         name: OpenTofu fmt
         entry: tofu fmt
         language: system
-        files: \.tf$
-        pass_filenames: false
-      - id: tofu-fmt-check
-        name: OpenTofu fmt check
-        entry: tofu fmt -check -recursive
-        language: system
-        files: \.tf$
-        pass_filenames: false
+        files: \.tf(vars)?$
+        pass_filenames: true
 
   # Check for secrets
   - repo: https://github.com/gitleaks/gitleaks
