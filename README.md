@@ -26,19 +26,7 @@ All steps performed to setup initial infrastructure and to current state.
    # Create service principal
    az ad sp create --id "9ad476c4-b845-40e3-a46f-0a77984b1a57"
    ```
-6. **Added Federated Credential for GitHub OIDC:**
-   ```bash
-   APP_OBJECT_ID=$(az ad app show --id "9ad476c4-b845-40e3-a46f-0a77984b1a57" --query id -o tsv)
-
-   # For environment-based deployments (works for both PRs and main branch)
-   az ad app federated-credential create --id "$APP_OBJECT_ID" --parameters '{
-     "name": "github-environment-dev",
-     "issuer": "https://token.actions.githubusercontent.com",
-     "subject": "repo:KrijnvanderBurg/my-cloud:environment:dev",
-     "audiences": ["api://AzureADTokenExchange"]
-   }'
-   ```
-7. **Granted Azure RBAC permissions:**
+6. **Granted Azure RBAC permissions:**
    ```bash
    # Contributor on subscription (for tfstate storage access)
    az role assignment create \
@@ -51,4 +39,16 @@ All steps performed to setup initial infrastructure and to current state.
      --assignee "9ad476c4-b845-40e3-a46f-0a77984b1a57" \
      --role "Management Group Contributor" \
      --scope "/providers/Microsoft.Management/managementGroups/90d27970-b92c-43dc-9935-1ed557d8e20e"
+   ```
+7. **Added Federated Credential for GitHub OIDC:**
+   ```bash
+   APP_OBJECT_ID=$(az ad app show --id "9ad476c4-b845-40e3-a46f-0a77984b1a57" --query id -o tsv)
+
+   # For environment-based deployments (works for both PRs and main branch)
+   az ad app federated-credential create --id "$APP_OBJECT_ID" --parameters '{
+     "name": "github-environment-dev",
+     "issuer": "https://token.actions.githubusercontent.com",
+     "subject": "repo:KrijnvanderBurg/my-cloud:environment:dev",
+     "audiences": ["api://AzureADTokenExchange"]
+   }'
    ```
