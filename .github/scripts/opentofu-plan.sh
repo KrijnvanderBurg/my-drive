@@ -11,7 +11,7 @@ cd "$target_path" || exit 1
 tofu plan -no-color -out="$plan_binary_file" ${var_file:+-var-file="$var_file"} 2>&1 | tee "$plan_text_file"
 exitcode=${PIPESTATUS[0]}
 
-echo "plan_file=$plan_text_file" >> "$GITHUB_OUTPUT"
+echo "plan_text_file=$plan_text_file" >> "$GITHUB_OUTPUT"
 echo "plan_binary_file=$plan_binary_file" >> "$GITHUB_OUTPUT"
 
 exit $exitcode
