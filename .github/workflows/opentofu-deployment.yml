@@ -5,15 +5,13 @@ on:
     branches:
       - main
     paths:
-      - environments/**
-      - modules/**
+      - 1_management/**
       - .github/workflows/opentofu-deployment.yml
       - .github/actions/**
       - .github/scripts/**
   pull_request:
     paths:
-      - environments/**
-      - modules/**
+      - 1_management/**
       - .github/workflows/opentofu-deployment.yml
       - .github/actions/**
       - .github/scripts/**
@@ -25,7 +23,7 @@ permissions:
 
 env:
   ENVIRONMENT: dev
-  TARGET_PATH: ./environments/dev
+  TARGET_PATH: ./1_management/environments/dev
   PLAN_BINARY_FILENAME: tfplan
   PLAN_TEXT_FILENAME: tfplan.txt
   ARM_CLIENT_ID: "9ad476c4-b845-40e3-a46f-0a77984b1a57"
