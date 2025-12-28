@@ -1,17 +1,25 @@
 name: OpenTofu PR Comment
 description: Post OpenTofu plan output as a PR comment
+
 inputs:
-  plan_file:
-    description: Path to file containing plan output
+  plan_text_file:
+    description: Absolute path to the human-readable plan output file
     required: true
   environment:
-    description: Environment name
-    required: false
-    default: dev
-  target_path:
-    description: Path to OpenTofu configuration directory
-    required: false
-    default: ./environments/dev
+    description: Target environment name (e.g. dev, staging, prod)
+    required: true
+  working_directory:
+    description: Path to OpenTofu configuration directory (for display purposes)
+    required: true
+
+outputs:
+  comment_id:
+    description: ID of the created or updated PR comment
+    value: ${{ steps.create-comment.outputs.comment-id }}
+  comment_url:
+    description: URL to the PR comment
+    value: ${{ steps.create-comment.outputs.comment-url }}
+
 runs:
   using: composite
   steps:
@@ -19,7 +27,10 @@ runs:
       id: comment
       shell: bash
       run: |
-        bash ${{ github.workspace }}/.github/scripts/opentofu-pr-comment.sh "${{ inputs.plan_file }}" "${{ inputs.environment }}" "${{ inputs.target_path }}"
+        bash ${{ github.workspace }}/.github/scripts/opentofu-pr-comment.sh \
+          ${{ inputs.plan_text_file }} \
+          ${{ inputs.environment }} \
+          ${{ inputs.working_directory }}
 
     - name: Find existing comment
       id: find-comment
@@ -27,9 +38,10 @@ runs:
       with:
         issue-number: ${{ github.event.pull_request.number }}
         comment-author: github-actions[bot]
-        body-includes: OpenTofu Plan
+        body-includes: "OpenTofu Plan - ${{ inputs.environment }}"
 
     - name: Create or update comment
+      id: create-comment
       uses: peter-evans/create-or-update-comment@v4
       with:
         comment-id: ${{ steps.find-comment.outputs.comment-id }}

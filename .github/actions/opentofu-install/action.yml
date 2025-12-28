@@ -1,11 +1,19 @@
 name: OpenTofu Install
-description: Install OpenTofu CLI
+description: Install OpenTofu CLI tool with caching support
 
 inputs:
   tofu_version:
-    description: OpenTofu version to install
+    description: OpenTofu version to install (e.g. 1.8.0)
     required: false
     default: 1.8.0
+
+outputs:
+  tofu_version:
+    description: Installed OpenTofu version
+    value: ${{ steps.verify.outputs.tofu_version }}
+  cache_hit:
+    description: Whether OpenTofu was restored from cache (true/false)
+    value: ${{ steps.cache-tofu.outputs.cache-hit }}
 
 runs:
   using: composite
@@ -22,9 +30,11 @@ runs:
       shell: bash
       env:
         TOFU_VERSION: ${{ inputs.tofu_version }}
-      run: |
-        bash ${{ github.action_path }}/../../scripts/opentofu-install.sh
+      run: bash ${{ github.action_path }}/../../scripts/opentofu-install.sh
 
-    - name: Verify OpenTofu
+    - name: Verify OpenTofu installation
+      id: verify
       shell: bash
-      run: tofu version
+      run: |
+        INSTALLED_VERSION=$(tofu version -json | jq -r '.terraform_version')
+        echo tofu_version=$INSTALLED_VERSION >> $GITHUB_OUTPUT

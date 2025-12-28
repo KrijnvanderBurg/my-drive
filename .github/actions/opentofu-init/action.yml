@@ -1,14 +1,35 @@
 name: OpenTofu Init
-description: Initialize OpenTofu working directory
+description: Initialize OpenTofu working directory and download providers
+
 inputs:
-  target_path:
-    description: Path to OpenTofu configuration directory
+  working_directory:
+    description: Absolute or relative path to the OpenTofu configuration directory
+    required: true
+  backend_config:
+    description: Additional backend configuration (optional, format key=value)
     required: false
-    default: ./infrastructure
+    default:
+  upgrade:
+    description: Upgrade modules and plugins to the latest allowed versions (true/false)
+    required: false
+    default: false
+
+outputs:
+  exit_code:
+    description: Exit code from tofu init command
+    value: ${{ steps.init.outputs.exit_code }}
+  init_status:
+    description: Initialization status (success/failure)
+    value: ${{ steps.init.outputs.init_status }}
+
 runs:
   using: composite
   steps:
     - name: Initialize OpenTofu
+      id: init
       shell: bash
       run: |
-        bash ${{ github.workspace }}/.github/scripts/opentofu-init.sh "${{ inputs.target_path }}"
+        bash ${{ github.workspace }}/.github/scripts/opentofu-init.sh \
+          ${{ inputs.working_directory }} \
+          ${{ inputs.backend_config }} \
+          ${{ inputs.upgrade }}
