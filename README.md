@@ -34,7 +34,7 @@ All steps performed to setup initial infrastructure and to current state.
    az ad app federated-credential create --id "$APP_OBJECT_ID" --parameters '{
      "name": "github-main-branch",
      "issuer": "https://token.actions.githubusercontent.com",
-     "subject": "repo:KrijnvanderBurg/my-drive:ref:refs/heads/main",
+     "subject": "repo:KrijnvanderBurg/my-cloud:ref:refs/heads/main",
      "audiences": ["api://AzureADTokenExchange"]
    }'
 
@@ -42,7 +42,7 @@ All steps performed to setup initial infrastructure and to current state.
    az ad app federated-credential create --id "$APP_OBJECT_ID" --parameters '{
      "name": "github-pull-request",
      "issuer": "https://token.actions.githubusercontent.com",
-     "subject": "repo:KrijnvanderBurg/my-drive:pull_request",
+     "subject": "repo:KrijnvanderBurg/my-cloud:pull_request",
      "audiences": ["api://AzureADTokenExchange"]
    }'
    ```
