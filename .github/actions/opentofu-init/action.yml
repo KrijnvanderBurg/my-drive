@@ -12,5 +12,6 @@ runs:
     - name: Initialize OpenTofu
       id: init
       shell: bash
+      working-directory: ${{ inputs.working_directory }}
       run: |
         bash ${{ github.workspace }}/.github/scripts/opentofu-init.sh
