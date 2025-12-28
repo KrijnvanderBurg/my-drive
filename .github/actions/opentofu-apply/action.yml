@@ -1,15 +1,15 @@
-name: 'OpenTofu Apply'
-description: 'Apply OpenTofu configuration changes'
+name: OpenTofu Apply
+description: Apply OpenTofu configuration changes
 inputs:
   target_path:
-    description: 'Path to OpenTofu configuration directory'
+    description: Path to OpenTofu configuration directory
     required: false
-    default: './infrastructure'
+    default: ./infrastructure
   plan_file:
-    description: 'Path to the binary plan file to apply'
+    description: Path to the binary plan file to apply
     required: true
 runs:
-  using: 'composite'
+  using: composite
   steps:
     - name: Apply OpenTofu changes
       shell: bash

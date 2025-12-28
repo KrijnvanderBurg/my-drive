@@ -1,12 +1,12 @@
-name: 'OpenTofu Init'
-description: 'Initialize OpenTofu working directory'
+name: OpenTofu Init
+description: Initialize OpenTofu working directory
 inputs:
   target_path:
-    description: 'Path to OpenTofu configuration directory'
+    description: Path to OpenTofu configuration directory
     required: false
-    default: './infrastructure'
+    default: ./infrastructure
 runs:
-  using: 'composite'
+  using: composite
   steps:
     - name: Initialize OpenTofu
       shell: bash

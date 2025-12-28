@@ -6,8 +6,8 @@ source "$(dirname "$0")/opentofu-install.sh"
 
 cd "$target_path" || exit 1
 
-plan_binary_file="$target_path/tfplan"
-plan_text_file="$target_path/tfplan.txt"
+plan_binary_file="/tmp/tfplan"
+plan_text_file="/tmp/tfplan.txt"
 
 tofu plan -no-color -out="$plan_binary_file" ${var_file:+-var-file="$var_file"} 2>&1 | tee "$plan_text_file"
 exitcode=${PIPESTATUS[0]}

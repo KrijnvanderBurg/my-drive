@@ -1,12 +1,12 @@
-name: 'OpenTofu Lint'
-description: 'Lint and validate OpenTofu configuration'
+name: OpenTofu Lint
+description: Lint and validate OpenTofu configuration
 inputs:
   target_path:
-    description: 'Path to OpenTofu configuration directory'
+    description: Path to OpenTofu configuration directory
     required: false
-    default: './infrastructure'
+    default: ./infrastructure
 runs:
-  using: 'composite'
+  using: composite
   steps:
     - name: Lint OpenTofu configuration
       shell: bash

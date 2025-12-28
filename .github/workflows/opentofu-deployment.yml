@@ -79,7 +79,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: tfplan-dev
-          path: ./environments/dev/tfplan
+          path: ${{ steps.plan.outputs.plan_binary_file }}
           retention-days: 5
 
       - name: Post Plan to PR
@@ -118,10 +118,10 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: tfplan-dev
-          path: ./environments/dev
+          path: /tmp
 
       - name: Apply changes
         uses: ./.github/actions/opentofu-apply
         with:
           target_path: ./environments/dev
-          plan_file: ./environments/dev/tfplan
+          plan_file: /tmp/tfplan

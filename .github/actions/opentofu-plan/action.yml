@@ -1,23 +1,23 @@
-name: 'OpenTofu Plan'
-description: 'Generate and show OpenTofu execution plan'
+name: OpenTofu Plan
+description: Generate and show OpenTofu execution plan
 inputs:
   target_path:
-    description: 'Path to OpenTofu configuration directory'
+    description: Path to OpenTofu configuration directory
     required: false
-    default: './infrastructure'
+    default: ./infrastructure
   var_file:
-    description: 'Path to variables file'
+    description: Path to variables file
     required: false
-    default: ''
+    default:
 outputs:
   plan_file:
-    description: 'Path to the plan text output file'
+    description: Path to the plan text output file
     value: ${{ steps.plan.outputs.plan_file }}
   plan_binary_file:
-    description: 'Path to the binary plan file for apply'
+    description: Path to the binary plan file for apply
     value: ${{ steps.plan.outputs.plan_binary_file }}
 runs:
-  using: 'composite'
+  using: composite
   steps:
     - name: Plan OpenTofu changes
       id: plan
