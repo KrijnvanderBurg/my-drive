@@ -26,6 +26,34 @@ module "sandbox_management_group" {
 }
 
 # =============================================================================
+# Policy Definitions
+# =============================================================================
+
+module "policy_deny_delete" {
+  source = "../../modules/policy-deny-delete"
+
+  name                = "deny-delete"
+  display_name        = "Deny Delete"
+  management_group_id = data.azurerm_management_group.tenant_root.id
+}
+
+# =============================================================================
+# Policy Assignments
+# =============================================================================
+
+# Protect drive management group from accidental deletions
+resource "azurerm_management_group_policy_assignment" "drive_deny_delete" {
+  name                 = "deny-del-drive"
+  display_name         = "Deny Delete - Drive"
+  description          = "Prevents deletion of any resources under drive management group"
+  policy_definition_id = module.policy_deny_delete.id
+  management_group_id  = module.drive_management_group.id
+  enforce              = true
+}
+
+# Note: Sandbox is intentionally NOT protected to allow experimentation
+
+# =============================================================================
 # Subscription Associations
 # =============================================================================
 
