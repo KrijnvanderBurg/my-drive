@@ -11,7 +11,7 @@ data "azurerm_management_group" "tenant_root" {
 module "drive_management_group" {
   source = "../../modules/management-group"
 
-  name                       = "mg-drive-prd-glb-01"
+  name                       = "mg-drive-dev-glb-01"
   display_name               = "drive"
   parent_management_group_id = data.azurerm_management_group.tenant_root.id
 }
@@ -29,7 +29,7 @@ module "sandbox_management_group" {
 module "management_management_group" {
   source = "../../modules/management-group"
 
-  name                       = "mg-management-prd-glb-01"
+  name                       = "mg-management-dev-glb-01"
   display_name               = "management"
   parent_management_group_id = data.azurerm_management_group.tenant_root.id
 }
@@ -65,7 +65,7 @@ resource "azurerm_management_group_policy_assignment" "drive_deny_delete" {
 # =============================================================================
 # Subscription Associations
 # =============================================================================
-
+#
 # IMPORTANT: The management subscription (sub-management-dev-gwc-01) is the ONLY
 # subscription created manually outside of Terraform. This is required because it
 # contains the tfstate storage account used by this Terraform configuration.
@@ -80,19 +80,10 @@ module "management_subscription_association" {
 # =============================================================================
 # Subscriptions
 # =============================================================================
-# Create new subscriptions using the subscription module. Each subscription
-# is automatically associated with its designated management group.
-#
-# Example: Create a sandbox subscription for development/testing
-# module "sandbox_subscription" {
-#   source = "../../modules/subscription"
-#
-#   name             = "sub-sandbox-dev-gwc-01"
-#   workload         = "DevTest"
-#   billing_scope_id = "<your-billing-scope-id>"
-#
-#   # Associate with sandbox management group
-#   management_group_id = module.sandbox_management_group.id
-#
-#   tags = var.tags
-# }
+module "sandbox_subscription" {
+  source              = "../../modules/subscription"
+  name                = "sub-drive-dev-gwc-01"
+  billing_scope_id    = "/providers/Microsoft.Billing/billingAccounts/ffbe90e4-4c92-51f3-62db-7a172bf13a15:6bd78d7c-050e-43d3-b328-5b78d77bd526_2019-05-31/billingProfiles/DYXR-KFLN-BG7-PGB/invoiceSections/VD3P-IQFM-PJA-PGB"
+  management_group_id = module.sandbox_management_group.id
+  tags                = var.tags
+}
