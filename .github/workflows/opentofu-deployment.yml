@@ -30,17 +30,15 @@ permissions:
   id-token: write
 
 env:
-  ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
-  ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+  ARM_CLIENT_ID: "9ad476c4-b845-40e3-a46f-0a77984b1a57"
+  ARM_TENANT_ID: "90d27970-b92c-43dc-9935-1ed557d8e20e"
+  ARM_SUBSCRIPTION_ID: "9312c5c5-b089-4b62-bb90-0d92d421d66c"
   ARM_USE_OIDC: true
 
 jobs:
   lint:
     name: Lint
     runs-on: ubuntu-latest
-    environment: ${{ inputs.environment || 'dev' }}
-    env:
-      ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -48,9 +46,9 @@ jobs:
       - name: Azure Login
         uses: azure/login@v2
         with:
-          client-id: ${{ secrets.AZURE_CLIENT_ID }}
-          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          client-id: "9ad476c4-b845-40e3-a46f-0a77984b1a57"
+          tenant-id: "90d27970-b92c-43dc-9935-1ed557d8e20e"
+          subscription-id: "9312c5c5-b089-4b62-bb90-0d92d421d66c"
 
       - name: Install OpenTofu
         uses: ./.github/actions/opentofu-install
@@ -69,9 +67,6 @@ jobs:
     name: Plan
     runs-on: ubuntu-latest
     needs: lint
-    environment: ${{ inputs.environment || 'dev' }}
-    env:
-      ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -79,9 +74,9 @@ jobs:
       - name: Azure Login
         uses: azure/login@v2
         with:
-          client-id: ${{ secrets.AZURE_CLIENT_ID }}
-          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          client-id: "9ad476c4-b845-40e3-a46f-0a77984b1a57"
+          tenant-id: "90d27970-b92c-43dc-9935-1ed557d8e20e"
+          subscription-id: "9312c5c5-b089-4b62-bb90-0d92d421d66c"
 
       - name: Install OpenTofu
         uses: ./.github/actions/opentofu-install
@@ -101,9 +96,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: plan
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-    environment: ${{ inputs.environment || 'dev' }}
-    env:
-      ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+    environment: production
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -111,9 +104,9 @@ jobs:
       - name: Azure Login
         uses: azure/login@v2
         with:
-          client-id: ${{ secrets.AZURE_CLIENT_ID }}
-          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          client-id: "9ad476c4-b845-40e3-a46f-0a77984b1a57"
+          tenant-id: "90d27970-b92c-43dc-9935-1ed557d8e20e"
+          subscription-id: "9312c5c5-b089-4b62-bb90-0d92d421d66c"
 
       - name: Install OpenTofu
         uses: ./.github/actions/opentofu-install
