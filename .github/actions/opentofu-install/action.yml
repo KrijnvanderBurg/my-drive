@@ -18,23 +18,9 @@ outputs:
 runs:
   using: composite
   steps:
-    - name: Cache OpenTofu
-      id: cache-tofu
-      uses: actions/cache@v4
-      with:
-        path: /usr/bin/tofu
-        key: opentofu-${{ runner.os }}-${{ inputs.tofu_version }}
-
     - name: Install OpenTofu
       if: steps.cache-tofu.outputs.cache-hit != true
       shell: bash
       env:
         TOFU_VERSION: ${{ inputs.tofu_version }}
       run: bash ${{ github.action_path }}/../../scripts/opentofu-install.sh
-
-    - name: Verify OpenTofu installation
-      id: verify
-      shell: bash
-      run: |
-        INSTALLED_VERSION=$(tofu version -json | jq -r '.terraform_version')
-        echo tofu_version=$INSTALLED_VERSION >> $GITHUB_OUTPUT
