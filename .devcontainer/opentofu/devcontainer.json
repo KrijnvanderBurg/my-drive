@@ -19,7 +19,9 @@
     "containerEnv": {
         "TF_LOG_PATH": "./terraform.log"
     },
-    // "postCreateCommand": "",
+    "postCreateCommand": {
+        "install pre-commit": "pip install --user pre-commit && pre-commit install"
+    },
     // "postStartCommand": {},
     // "postAttachCommand": {},
     // "updateContentCommand": {},

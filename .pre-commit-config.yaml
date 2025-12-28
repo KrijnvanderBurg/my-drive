@@ -17,6 +17,22 @@ repos:
       - id: no-commit-to-branch
         args: ['--branch', 'main']
 
+  # OpenTofu formatting and validation
+  - repo: local
+    hooks:
+      - id: tofu-fmt
+        name: OpenTofu fmt
+        entry: tofu fmt
+        language: system
+        files: \.tf$
+        pass_filenames: false
+      - id: tofu-fmt-check
+        name: OpenTofu fmt check
+        entry: tofu fmt -check -recursive
+        language: system
+        files: \.tf$
+        pass_filenames: false
+
   # Check for secrets
   - repo: https://github.com/gitleaks/gitleaks
     rev: v8.18.1
