@@ -37,6 +37,7 @@ jobs:
   lint:
     name: Lint
     runs-on: ubuntu-latest
+    environment: dev
     outputs:
       lint_status: ${{ steps.lint.outputs.lint_status }}
     steps:
@@ -69,6 +70,7 @@ jobs:
   plan:
     name: Plan
     runs-on: ubuntu-latest
+    environment: dev
     needs: lint
     outputs:
       plan_binary_file: ${{ steps.plan.outputs.plan_binary_file }}
