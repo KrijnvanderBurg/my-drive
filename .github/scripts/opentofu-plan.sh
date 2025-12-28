@@ -1,13 +1,12 @@
 #!/bin/bash
 target_path="${1:?Target path is required}"
 var_file="${2:-}"
+plan_binary_file="${3:?Plan binary file path is required}"
+plan_text_file="${4:?Plan text file path is required}"
 
 source "$(dirname "$0")/opentofu-install.sh"
 
 cd "$target_path" || exit 1
-
-plan_binary_file="/tmp/tfplan"
-plan_text_file="/tmp/tfplan.txt"
 
 tofu plan -no-color -out="$plan_binary_file" ${var_file:+-var-file="$var_file"} 2>&1 | tee "$plan_text_file"
 exitcode=${PIPESTATUS[0]}

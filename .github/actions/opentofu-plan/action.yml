@@ -3,12 +3,17 @@ description: Generate and show OpenTofu execution plan
 inputs:
   target_path:
     description: Path to OpenTofu configuration directory
-    required: false
-    default: ./infrastructure
+    required: true
   var_file:
     description: Path to variables file
     required: false
     default:
+  plan_binary_file:
+    description: Path to output binary plan file
+    required: true
+  plan_text_file:
+    description: Path to output text plan file
+    required: true
 outputs:
   plan_file:
     description: Path to the plan text output file
@@ -23,4 +28,4 @@ runs:
       id: plan
       shell: bash
       run: |
-        bash ${{ github.workspace }}/.github/scripts/opentofu-plan.sh "${{ inputs.target_path }}" "${{ inputs.var_file }}"
+        bash ${{ github.workspace }}/.github/scripts/opentofu-plan.sh "${{ inputs.target_path }}" "${{ inputs.var_file }}" "${{ inputs.plan_binary_file }}" "${{ inputs.plan_text_file }}"
