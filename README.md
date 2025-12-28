@@ -66,3 +66,11 @@ All steps performed to setup initial infrastructure and to current state.
      --role "User Access Administrator" \
      --scope "/providers/Microsoft.Management/managementGroups/90d27970-b92c-43dc-9935-1ed557d8e20e"
    ```
+9. **Granted Billing permissions for subscription creation (Portal only):**
+   > Billing permissions cannot be assigned via Azure CLI or Terraform — Portal only.
+   1. Go to **Azure Portal** → **Cost Management + Billing**
+   2. Navigate to **Access control (IAM)**
+   3. Click **+ Add**
+   4. Select role: **Billing account contributor**
+   5. Select the CI/CD service principal (`github-opentofu-deployment` / `9ad476c4-b845-40e3-a46f-0a77984b1a57`)
+   6. Add + save
