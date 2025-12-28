@@ -58,3 +58,11 @@ All steps performed to setup initial infrastructure and to current state.
      "audiences": ["api://AzureADTokenExchange"]
    }'
    ```
+8. **Granted User Access Administrator for subscription association:**
+   ```bash
+   # Required to move subscriptions between management groups (needs Microsoft.Authorization/roleAssignments/write)
+   az role assignment create \
+     --assignee "9ad476c4-b845-40e3-a46f-0a77984b1a57" \
+     --role "User Access Administrator" \
+     --scope "/providers/Microsoft.Management/managementGroups/90d27970-b92c-43dc-9935-1ed557d8e20e"
+   ```
