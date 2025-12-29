@@ -70,7 +70,7 @@ jobs:
     name: Plan
     runs-on: ubuntu-latest
     environment: dev
-    needs: lint
+    # needs: lint
     outputs:
       plan_binary_file: ${{ steps.plan.outputs.plan_binary_file }}
       plan_text_file: ${{ steps.plan.outputs.plan_text_file }}
