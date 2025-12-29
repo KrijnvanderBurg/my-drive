@@ -11,7 +11,7 @@ data "azurerm_management_group" "tenant_root" {
 module "management_management_group" {
   source = "../../modules/management-group"
 
-  name                       = "mg-management-${var.environment}-glb-01"
+  name                       = "mg-pl-management-${var.environment}-na-01"
   display_name               = "management"
   parent_management_group_id = data.azurerm_management_group.tenant_root.id
 }
@@ -20,7 +20,7 @@ module "management_management_group" {
 module "drive_management_group" {
   source = "../../modules/management-group"
 
-  name                       = "mg-drive-${var.environment}-glb-01"
+  name                       = "mg-drive-${var.environment}-na-01"
   display_name               = "drive"
   parent_management_group_id = data.azurerm_management_group.tenant_root.id
 }
@@ -29,7 +29,7 @@ module "drive_management_group" {
 module "sandbox_management_group" {
   source = "../../modules/management-group"
 
-  name                       = "mg-sandbox-${var.environment}-glb-01"
+  name                       = "mg-sandbox-${var.environment}-na-01"
   display_name               = "sandbox"
   parent_management_group_id = data.azurerm_management_group.tenant_root.id
 }
@@ -66,7 +66,7 @@ resource "azurerm_management_group_policy_assignment" "drive_deny_delete" {
 # Subscription Associations
 # =============================================================================
 #
-# IMPORTANT: The management subscription (sub-management-${var.environment}-gwc-01) is the ONLY
+# IMPORTANT: The management subscription (pl-management-co-${var.environment}-gwc-01) is the ONLY
 # subscription created manually outside of Terraform. This is required because it
 # contains the tfstate storage account used by this Terraform configuration.
 # All other subscriptions MUST be created and associated via Terraform.
@@ -74,7 +74,7 @@ module "management_subscription_association" {
   source = "../../modules/subscription-association"
 
   management_group_id = module.management_management_group.id
-  subscription_id     = var.management_subscription_id
+  subscription_id     = var.pl_management_subscription_id
 }
 
 # =============================================================================
@@ -90,18 +90,4 @@ data "azurerm_billing_mca_account_scope" "billing" {
   billing_account_name = each.value.billing_account_name
   billing_profile_name = each.value.billing_profile_name
   invoice_section_name = each.value.invoice_section_name
-}
-
-# =============================================================================
-# Subscriptions
-# =============================================================================
-module "drive_subscription" {
-  source              = "../../modules/subscription"
-  name                = "sub-drive-${var.environment}-gwc-01"
-  billing_scope_id    = data.azurerm_billing_mca_account_scope.billing["infra"].id
-  management_group_id = module.drive_management_group.id
-  tags = merge(
-    var.tags,
-    {}
-  )
 }
