@@ -9,7 +9,7 @@
 # =============================================================================
 
 # module "hub_to_hub_peering" {
-#   source = "../../../modules/vnet-peering"
+#   source = "../../modules/vnet-peering"
 #
 #   peering_name_source_to_destination = "peer-hubgwctohubweu-co-${var.environment}-glb-01"
 #   peering_name_destination_to_source = "peer-hubweutohubgwc-co-${var.environment}-glb-01"

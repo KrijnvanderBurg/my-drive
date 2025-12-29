@@ -1,6 +1,0 @@
----
-# Group variables for secondary NVA hosts
-# Inherits from nva_primary with backup-specific settings
-
-carp_advskew: 100
-ha_role: backup

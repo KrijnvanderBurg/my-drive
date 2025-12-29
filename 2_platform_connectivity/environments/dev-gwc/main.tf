@@ -8,7 +8,7 @@
 # =============================================================================
 
 module "hub_rg" {
-  source = "../../../modules/resource-group"
+  source = "../../modules/resource-group"
 
   name     = local.hub_rg_name
   location = var.location
@@ -20,7 +20,7 @@ module "hub_rg" {
 # =============================================================================
 
 module "hub_vnet" {
-  source = "../../../modules/virtual-network"
+  source = "../../modules/virtual-network"
 
   name                = local.hub_vnet_name
   resource_group_name = module.hub_rg.name
@@ -34,7 +34,7 @@ module "hub_vnet" {
 # =============================================================================
 
 module "subnet_nva" {
-  source = "../../../modules/subnet"
+  source = "../../modules/subnet"
 
   name                 = "snet-hubnva-co-${var.environment}-${var.location_short}-01"
   resource_group_name  = module.hub_rg.name
@@ -43,7 +43,7 @@ module "subnet_nva" {
 }
 
 module "subnet_management" {
-  source = "../../../modules/subnet"
+  source = "../../modules/subnet"
 
   name                 = "snet-hubmgmt-co-${var.environment}-${var.location_short}-01"
   resource_group_name  = module.hub_rg.name
@@ -52,7 +52,7 @@ module "subnet_management" {
 }
 
 module "subnet_jumpbox" {
-  source = "../../../modules/subnet"
+  source = "../../modules/subnet"
 
   name                 = "snet-hubjmp-co-${var.environment}-${var.location_short}-01"
   resource_group_name  = module.hub_rg.name
@@ -65,7 +65,7 @@ module "subnet_jumpbox" {
 # =============================================================================
 
 module "nsg_nva" {
-  source = "../../../modules/network-security-group"
+  source = "../../modules/network-security-group"
 
   name                = "nsg-hubnva-co-${var.environment}-${var.location_short}-01"
   resource_group_name = module.hub_rg.name
@@ -74,7 +74,7 @@ module "nsg_nva" {
 }
 
 module "nsg_jumpbox" {
-  source = "../../../modules/network-security-group"
+  source = "../../modules/network-security-group"
 
   name                = "nsg-hubjmp-co-${var.environment}-${var.location_short}-01"
   resource_group_name = module.hub_rg.name
@@ -95,39 +95,26 @@ module "nsg_jumpbox" {
 }
 
 module "nsg_association_nva" {
-  source = "../../../modules/nsg-association"
+  source = "../../modules/nsg-association"
 
   subnet_id                 = module.subnet_nva.id
   network_security_group_id = module.nsg_nva.id
 }
 
 module "nsg_association_jumpbox" {
-  source = "../../../modules/nsg-association"
+  source = "../../modules/nsg-association"
 
   subnet_id                 = module.subnet_jumpbox.id
   network_security_group_id = module.nsg_jumpbox.id
 }
 
 # =============================================================================
-# NAT GATEWAY
-# =============================================================================
 
-module "nat_gateway" {
-  source = "../../../modules/nat-gateway"
-
-  name                = "ng-hub-co-${var.environment}-${var.location_short}-01"
-  public_ip_name      = "pip-hubng-co-${var.environment}-${var.location_short}-01"
-  resource_group_name = module.hub_rg.name
-  location            = var.location
-  tags                = local.common_tags
-}
-
-# =============================================================================
 # HA NVA (pfSense)
 # =============================================================================
 
 module "nva_ha" {
-  source = "../../../modules/nva-ha"
+  source = "../../modules/nva-ha"
 
   resource_group_name      = module.hub_rg.name
   location                 = var.location
@@ -149,7 +136,7 @@ module "nva_ha" {
 # =============================================================================
 
 module "jumpbox" {
-  source = "../../../modules/jumpbox"
+  source = "../../modules/jumpbox"
 
   name                 = "vm-hubjmp-co-${var.environment}-${var.location_short}-01"
   nic_name             = "nic-hubjmp-co-${var.environment}-${var.location_short}-01"
@@ -165,7 +152,7 @@ module "jumpbox" {
 # =============================================================================
 
 module "dns_zone_blob" {
-  source = "../../../modules/private-dns-zone"
+  source = "../../modules/private-dns-zone"
 
   name                = "privatelink.blob.core.windows.net"
   resource_group_name = module.hub_rg.name
@@ -173,7 +160,7 @@ module "dns_zone_blob" {
 }
 
 module "dns_zone_keyvault" {
-  source = "../../../modules/private-dns-zone"
+  source = "../../modules/private-dns-zone"
 
   name                = "privatelink.vaultcore.azure.net"
   resource_group_name = module.hub_rg.name
@@ -181,7 +168,7 @@ module "dns_zone_keyvault" {
 }
 
 module "dns_link_blob_hub" {
-  source = "../../../modules/private-dns-zone-link"
+  source = "../../modules/private-dns-zone-link"
 
   name                  = "link-hub-blob-${var.location_short}"
   resource_group_name   = module.hub_rg.name
@@ -191,7 +178,7 @@ module "dns_link_blob_hub" {
 }
 
 module "dns_link_keyvault_hub" {
-  source = "../../../modules/private-dns-zone-link"
+  source = "../../modules/private-dns-zone-link"
 
   name                  = "link-hub-kv-${var.location_short}"
   resource_group_name   = module.hub_rg.name
@@ -205,7 +192,7 @@ module "dns_link_keyvault_hub" {
 # =============================================================================
 
 module "identity_rg" {
-  source = "../../../modules/resource-group"
+  source = "../../modules/resource-group"
 
   name     = "rg-identity-co-${var.environment}-${var.location_short}-01"
   location = var.location
@@ -213,7 +200,7 @@ module "identity_rg" {
 }
 
 module "identity_vnet" {
-  source = "../../../modules/virtual-network"
+  source = "../../modules/virtual-network"
 
   name                = "vnet-identity-co-${var.environment}-${var.location_short}-01"
   resource_group_name = module.identity_rg.name
@@ -223,7 +210,7 @@ module "identity_vnet" {
 }
 
 module "identity_subnet" {
-  source = "../../../modules/subnet"
+  source = "../../modules/subnet"
 
   name                 = "snet-identity-co-${var.environment}-${var.location_short}-01"
   resource_group_name  = module.identity_rg.name
@@ -232,7 +219,7 @@ module "identity_subnet" {
 }
 
 module "identity_route_table" {
-  source = "../../../modules/route-table"
+  source = "../../modules/route-table"
 
   name                = "rt-identity-co-${var.environment}-${var.location_short}-01"
   resource_group_name = module.identity_rg.name
@@ -248,14 +235,14 @@ module "identity_route_table" {
 }
 
 module "identity_rt_association" {
-  source = "../../../modules/route-table-association"
+  source = "../../modules/route-table-association"
 
   subnet_id      = module.identity_subnet.id
   route_table_id = module.identity_route_table.id
 }
 
 module "hub_to_identity_peering" {
-  source = "../../../modules/vnet-peering"
+  source = "../../modules/vnet-peering"
 
   peering_name_source_to_destination = "peer-hubtoidentity-co-${var.environment}-${var.location_short}-01"
   peering_name_destination_to_source = "peer-identitytohub-co-${var.environment}-${var.location_short}-01"
@@ -274,7 +261,7 @@ module "hub_to_identity_peering" {
 # =============================================================================
 
 module "management_rg" {
-  source = "../../../modules/resource-group"
+  source = "../../modules/resource-group"
 
   name     = "rg-management-co-${var.environment}-${var.location_short}-01"
   location = var.location
@@ -282,7 +269,7 @@ module "management_rg" {
 }
 
 module "management_vnet" {
-  source = "../../../modules/virtual-network"
+  source = "../../modules/virtual-network"
 
   name                = "vnet-management-co-${var.environment}-${var.location_short}-01"
   resource_group_name = module.management_rg.name
@@ -292,7 +279,7 @@ module "management_vnet" {
 }
 
 module "management_subnet" {
-  source = "../../../modules/subnet"
+  source = "../../modules/subnet"
 
   name                 = "snet-management-co-${var.environment}-${var.location_short}-01"
   resource_group_name  = module.management_rg.name
@@ -301,7 +288,7 @@ module "management_subnet" {
 }
 
 module "management_route_table" {
-  source = "../../../modules/route-table"
+  source = "../../modules/route-table"
 
   name                = "rt-management-co-${var.environment}-${var.location_short}-01"
   resource_group_name = module.management_rg.name
@@ -317,14 +304,14 @@ module "management_route_table" {
 }
 
 module "management_rt_association" {
-  source = "../../../modules/route-table-association"
+  source = "../../modules/route-table-association"
 
   subnet_id      = module.management_subnet.id
   route_table_id = module.management_route_table.id
 }
 
 module "hub_to_management_peering" {
-  source = "../../../modules/vnet-peering"
+  source = "../../modules/vnet-peering"
 
   peering_name_source_to_destination = "peer-hubtomgmt-co-${var.environment}-${var.location_short}-01"
   peering_name_destination_to_source = "peer-mgmttohub-co-${var.environment}-${var.location_short}-01"
@@ -340,7 +327,7 @@ module "hub_to_management_peering" {
 
 # DNS Links for Platform Spokes
 module "dns_link_blob_identity" {
-  source = "../../../modules/private-dns-zone-link"
+  source = "../../modules/private-dns-zone-link"
 
   name                  = "link-identity-blob-${var.location_short}"
   resource_group_name   = module.hub_rg.name
@@ -350,7 +337,7 @@ module "dns_link_blob_identity" {
 }
 
 module "dns_link_blob_management" {
-  source = "../../../modules/private-dns-zone-link"
+  source = "../../modules/private-dns-zone-link"
 
   name                  = "link-mgmt-blob-${var.location_short}"
   resource_group_name   = module.hub_rg.name
