@@ -82,7 +82,7 @@ module "management_subscription_association" {
 # =============================================================================
 # Creates data sources for each billing scope defined in var.billing_scopes.
 # Reference specific scopes when creating subscriptions:
-#   billing_scope_id = data.azurerm_billing_mca_account_scope.billing["infra"].id
+#   billing_scope_id = data.azurerm_billing_mca_account_scope.billing["platform"].id
 # =============================================================================
 data "azurerm_billing_mca_account_scope" "billing" {
   for_each = var.billing_scopes
@@ -101,7 +101,9 @@ module "drive_subscription" {
   billing_scope_id    = data.azurerm_billing_mca_account_scope.billing["platform"].id
   management_group_id = module.drive_management_group.id
   tags = merge(
-    var.tags,
-    {}
+    local.common_tags,
+    {
+      # Add resource-specific tags here
+    }
   )
 }
