@@ -7,21 +7,21 @@ data "azurerm_management_group" "tenant_root" {
   name = var.tenant_id
 }
 
-# Management Management Group - for management resources
+# Platform management Management Group - for management resources
 module "management_management_group" {
   source = "../../modules/management-group"
 
   name                       = "mg-pl-management-${var.environment}-na-01"
-  display_name               = "management"
+  display_name               = "mg-pl-management-${var.environment}-na-01"
   parent_management_group_id = data.azurerm_management_group.tenant_root.id
 }
 
-# Drive Management Group - for shared drive services
-module "drive_management_group" {
+# Platform connectivity Management Group - for management resources
+module "platform_connectivity_management_group" {
   source = "../../modules/management-group"
 
-  name                       = "mg-drive-${var.environment}-na-01"
-  display_name               = "drive"
+  name                       = "mg-pl-platform-connectivity-${var.environment}-na-01"
+  display_name               = "mg-pl-platform-connectivity-${var.environment}-na-01"
   parent_management_group_id = data.azurerm_management_group.tenant_root.id
 }
 
@@ -50,13 +50,13 @@ module "policy_deny_delete" {
 # Policy Assignments
 # =============================================================================
 
-# Protect drive management group from accidental deletions
-resource "azurerm_management_group_policy_assignment" "drive_deny_delete" {
-  name                 = "deny-del-drive"
-  display_name         = "Deny Delete - Drive"
-  description          = "Prevents deletion of any resources under drive management group"
+# Protect a management group from accidental deletions
+resource "azurerm_management_group_policy_assignment" "platform_connectivity_deny_delete" {
+  name                 = "deny-del-pl-connectivity"
+  display_name         = "Deny Delete - Platform Connectivity"
+  description          = "Prevents deletion of any resources under platform connectivity management group"
   policy_definition_id = module.policy_deny_delete.id
-  management_group_id  = module.drive_management_group.id
+  management_group_id  = module.platform_connectivity_management_group.id
   enforce              = true
 }
 
@@ -82,7 +82,7 @@ module "management_subscription_association" {
 # =============================================================================
 # Creates data sources for each billing scope defined in var.billing_scopes.
 # Reference specific scopes when creating subscriptions:
-#   billing_scope_id = data.azurerm_billing_mca_account_scope.billing["infra"].id
+#   billing_scope_id = data.azurerm_billing_mca_account_scope.billing["platform"].id
 # =============================================================================
 data "azurerm_billing_mca_account_scope" "billing" {
   for_each = var.billing_scopes
@@ -95,13 +95,15 @@ data "azurerm_billing_mca_account_scope" "billing" {
 # =============================================================================
 # Subscriptions
 # =============================================================================
-module "drive_subscription" {
+module "platform_connectivity_subscription" {
   source              = "../../modules/subscription"
-  name                = "pl-management-${var.environment}-na-01"
+  name                = "pl-connectivity-${var.environment}-na-01"
   billing_scope_id    = data.azurerm_billing_mca_account_scope.billing["platform"].id
-  management_group_id = module.drive_management_group.id
+  management_group_id = module.platform_connectivity_management_group.id
   tags = merge(
-    var.tags,
-    {}
+    local.common_tags,
+    {
+      # Add resource-specific tags here
+    }
   )
 }

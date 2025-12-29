@@ -7,15 +7,6 @@ output "tenant_root_management_group_id" {
   value       = data.azurerm_management_group.tenant_root.id
 }
 
-output "drive_management_group" {
-  description = "drive management group details"
-  value = {
-    id           = module.drive_management_group.id
-    name         = module.drive_management_group.name
-    display_name = module.drive_management_group.display_name
-  }
-}
-
 output "sandbox_management_group" {
   description = "Sandbox management group details"
   value = {

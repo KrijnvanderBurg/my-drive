@@ -40,6 +40,12 @@ Based on [Azure Cloud Adoption Framework](https://learn.microsoft.com/en-us/azur
 | Virtual network | `vnet` |
 | Subnet | `snet` |
 | Network security group | `nsg` |
+| Route table | `rt` |
+| NAT Gateway | `ng` |
+| Load balancer | `lb` |
+| Public IP | `pip` |
+| Network interface | `nic` |
+| VNet peering | `peer` |
 | Virtual machine | `vm` |
 | Key vault | `kv` |
 | AKS cluster | `aks` |
@@ -50,6 +56,7 @@ Based on [Azure Cloud Adoption Framework](https://learn.microsoft.com/en-us/azur
 | ExpressRoute Gateway | `ergw` |
 | Bastion | `bas` |
 | Private DNS Zone | `pdnsz` |
+| Private DNS Zone Link | `link` (simple name, no full convention) |
 
 ## Archetypes
 
