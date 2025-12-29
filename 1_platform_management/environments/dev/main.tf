@@ -41,8 +41,8 @@ module "sandbox_management_group" {
 module "policy_deny_delete" {
   source = "../../modules/policy-deny-delete"
 
-  name                = "deny-delete"
-  display_name        = "Deny Delete"
+  name                = "deny-delete-platform"
+  display_name        = "Deny Delete Operations - Platform"
   management_group_id = data.azurerm_management_group.tenant_root.id
 }
 

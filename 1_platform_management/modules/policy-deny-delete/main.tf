@@ -1,9 +1,9 @@
 # Policy definition to deny all delete operations
 resource "azurerm_policy_definition" "deny_delete" {
-  name                = "deny-delete-${var.name}"
+  name                = var.name
   policy_type         = "Custom"
   mode                = "All"
-  display_name        = "Deny Delete Operations - ${var.display_name}"
+  display_name        = var.display_name
   description         = "This policy denies all delete operations on resources for maximum protection."
   management_group_id = var.management_group_id
 

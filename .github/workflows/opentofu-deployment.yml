@@ -6,175 +6,42 @@ on:
       - main
     paths:
       - 1_platform_management/**
+      - 2_platform_connectivity/**
       - .github/workflows/opentofu-deployment.yml
+      - .github/workflows/opentofu-template.yml
       - .github/actions/**
       - .github/scripts/**
   pull_request:
     paths:
       - 1_platform_management/**
+      - 2_platform_connectivity/**
       - .github/workflows/opentofu-deployment.yml
+      - .github/workflows/opentofu-template.yml
       - .github/actions/**
       - .github/scripts/**
 
-permissions:
-  contents: read
-  pull-requests: write
-  id-token: write
-
-env:
-  ENVIRONMENT: dev
-  TARGET_PATH: ./1_platform_management/environments/dev
-  PLAN_BINARY_FILENAME: tfplan
-  PLAN_TEXT_FILENAME: tfplan.txt
-  APPLY_OUTPUT_FILENAME: apply-output.txt
-  ARM_CLIENT_ID: "167a99fd-6289-4088-a9e0-dd2dc1a2c509"
-  ARM_TENANT_ID: "90d27970-b92c-43dc-9935-1ed557d8e20e"
-  ARM_SUBSCRIPTION_ID: "e388ddce-c79d-4db0-8a6f-cd69b1708954"
-  ARM_USE_OIDC: true
-
 jobs:
-  lint:
-    name: Lint
-    runs-on: ubuntu-latest
-    environment: dev
-    outputs:
-      lint_status: ${{ steps.lint.outputs.lint_status }}
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+  pl-management:
+    name: pl-management
+    uses: ./.github/workflows/opentofu-template.yml
+    with:
+      working_directory: ./1_platform_management/environments/dev
+      artifact_prefix: pl-management-dev
 
-      - name: Azure Login
-        uses: azure/login@v2
-        with:
-          client-id: ${{ env.ARM_CLIENT_ID }}
-          tenant-id: ${{ env.ARM_TENANT_ID }}
-          subscription-id: ${{ env.ARM_SUBSCRIPTION_ID }}
+  pl-connectivity-dev-global:
+    name: pl-connectivity dev-global
+    needs: pl-management
+    if: always() && (needs.pl-management.result == 'success' || github.event_name == 'pull_request')
+    uses: ./.github/workflows/opentofu-template.yml
+    with:
+      working_directory: ./2_platform_connectivity/environments/dev-global
+      artifact_prefix: pl-connectivity-dev-global
 
-      - name: Install OpenTofu
-        uses: ./.github/actions/opentofu-install
-        with:
-          tofu_version: 1.8.0
-
-      - name: Initialize OpenTofu
-        uses: ./.github/actions/opentofu-init
-        with:
-          working_directory: ${{ env.TARGET_PATH }}
-
-      - name: Lint configuration
-        id: lint
-        uses: ./.github/actions/opentofu-lint
-        with:
-          working_directory: ${{ env.TARGET_PATH }}
-
-  plan:
-    name: Plan
-    runs-on: ubuntu-latest
-    environment: dev
-    # needs: lint
-    outputs:
-      plan_binary_file: ${{ steps.plan.outputs.plan_binary_file }}
-      plan_text_file: ${{ steps.plan.outputs.plan_text_file }}
-      has_changes: ${{ steps.plan.outputs.has_changes }}
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Azure Login
-        uses: azure/login@v2
-        with:
-          client-id: ${{ env.ARM_CLIENT_ID }}
-          tenant-id: ${{ env.ARM_TENANT_ID }}
-          subscription-id: ${{ env.ARM_SUBSCRIPTION_ID }}
-
-      - name: Install OpenTofu
-        uses: ./.github/actions/opentofu-install
-        with:
-          tofu_version: 1.8.0
-
-      - name: Initialize OpenTofu
-        uses: ./.github/actions/opentofu-init
-        with:
-          working_directory: ${{ env.TARGET_PATH }}
-
-      - name: Plan changes
-        id: plan
-        uses: ./.github/actions/opentofu-plan
-        with:
-          working_directory: ${{ env.TARGET_PATH }}
-          plan_binary_file: ${{ runner.temp }}/${{ env.PLAN_BINARY_FILENAME }}
-          plan_text_file: ${{ runner.temp }}/${{ env.PLAN_TEXT_FILENAME }}
-
-      - name: Upload Plan Binary Artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: tfplan-${{ env.ENVIRONMENT }}-binary
-          path: ${{ steps.plan.outputs.plan_binary_file }}
-          retention-days: 5
-          if-no-files-found: error
-
-      - name: Upload Plan Text Artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: tfplan-${{ env.ENVIRONMENT }}-text
-          path: ${{ steps.plan.outputs.plan_text_file }}
-          retention-days: 5
-          if-no-files-found: error
-
-      - name: Post Plan to PR
-        if: github.event_name == 'pull_request'
-        uses: ./.github/actions/opentofu-plan-comment
-        with:
-          plan_text_file: ${{ steps.plan.outputs.plan_text_file }}
-          environment: ${{ env.ENVIRONMENT }}
-          working_directory: ${{ env.TARGET_PATH }}
-
-  apply:
-    name: Apply
-    runs-on: ubuntu-latest
-    needs: plan
-    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-    environment: dev
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Azure Login
-        uses: azure/login@v2
-        with:
-          client-id: ${{ env.ARM_CLIENT_ID }}
-          tenant-id: ${{ env.ARM_TENANT_ID }}
-          subscription-id: ${{ env.ARM_SUBSCRIPTION_ID }}
-
-      - name: Install OpenTofu
-        uses: ./.github/actions/opentofu-install
-        with:
-          tofu_version: 1.8.0
-
-      - name: Initialize OpenTofu
-        uses: ./.github/actions/opentofu-init
-        with:
-          working_directory: ${{ env.TARGET_PATH }}
-
-      - name: Download Plan Binary Artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: tfplan-${{ env.ENVIRONMENT }}-binary
-          path: ${{ runner.temp }}
-
-      - name: Apply changes
-        id: apply
-        uses: ./.github/actions/opentofu-apply
-        with:
-          working_directory: ${{ env.TARGET_PATH }}
-          plan_binary_file: ${{ runner.temp }}/${{ env.PLAN_BINARY_FILENAME }}
-          apply_output_file: ${{ runner.temp }}/${{ env.APPLY_OUTPUT_FILENAME }}
-
-      - name: Post Apply Result to PR
-        if: always()
-        uses: ./.github/actions/opentofu-apply-comment
-        with:
-          apply_output_file: ${{ runner.temp }}/${{ env.APPLY_OUTPUT_FILENAME }}
-          environment: ${{ env.ENVIRONMENT }}
-          working_directory: ${{ env.TARGET_PATH }}
-          apply_status: ${{ steps.apply.outcome }}
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+  pl-connectivity-dev-gwc:
+    name: pl-connectivity dev-gwc
+    needs: pl-connectivity-dev-global
+    if: always() && (needs.pl-connectivity-dev-global.result == 'success' || github.event_name == 'pull_request')
+    uses: ./.github/workflows/opentofu-template.yml
+    with:
+      working_directory: ./2_platform_connectivity/environments/dev-gwc
+      artifact_prefix: pl-connectivity-dev-gwc
