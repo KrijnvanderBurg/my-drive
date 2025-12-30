@@ -29,8 +29,8 @@ output "management_management_group" {
 # Subscription Association Outputs
 # =============================================================================
 
-output "management_subscription_association" {
-  description = "Management subscription association details"
+output "platform_management_subscription_association" {
+  description = "Platform Management subscription association details"
   value = {
     id                  = module.management_subscription_association.id
     management_group_id = module.management_subscription_association.management_group_id
@@ -38,14 +38,15 @@ output "management_subscription_association" {
   }
 }
 
-
-# output "platform_connectivity_subscription" {
-#   description = "Platform connectivity subscription details"
-#   value = {
-#     subscription_id = module.platform_connectivity_subscription.subscription_id
-#     name            = module.platform_connectivity_subscription.name
-#   }
-# }
+# IMPORTANT: Change to connectivity subscription later
+output "platform_connectivity_subscription_association" {
+  description = "Platform Connectivity subscription association details"
+  value = {
+    id                  = module.management_subscription_association.id
+    management_group_id = module.management_subscription_association.management_group_id
+    subscription_id     = module.management_subscription_association.subscription_id
+  }
+}
 
 # =============================================================================
 # Environment Information
