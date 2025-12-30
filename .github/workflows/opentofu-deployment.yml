@@ -23,6 +23,7 @@ jobs:
       working_directory: ./2_platform_connectivity/environments/dev-global
 
   pl-connectivity-dev-gwc-lint:
+    if: github.event.pull_request.state != 'closed'
     name: pl-connectivity-dev-gwc lint
     uses: ./.github/workflows/opentofu-lint.yml
     with:

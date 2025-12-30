@@ -10,16 +10,12 @@ inputs:
 outputs:
   tofu_version:
     description: Installed OpenTofu version
-    value: ${{ steps.verify.outputs.tofu_version }}
-  cache_hit:
-    description: Whether OpenTofu was restored from cache (true/false)
-    value: ${{ steps.cache-tofu.outputs.cache-hit }}
+    value: ${{ inputs.tofu_version }}
 
 runs:
   using: composite
   steps:
     - name: Install OpenTofu
-      if: steps.cache-tofu.outputs.cache-hit != true
       shell: bash
       env:
         TOFU_VERSION: ${{ inputs.tofu_version }}

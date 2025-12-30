@@ -20,15 +20,12 @@ inputs:
     required: true
 
 outputs:
-  comment_id:
-    description: ID of the created or updated PR comment
-    value: ${{ steps.create-comment.outputs.comment-id }}
-  comment_url:
-    description: URL to the PR comment
-    value: ${{ steps.create-comment.outputs.comment-url }}
   pr_number:
     description: The PR number that was commented on
     value: ${{ steps.find-pr.outputs.pr_number }}
+  comment_body:
+    description: The generated comment body
+    value: ${{ steps.comment.outputs.comment_body }}
 
 runs:
   using: composite

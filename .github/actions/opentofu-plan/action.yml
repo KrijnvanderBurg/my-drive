@@ -5,10 +5,6 @@ inputs:
   working_directory:
     description: Absolute or relative path to the OpenTofu configuration directory
     required: true
-  var_file:
-    description: Path to terraform.tfvars or custom variables file (optional)
-    required: false
-    default:
   plan_binary_file:
     description: Absolute path for the output binary plan file (used by apply)
     required: true
@@ -27,12 +23,6 @@ outputs:
   plan_binary_file:
     description: Absolute path to the generated binary plan file for apply
     value: ${{ steps.plan.outputs.plan_binary_file }}
-  has_changes:
-    description: Whether the plan contains changes (true/false)
-    value: ${{ steps.plan.outputs.has_changes }}
-  exit_code:
-    description: Exit code from tofu plan command
-    value: ${{ steps.plan.outputs.exit_code }}
 
 runs:
   using: composite
@@ -43,7 +33,7 @@ runs:
       run: |
         bash ${{ github.workspace }}/.github/scripts/opentofu-plan.sh \
           "${{ inputs.working_directory }}" \
-          "${{ inputs.var_file }}" \
+          "" \
           "${{ inputs.plan_binary_file }}" \
           "${{ inputs.plan_text_file }}" \
           "${{ inputs.pr_number }}"

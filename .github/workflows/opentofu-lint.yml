@@ -43,6 +43,7 @@ jobs:
         uses: ./.github/actions/opentofu-init
         with:
           working_directory: ${{ inputs.working_directory }}
+          state_key: lint-${{ inputs.working_directory }}.tfstate
 
       - name: Lint configuration
         id: lint
