@@ -15,6 +15,10 @@ inputs:
   plan_text_file:
     description: Absolute path for the output human-readable plan file
     required: true
+  pr_number:
+    description: PR number for ephemeral deployments
+    required: false
+    default: ""
 
 outputs:
   plan_text_file:
@@ -41,4 +45,5 @@ runs:
           "${{ inputs.working_directory }}" \
           "${{ inputs.var_file }}" \
           "${{ inputs.plan_binary_file }}" \
-          "${{ inputs.plan_text_file }}"
+          "${{ inputs.plan_text_file }}" \
+          "${{ inputs.pr_number }}"

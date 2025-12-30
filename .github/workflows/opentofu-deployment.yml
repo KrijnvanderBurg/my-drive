@@ -11,6 +11,9 @@ permissions:
   pull-requests: write
   id-token: write
 
+env:
+  PR_NUMBER: ${{ github.event.pull_request.number }}
+
 jobs:
   pl-management-dev-lint:
     name: pl-management-dev lint
@@ -36,49 +39,56 @@ jobs:
     uses: ./.github/workflows/opentofu-plan.yml
     with:
       working_directory: ./1_platform_management/environments/dev
-      artifact_name: pl-management-dev
+      artifact_name: pl-management-dev-pr${{ github.event.pull_request.number }}
+      state_key: pl-management-dev-pr${{ github.event.pull_request.number }}.tfstate
+      pr_number: ${{ github.event.pull_request.number }}
 
   pl-management-dev-apply:
     name: pl-management-dev apply
     needs: [pl-management-dev-plan]
-    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
     uses: ./.github/workflows/opentofu-apply.yml
     with:
       working_directory: ./1_platform_management/environments/dev
-      artifact_name: pl-management-dev
+      artifact_name: pl-management-dev-pr${{ github.event.pull_request.number }}
+      state_key: pl-management-dev-pr${{ github.event.pull_request.number }}.tfstate
+      pr_number: ${{ github.event.pull_request.number }}
 
   pl-connectivity-dev-gwc-plan:
     name: pl-connectivity-dev-gwc plan
     needs: [pl-management-dev-apply]
-    if: always() && (needs.pl-management-dev-apply.result == 'success' || needs.pl-management-dev-apply.result == 'skipped')
     uses: ./.github/workflows/opentofu-plan.yml
     with:
       working_directory: ./2_platform_connectivity/environments/dev-gwc
-      artifact_name: pl-connectivity-dev-gwc
+      artifact_name: pl-connectivity-dev-gwc-pr${{ github.event.pull_request.number }}
+      state_key: pl-connectivity-dev-gwc-pr${{ github.event.pull_request.number }}.tfstate
+      pr_number: ${{ github.event.pull_request.number }}
 
   pl-connectivity-dev-gwc-apply:
     name: pl-connectivity-dev-gwc apply
     needs: [pl-connectivity-dev-gwc-plan]
-    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
     uses: ./.github/workflows/opentofu-apply.yml
     with:
       working_directory: ./2_platform_connectivity/environments/dev-gwc
-      artifact_name: pl-connectivity-dev-gwc
+      artifact_name: pl-connectivity-dev-gwc-pr${{ github.event.pull_request.number }}
+      state_key: pl-connectivity-dev-gwc-pr${{ github.event.pull_request.number }}.tfstate
+      pr_number: ${{ github.event.pull_request.number }}
 
   pl-connectivity-dev-global-plan:
     name: pl-connectivity-dev-global plan
     needs: [pl-connectivity-dev-gwc-apply]
-    if: always() && (needs.pl-connectivity-dev-gwc-apply.result == 'success' || needs.pl-connectivity-dev-gwc-apply.result == 'skipped')
     uses: ./.github/workflows/opentofu-plan.yml
     with:
       working_directory: ./2_platform_connectivity/environments/dev-global
-      artifact_name: pl-connectivity-dev-global
+      artifact_name: pl-connectivity-dev-global-pr${{ github.event.pull_request.number }}
+      state_key: pl-connectivity-dev-global-pr${{ github.event.pull_request.number }}.tfstate
+      pr_number: ${{ github.event.pull_request.number }}
 
   pl-connectivity-dev-global-apply:
     name: pl-connectivity-dev-global apply
     needs: [pl-connectivity-dev-global-plan]
-    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
     uses: ./.github/workflows/opentofu-apply.yml
     with:
       working_directory: ./2_platform_connectivity/environments/dev-global
-      artifact_name: pl-connectivity-dev-global
+      artifact_name: pl-connectivity-dev-global-pr${{ github.event.pull_request.number }}
+      state_key: pl-connectivity-dev-global-pr${{ github.event.pull_request.number }}.tfstate
+      pr_number: ${{ github.event.pull_request.number }}

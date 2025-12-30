@@ -1,3 +1,3 @@
 #!/bin/bash
 
-tofu init
+tofu init -backend-config="key=$1"

@@ -11,6 +11,15 @@ on:
         description: Name for artifacts and display
         required: true
         type: string
+      state_key:
+        description: State file key for backend configuration
+        required: true
+        type: string
+      pr_number:
+        description: PR number for ephemeral deployments
+        required: false
+        type: string
+        default: ""
 
 permissions:
   contents: read
@@ -53,6 +62,7 @@ jobs:
         uses: ./.github/actions/opentofu-init
         with:
           working_directory: ${{ inputs.working_directory }}
+          state_key: ${{ inputs.state_key }}
 
       - name: Plan changes
         id: plan
@@ -61,6 +71,7 @@ jobs:
           working_directory: ${{ inputs.working_directory }}
           plan_binary_file: ${{ runner.temp }}/${{ inputs.artifact_name }}-${{ env.PLAN_BINARY_FILENAME }}
           plan_text_file: ${{ runner.temp }}/${{ inputs.artifact_name }}-${{ env.PLAN_TEXT_FILENAME }}
+          pr_number: ${{ inputs.pr_number }}
 
       - name: Upload Plan Binary Artifact
         uses: actions/upload-artifact@v4

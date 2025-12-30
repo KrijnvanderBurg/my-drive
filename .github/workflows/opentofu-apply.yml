@@ -11,6 +11,15 @@ on:
         description: Name for artifacts and display
         required: true
         type: string
+      state_key:
+        description: State file key for backend configuration
+        required: true
+        type: string
+      pr_number:
+        description: PR number for ephemeral deployments
+        required: false
+        type: string
+        default: ""
 
 permissions:
   contents: read
@@ -50,6 +59,7 @@ jobs:
         uses: ./.github/actions/opentofu-init
         with:
           working_directory: ${{ inputs.working_directory }}
+          state_key: ${{ inputs.state_key }}
 
       - name: Download Plan Binary Artifact
         uses: actions/download-artifact@v4
