@@ -30,7 +30,7 @@ module "sandbox_management_group" {
   source = "../../modules/management-group"
 
   name                       = "mg-sandbox-${var.environment}-na-01"
-  display_name               = "sandbox"
+  display_name               = "mg-sandbox-${var.environment}-na-01"
   parent_management_group_id = data.azurerm_management_group.tenant_root.id
 }
 
