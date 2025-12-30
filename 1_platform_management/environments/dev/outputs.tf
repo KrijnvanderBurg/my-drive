@@ -39,13 +39,13 @@ output "management_subscription_association" {
 }
 
 
-output "platform_connectivity_subscription" {
-  description = "Platform connectivity subscription details"
-  value = {
-    subscription_id = module.platform_connectivity_subscription.subscription_id
-    name            = module.platform_connectivity_subscription.name
-  }
-}
+# output "platform_connectivity_subscription" {
+#   description = "Platform connectivity subscription details"
+#   value = {
+#     subscription_id = module.platform_connectivity_subscription.subscription_id
+#     name            = module.platform_connectivity_subscription.name
+#   }
+# }
 
 # =============================================================================
 # Environment Information
