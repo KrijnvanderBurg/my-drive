@@ -50,7 +50,6 @@ jobs:
   pl-connectivity-dev-gwc-plan:
     name: pl-connectivity-dev-gwc plan
     needs: [pl-management-dev-apply]
-    if: always() && (needs.pl-management-dev-apply.result == 'success' || github.event_name == 'pull_request')
     uses: ./.github/workflows/opentofu-plan.yml
     with:
       working_directory: ./2_platform_connectivity/environments/dev-gwc
@@ -68,7 +67,6 @@ jobs:
   pl-connectivity-dev-global-plan:
     name: pl-connectivity-dev-global plan
     needs: [pl-connectivity-dev-gwc-apply]
-    if: always() && (needs.pl-connectivity-dev-gwc-apply.result == 'success' || github.event_name == 'pull_request')
     uses: ./.github/workflows/opentofu-plan.yml
     with:
       working_directory: ./2_platform_connectivity/environments/dev-global
