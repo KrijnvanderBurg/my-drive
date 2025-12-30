@@ -34,9 +34,9 @@ jobs:
     uses: ./.github/workflows/opentofu-plan.yml
     with:
       working_directory: ./1_platform_management/environments/dev
-      artifact_name: pl-management-dev-pr${{ github.event.pull_request.number }}
-      state_key: pl-management-dev-pr${{ github.event.pull_request.number }}.tfstate
-      pr_number: ${{ github.event.pull_request.number }}
+      artifact_name: pl-management-dev
+      state_key: pl-management-dev.tfstate
+      pr_number:
 
   pl-management-dev-apply:
     name: pl-management-dev apply
@@ -44,46 +44,46 @@ jobs:
     uses: ./.github/workflows/opentofu-apply.yml
     with:
       working_directory: ./1_platform_management/environments/dev
-      artifact_name: pl-management-dev-pr${{ github.event.pull_request.number }}
-      state_key: pl-management-dev-pr${{ github.event.pull_request.number }}.tfstate
-      pr_number: ${{ github.event.pull_request.number }}
+      artifact_name: pl-management-dev
+      state_key: pl-management-dev.tfstate
+      pr_number:
 
-  pl-connectivity-dev-gwc-plan:
-    name: pl-connectivity-dev-gwc plan
-    needs: [pl-management-dev-apply]
-    uses: ./.github/workflows/opentofu-plan.yml
-    with:
-      working_directory: ./2_platform_connectivity/environments/dev-gwc
-      artifact_name: pl-connectivity-dev-gwc-pr${{ github.event.pull_request.number }}
-      state_key: pl-connectivity-dev-gwc-pr${{ github.event.pull_request.number }}.tfstate
-      pr_number: ${{ github.event.pull_request.number }}
+  # pl-connectivity-dev-gwc-plan:
+  #   name: pl-connectivity-dev-gwc plan
+  #   needs: [pl-management-dev-apply]
+  #   uses: ./.github/workflows/opentofu-plan.yml
+  #   with:
+  #     working_directory: ./2_platform_connectivity/environments/dev-gwc
+  #     artifact_name: pl-connectivity-dev-gwc-pr${{ github.event.pull_request.number }}
+  #     state_key: pl-connectivity-dev-gwc-pr${{ github.event.pull_request.number }}.tfstate
+  #     pr_number: ${{ github.event.pull_request.number }}
 
-  pl-connectivity-dev-gwc-apply:
-    name: pl-connectivity-dev-gwc apply
-    needs: [pl-connectivity-dev-gwc-plan]
-    uses: ./.github/workflows/opentofu-apply.yml
-    with:
-      working_directory: ./2_platform_connectivity/environments/dev-gwc
-      artifact_name: pl-connectivity-dev-gwc-pr${{ github.event.pull_request.number }}
-      state_key: pl-connectivity-dev-gwc-pr${{ github.event.pull_request.number }}.tfstate
-      pr_number: ${{ github.event.pull_request.number }}
+  # pl-connectivity-dev-gwc-apply:
+  #   name: pl-connectivity-dev-gwc apply
+  #   needs: [pl-connectivity-dev-gwc-plan]
+  #   uses: ./.github/workflows/opentofu-apply.yml
+  #   with:
+  #     working_directory: ./2_platform_connectivity/environments/dev-gwc
+  #     artifact_name: pl-connectivity-dev-gwc-pr${{ github.event.pull_request.number }}
+  #     state_key: pl-connectivity-dev-gwc-pr${{ github.event.pull_request.number }}.tfstate
+  #     pr_number: ${{ github.event.pull_request.number }}
 
-  pl-connectivity-dev-global-plan:
-    name: pl-connectivity-dev-global plan
-    needs: [pl-connectivity-dev-gwc-apply]
-    uses: ./.github/workflows/opentofu-plan.yml
-    with:
-      working_directory: ./2_platform_connectivity/environments/dev-global
-      artifact_name: pl-connectivity-dev-global-pr${{ github.event.pull_request.number }}
-      state_key: pl-connectivity-dev-global-pr${{ github.event.pull_request.number }}.tfstate
-      pr_number: ${{ github.event.pull_request.number }}
+  # pl-connectivity-dev-global-plan:
+  #   name: pl-connectivity-dev-global plan
+  #   needs: [pl-connectivity-dev-gwc-apply]
+  #   uses: ./.github/workflows/opentofu-plan.yml
+  #   with:
+  #     working_directory: ./2_platform_connectivity/environments/dev-global
+  #     artifact_name: pl-connectivity-dev-global-pr${{ github.event.pull_request.number }}
+  #     state_key: pl-connectivity-dev-global-pr${{ github.event.pull_request.number }}.tfstate
+  #     pr_number: ${{ github.event.pull_request.number }}
 
-  pl-connectivity-dev-global-apply:
-    name: pl-connectivity-dev-global apply
-    needs: [pl-connectivity-dev-global-plan]
-    uses: ./.github/workflows/opentofu-apply.yml
-    with:
-      working_directory: ./2_platform_connectivity/environments/dev-global
-      artifact_name: pl-connectivity-dev-global-pr${{ github.event.pull_request.number }}
-      state_key: pl-connectivity-dev-global-pr${{ github.event.pull_request.number }}.tfstate
-      pr_number: ${{ github.event.pull_request.number }}
+  # pl-connectivity-dev-global-apply:
+  #   name: pl-connectivity-dev-global apply
+  #   needs: [pl-connectivity-dev-global-plan]
+  #   uses: ./.github/workflows/opentofu-apply.yml
+  #   with:
+  #     working_directory: ./2_platform_connectivity/environments/dev-global
+  #     artifact_name: pl-connectivity-dev-global-pr${{ github.event.pull_request.number }}
+  #     state_key: pl-connectivity-dev-global-pr${{ github.event.pull_request.number }}.tfstate
+  #     pr_number: ${{ github.event.pull_request.number }}
