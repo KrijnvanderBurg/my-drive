@@ -16,5 +16,5 @@ terraform {
 provider "azurerm" {
   features {}
   # Deploy to the permanent connectivity subscription (not PR-specific)
-  subscription_id = data.terraform_remote_state.management.outputs.platform_connectivity_subscription.subscription_id
+  subscription_id = data.terraform_remote_state.pl-management.outputs.platform_connectivity_subscription_association.subscription_id
 }

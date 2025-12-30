@@ -2,7 +2,7 @@
 # Remote State - Read Management Layer State
 # -----------------------------------------------------------------------------
 
-data "terraform_remote_state" "management" {
+data "terraform_remote_state" "pl-management" {
   backend = "azurerm"
 
   config = {
