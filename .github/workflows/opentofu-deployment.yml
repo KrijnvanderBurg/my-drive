@@ -18,9 +18,15 @@ jobs:
     with:
       working_directory: ./1_platform_management/environments/dev
 
+  pl-connectivity-lint:
+    name: pl-connectivity lint
+    uses: ./.github/workflows/opentofu-lint.yml
+    with:
+      working_directory: ./2_platform_connectivity/environments/dev
+
   pl-management-plan:
     name: pl-management plan
-    needs: pl-management-lint
+    needs: [pl-management-lint]
     uses: ./.github/workflows/opentofu-plan.yml
     with:
       working_directory: ./1_platform_management/environments/dev
@@ -28,12 +34,30 @@ jobs:
 
   pl-management-apply:
     name: pl-management apply
-    needs: pl-management-plan
+    needs: [pl-management-plan]
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
     uses: ./.github/workflows/opentofu-apply.yml
     with:
       working_directory: ./1_platform_management/environments/dev
       artifact_name: pl-management-dev
+
+  pl-connectivity-plan:
+    name: pl-connectivity plan
+    needs: [pl-connectivity-lint, pl-management-apply]
+    if: always() && (needs.pl-management-apply.result == 'success' || github.event_name == 'pull_request')
+    uses: ./.github/workflows/opentofu-plan.yml
+    with:
+      working_directory: ./2_platform_connectivity/environments/dev
+      artifact_name: pl-connectivity-dev
+
+  pl-connectivity-apply:
+    name: pl-connectivity apply
+    needs: [pl-connectivity-plan]
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    uses: ./.github/workflows/opentofu-apply.yml
+    with:
+      working_directory: ./2_platform_connectivity/environments/dev
+      artifact_name: pl-connectivity-dev
 
   # pl-connectivity-dev-global:
   #   name: pl-connectivity dev-global
