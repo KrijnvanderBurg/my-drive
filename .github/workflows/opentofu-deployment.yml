@@ -35,7 +35,7 @@ jobs:
     with:
       working_directory: ./1_platform_management/environments/dev
       artifact_name: pl-management-dev
-      state_key: pl-management.tfstate
+      state_key: pl-management-dev.tfstate
       pr_number:
 
   pl-management-dev-apply:
@@ -45,7 +45,7 @@ jobs:
     with:
       working_directory: ./1_platform_management/environments/dev
       artifact_name: pl-management-dev
-      state_key: pl-management.tfstate
+      state_key: pl-management-dev.tfstate
       pr_number:
 
   # pl-connectivity-dev-gwc-plan:
