@@ -109,7 +109,44 @@ module "nsg_association_jumpbox" {
 }
 
 # =============================================================================
+# SSH KEY GENERATION & KEY VAULT
+# =============================================================================
 
+# Generate SSH key pair for VMs
+resource "tls_private_key" "vm_ssh" {
+  algorithm = "RSA"
+  rsa_bits  = 4096
+}
+
+# Key Vault for storing secrets
+module "key_vault" {
+  source = "../../modules/key-vault"
+
+  name                = "kv-hubmgmt-co-${var.environment}-${var.location_short}-01"
+  resource_group_name = module.hub_rg.name
+  location            = var.location
+  tags                = local.common_tags
+}
+
+# Store private key in Key Vault
+resource "azurerm_key_vault_secret" "vm_ssh_private_key" {
+  name         = "vm-ssh-private-key"
+  value        = tls_private_key.vm_ssh.private_key_openssh
+  key_vault_id = module.key_vault.id
+
+  depends_on = [module.key_vault]
+}
+
+# Store public key in Key Vault for reference
+resource "azurerm_key_vault_secret" "vm_ssh_public_key" {
+  name         = "vm-ssh-public-key"
+  value        = tls_private_key.vm_ssh.public_key_openssh
+  key_vault_id = module.key_vault.id
+
+  depends_on = [module.key_vault]
+}
+
+# =============================================================================
 # HA NVA (pfSense)
 # =============================================================================
 
