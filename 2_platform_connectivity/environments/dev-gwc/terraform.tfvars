@@ -21,9 +21,6 @@ nva_lb_ip        = "10.0.0.6"
 identity_spoke_address_space   = ["10.1.0.0/24"]
 management_spoke_address_space = ["10.2.0.0/24"]
 
-# SSH Key (replace with actual key)
-admin_ssh_public_key = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQ..."
-
 tags = {
   project     = "levendaal"
   environment = "dev"

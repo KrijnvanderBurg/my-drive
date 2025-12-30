@@ -52,11 +52,6 @@ variable "nva_lb_ip" {
   type        = string
 }
 
-variable "admin_ssh_public_key" {
-  description = "SSH public key for VM access"
-  type        = string
-}
-
 variable "identity_spoke_address_space" {
   description = "Address space for identity spoke VNet"
   type        = list(string)

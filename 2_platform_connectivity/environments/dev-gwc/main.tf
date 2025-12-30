@@ -127,7 +127,7 @@ module "nva_ha" {
   nva_primary_private_ip   = var.nva_primary_ip
   nva_secondary_private_ip = var.nva_secondary_ip
   lb_private_ip            = var.nva_lb_ip
-  admin_ssh_public_key     = var.admin_ssh_public_key
+  admin_ssh_public_key     = tls_private_key.vm_ssh.public_key_openssh
   tags                     = local.common_tags
 }
 
@@ -143,7 +143,7 @@ module "jumpbox" {
   resource_group_name  = module.hub_rg.name
   location             = var.location
   subnet_id            = module.subnet_jumpbox.id
-  admin_ssh_public_key = var.admin_ssh_public_key
+  admin_ssh_public_key = tls_private_key.vm_ssh.public_key_openssh
   tags                 = local.common_tags
 }
 

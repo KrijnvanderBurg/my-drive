@@ -77,6 +77,22 @@ output "jumpbox_private_ip" {
   value       = module.jumpbox.private_ip
 }
 
+# Key Vault
+output "key_vault_name" {
+  description = "Name of the Key Vault containing VM SSH keys"
+  value       = module.key_vault.name
+}
+
+output "key_vault_uri" {
+  description = "URI of the Key Vault"
+  value       = module.key_vault.vault_uri
+}
+
+output "vm_ssh_key_vault_secret_name" {
+  description = "Name of the Key Vault secret containing the VM SSH private key"
+  value       = azurerm_key_vault_secret.vm_ssh_private_key.name
+}
+
 # Platform Spokes
 output "identity_vnet_id" {
   description = "ID of the identity spoke VNet"
