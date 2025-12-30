@@ -12,12 +12,28 @@ permissions:
   id-token: write
 
 jobs:
-  pl-management:
-    name: pl-management
-    uses: ./.github/workflows/opentofu-template.yml
+  pl-management-lint:
+    name: pl-management lint
+    uses: ./.github/workflows/opentofu-lint.yml
     with:
       working_directory: ./1_platform_management/environments/dev
-      artifact_prefix: pl-management-dev
+
+  pl-management-plan:
+    name: pl-management plan
+    needs: pl-management-lint
+    uses: ./.github/workflows/opentofu-plan.yml
+    with:
+      working_directory: ./1_platform_management/environments/dev
+      artifact_name: pl-management-dev
+
+  pl-management-apply:
+    name: pl-management apply
+    needs: pl-management-plan
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    uses: ./.github/workflows/opentofu-apply.yml
+    with:
+      working_directory: ./1_platform_management/environments/dev
+      artifact_name: pl-management-dev
 
   # pl-connectivity-dev-global:
   #   name: pl-connectivity dev-global

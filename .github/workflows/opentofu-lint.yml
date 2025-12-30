@@ -1,0 +1,51 @@
+name: OpenTofu Lint
+
+on:
+  workflow_call:
+    inputs:
+      working_directory:
+        description: Path to the OpenTofu configuration directory
+        required: true
+        type: string
+
+permissions:
+  contents: read
+  id-token: write
+
+env:
+  ARM_CLIENT_ID: "167a99fd-6289-4088-a9e0-dd2dc1a2c509"
+  ARM_TENANT_ID: "90d27970-b92c-43dc-9935-1ed557d8e20e"
+  ARM_SUBSCRIPTION_ID: "e388ddce-c79d-4db0-8a6f-cd69b1708954"
+  ARM_USE_OIDC: true
+
+jobs:
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    environment: dev
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Azure Login
+        uses: azure/login@v2
+        with:
+          client-id: ${{ env.ARM_CLIENT_ID }}
+          tenant-id: ${{ env.ARM_TENANT_ID }}
+          subscription-id: ${{ env.ARM_SUBSCRIPTION_ID }}
+
+      - name: Install OpenTofu
+        uses: ./.github/actions/opentofu-install
+        with:
+          tofu_version: 1.8.0
+
+      - name: Initialize OpenTofu
+        uses: ./.github/actions/opentofu-init
+        with:
+          working_directory: ${{ inputs.working_directory }}
+
+      - name: Lint configuration
+        id: lint
+        uses: ./.github/actions/opentofu-lint
+        with:
+          working_directory: ${{ inputs.working_directory }}
