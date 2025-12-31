@@ -82,8 +82,8 @@ module "management_subscription_association" {
 # =============================================================================
 
 resource "azurerm_subscription" "platform_connectivity" {
-  alias             = "pl-connectivity-co-dev-na-01"
-  subscription_name = "pl-connectivity-co-dev-na-01"
+  alias             = "pl-connectivity-co-dev-glb-01"
+  subscription_name = "pl-connectivity-co-dev-glb-01"
   subscription_id   = "9312c5c5-b089-4b62-bb90-0d92d421d66c"
 }
 
