@@ -16,12 +16,12 @@ output "sandbox_management_group" {
   }
 }
 
-output "management_management_group" {
+output "platform_management_management_group" {
   description = "Management management group details"
   value = {
-    id           = module.management_management_group.id
-    name         = module.management_management_group.name
-    display_name = module.management_management_group.display_name
+    id           = module.platform_management_management_group.id
+    name         = module.platform_management_management_group.name
+    display_name = module.platform_management_management_group.display_name
   }
 }
 
