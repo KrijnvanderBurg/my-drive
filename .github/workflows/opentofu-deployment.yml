@@ -66,6 +66,7 @@ jobs:
       working_directory: ./2_platform_connectivity/environments/dev-gwc
       artifact_name: pl-connectivity-dev-gwc
       state_key: pl-connectivity-dev-gwc.tfstate
+      # pr_number: ${{ github.event.pull_request.number }}
 
   # pl-connectivity-dev-global-plan:
   #   name: pl-connectivity-dev-global plan
