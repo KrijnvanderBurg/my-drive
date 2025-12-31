@@ -54,9 +54,9 @@ jobs:
     uses: ./.github/workflows/opentofu-plan.yml
     with:
       working_directory: ./2_platform_connectivity/environments/dev-gwc
-      artifact_name: pl-connectivity-dev-gwc-pr${{ github.event.pull_request.number }}
-      state_key: pl-connectivity-dev-gwc-pr${{ github.event.pull_request.number }}.tfstate
-      pr_number: ${{ github.event.pull_request.number }}
+      artifact_name: pl-connectivity-dev-gwc
+      state_key: pl-connectivity-dev-gwc.tfstate
+      # pr_number: ${{ github.event.pull_request.number }}
 
   # pl-connectivity-dev-gwc-apply:
   #   name: pl-connectivity-dev-gwc apply
