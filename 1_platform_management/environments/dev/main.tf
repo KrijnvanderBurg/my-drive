@@ -78,17 +78,13 @@ module "management_subscription_association" {
 }
 
 # =============================================================================
-# Subscriptions
+# Platform Connectivity Subscription
 # =============================================================================
 
 resource "azurerm_subscription" "platform_connectivity" {
-  subscription_name = "sub-pl-connectivity-dev-na-01"
-  billing_scope_id  = data.azurerm_billing_mca_account_scope.billing["platform"].id
-}
-
-import {
-  to = azurerm_subscription.platform_connectivity
-  id = "/subscriptions/9312c5c5-b089-4b62-bb90-0d92d421d66c"
+  alias             = "pl-connectivity-co-dev-na-01"
+  subscription_name = "pl-connectivity-co-dev-na-01"
+  subscription_id   = "9312c5c5-b089-4b62-bb90-0d92d421d66c"
 }
 
 module "platform_connectivity_subscription_association" {
