@@ -67,6 +67,13 @@ jobs:
           name: tfplan-${{ inputs.artifact_name }}-binary
           path: ${{ runner.temp }}
 
+      - name: Show Plan Before Applying
+        working-directory: ${{ inputs.working_directory }}
+        run: |
+          echo "::group::📋 Plan to be applied"
+          tofu show ${{ runner.temp }}/${{ inputs.artifact_name }}-${{ env.PLAN_BINARY_FILENAME }}
+          echo "::endgroup::"
+
       - name: Apply changes
         id: apply
         uses: ./.github/actions/opentofu-apply
