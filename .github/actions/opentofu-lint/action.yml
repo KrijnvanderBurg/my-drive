@@ -6,22 +6,10 @@ inputs:
     description: Absolute or relative path to the OpenTofu configuration directory
     required: true
 
-outputs:
-  fmt_status:
-    description: Format check status (success/failure)
-    value: ${{ steps.lint.outputs.fmt_status }}
-  validate_status:
-    description: Validation check status (success/failure)
-    value: ${{ steps.lint.outputs.validate_status }}
-  lint_status:
-    description: Overall lint status (success/failure)
-    value: ${{ steps.lint.outputs.lint_status }}
-
 runs:
   using: composite
   steps:
     - name: Lint OpenTofu configuration
-      id: lint
       shell: bash
       run: |
         bash ${{ github.workspace }}/.github/scripts/opentofu-lint.sh \

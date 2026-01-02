@@ -7,9 +7,9 @@ module "spoke" {
   source = "../../modules/spoke-vnet"
 
   workload            = var.workload
-  resource_group_name = "rg-${var.workload}-${var.archetype}-${var.environment}-${var.location_short}-01"
-  vnet_name           = "vnet-${var.workload}-${var.archetype}-${var.environment}-${var.location_short}-01"
-  route_table_name    = "rt-${var.workload}-${var.archetype}-${var.environment}-${var.location_short}-01"
+  resource_group_name = "rg-${var.workload}-${var.archetype}-${var.environment}-${var.location_short}-01${local.pr_suffix}"
+  vnet_name           = "vnet-${var.workload}-${var.archetype}-${var.environment}-${var.location_short}-01${local.pr_suffix}"
+  route_table_name    = "rt-${var.workload}-${var.archetype}-${var.environment}-${var.location_short}-01${local.pr_suffix}"
   location            = var.location
   address_space       = var.address_space
   subnets             = var.subnets
@@ -21,8 +21,8 @@ module "spoke" {
   nva_lb_ip               = data.terraform_remote_state.hub.outputs.nva_lb_ip
 
   # Peering names
-  peering_name_spoke_to_hub = "peer-${var.workload}tohub-${var.archetype}-${var.environment}-${var.location_short}-01"
-  peering_name_hub_to_spoke = "peer-hubto${var.workload}-${var.archetype}-${var.environment}-${var.location_short}-01"
+  peering_name_spoke_to_hub = "peer-${var.workload}tohub-${var.archetype}-${var.environment}-${var.location_short}-01${local.pr_suffix}"
+  peering_name_hub_to_spoke = "peer-hubto${var.workload}-${var.archetype}-${var.environment}-${var.location_short}-01${local.pr_suffix}"
 
   # DNS zone links
   dns_zone_ids = {

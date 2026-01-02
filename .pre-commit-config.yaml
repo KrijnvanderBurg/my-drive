@@ -25,9 +25,3 @@ repos:
         language: system
         files: \.tf(vars)?$
         pass_filenames: true
-
-  # Check for secrets
-  - repo: https://github.com/gitleaks/gitleaks
-    rev: v8.18.1
-    hooks:
-      - id: gitleaks

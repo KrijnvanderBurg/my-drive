@@ -18,53 +18,23 @@ inputs:
   github_token:
     description: GitHub token for API calls
     required: true
+  pr_number:
+    description: PR number
+    required: true
 
 outputs:
-  comment_id:
-    description: ID of the created or updated PR comment
-    value: ${{ steps.create-comment.outputs.comment-id }}
-  comment_url:
-    description: URL to the PR comment
-    value: ${{ steps.create-comment.outputs.comment-url }}
   pr_number:
     description: The PR number that was commented on
-    value: ${{ steps.find-pr.outputs.pr_number }}
+    value: ${{ inputs.pr_number }}
+  comment_body:
+    description: The generated comment body
+    value: ${{ steps.comment.outputs.comment_body }}
 
 runs:
   using: composite
   steps:
-    - name: Find PR number from merge commit
-      id: find-pr
-      shell: bash
-      env:
-        GH_TOKEN: ${{ inputs.github_token }}
-      run: |
-        # Get the PR number associated with this merge commit
-        PR_NUMBER=$(gh pr list --state merged --search "${{ github.sha }}" --json number --jq '.[0].number')
-
-        # If not found, try to extract from commit message (merge commit format)
-        if [[ -z "$PR_NUMBER" ]]; then
-          COMMIT_MSG=$(git log -1 --pretty=%B)
-          PR_NUMBER=$(echo "$COMMIT_MSG" | grep -oP 'Merge pull request #\K\d+' || echo "")
-        fi
-
-        # Alternative: search by commit SHA
-        if [[ -z "$PR_NUMBER" ]]; then
-          PR_NUMBER=$(gh api "/repos/${{ github.repository }}/commits/${{ github.sha }}/pulls" --jq '.[0].number' 2>/dev/null || echo "")
-        fi
-
-        if [[ -z "$PR_NUMBER" ]]; then
-          echo "::warning::Could not find PR number for commit ${{ github.sha }}"
-          echo "pr_found=false" >> "$GITHUB_OUTPUT"
-        else
-          echo "Found PR #${PR_NUMBER}"
-          echo "pr_number=${PR_NUMBER}" >> "$GITHUB_OUTPUT"
-          echo "pr_found=true" >> "$GITHUB_OUTPUT"
-        fi
-
     - name: Generate comment body
       id: comment
-      if: steps.find-pr.outputs.pr_found == 'true'
       shell: bash
       run: |
         bash ${{ github.workspace }}/.github/scripts/opentofu-apply-comment.sh \
@@ -75,19 +45,17 @@ runs:
 
     - name: Find existing apply comment
       id: find-comment
-      if: steps.find-pr.outputs.pr_found == 'true'
       uses: peter-evans/find-comment@v3
       with:
-        issue-number: ${{ steps.find-pr.outputs.pr_number }}
+        issue-number: ${{ inputs.pr_number }}
         comment-author: github-actions[bot]
         body-includes: "OpenTofu Apply - ${{ inputs.environment }}"
 
     - name: Create or update comment
       id: create-comment
-      if: steps.find-pr.outputs.pr_found == 'true'
       uses: peter-evans/create-or-update-comment@v4
       with:
         comment-id: ${{ steps.find-comment.outputs.comment-id }}
-        issue-number: ${{ steps.find-pr.outputs.pr_number }}
+        issue-number: ${{ inputs.pr_number }}
         body: ${{ steps.comment.outputs.comment_body }}
         edit-mode: replace

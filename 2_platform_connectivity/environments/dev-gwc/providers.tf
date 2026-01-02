@@ -10,9 +10,16 @@ terraform {
       source  = "hashicorp/azurerm"
       version = "~> 4.57"
     }
+    tls = {
+      source  = "hashicorp/tls"
+      version = "~> 4.0"
+    }
   }
 }
 
 provider "azurerm" {
   features {}
+
+  storage_use_azuread = true
+  subscription_id     = data.terraform_remote_state.pl-management.outputs.pl_connectivity_subscription.subscription_id
 }

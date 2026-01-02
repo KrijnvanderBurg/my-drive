@@ -5,6 +5,9 @@ inputs:
   working_directory:
     description: Absolute or relative path to the OpenTofu configuration directory
     required: true
+  state_key:
+    description: State file key for backend configuration
+    required: true
 
 runs:
   using: composite
@@ -14,4 +17,4 @@ runs:
       shell: bash
       working-directory: ${{ inputs.working_directory }}
       run: |
-        bash ${{ github.workspace }}/.github/scripts/opentofu-init.sh
+        bash ${{ github.workspace }}/.github/scripts/opentofu-init.sh "${{ inputs.state_key }}"

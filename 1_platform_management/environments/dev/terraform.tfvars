@@ -7,18 +7,6 @@ tags = {
 }
 
 # =============================================================================
-# Subscription IDs
-# =============================================================================
-# IMPORTANT: The management subscription is the ONLY subscription ID that should
-# be hardcoded here. This subscription was created manually because it contains
-# the tfstate storage account required for this Terraform configuration.
-#
-# All other subscriptions MUST be created via Terraform and referenced by their
-# module outputs (e.g., module.some_subscription.id) - never hardcoded as variables.
-# =============================================================================
-pl_management_subscription_id = "9312c5c5-b089-4b62-bb90-0d92d421d66c"
-
-# =============================================================================
 # Billing Configuration (Microsoft Customer Agreement)
 # =============================================================================
 # Define multiple billing scopes for different subscriptions.
