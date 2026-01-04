@@ -122,7 +122,7 @@ module "pl_management_subscription_association" {
 resource "azurerm_subscription" "platform_identity" {
   alias             = "pl-identity-co-dev-na-01"
   subscription_name = "pl-identity-co-dev-na-01"
-  subscription_id   = "96018b0fb-7b8c-491f-8abf-375d2c07ef97"
+  subscription_id   = "6018b0fb-7b8c-491f-8abf-375d2c07ef97"
 }
 
 module "pl_identity_subscription_association" {
