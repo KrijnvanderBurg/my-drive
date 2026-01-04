@@ -87,8 +87,8 @@ resource "azurerm_monitor_activity_log_alert" "breakglass_signin" {
   tags                = local.common_tags
 
   criteria {
-    category       = "SignInLogs"
-    operation_name = "Sign-in activity"
+    category       = "Administrative"
+    operation_name = "Microsoft.Authorization/roleAssignments/write"
     level          = "Informational"
   }
 
