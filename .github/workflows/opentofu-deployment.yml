@@ -69,15 +69,15 @@ jobs:
     needs: [pl-storage-dev-lint]
     uses: ./.github/workflows/opentofu-plan.yml
     with:
-      working_directory: ./3_platform_storage/environments/dev
-      artifact_name: pl-storage-dev
-      state_key: pl-storage-dev.tfstate
+      working_directory: ./3_alz_drives/environments/dev
+      artifact_name: alz-drive-dev
+      state_key: alz-drive-dev.tfstate
 
   pl-storage-dev-apply:
     name: pl-storage-dev apply
     needs: [pl-storage-dev-plan]
     uses: ./.github/workflows/opentofu-apply.yml
     with:
-      working_directory: ./3_platform_storage/environments/dev
-      artifact_name: pl-storage-dev
-      state_key: pl-storage-dev.tfstate
+      working_directory: ./3_alz_drives/environments/dev
+      artifact_name: alz-drive-dev
+      state_key: alz-drive-dev.tfstate
