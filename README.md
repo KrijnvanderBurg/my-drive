@@ -113,17 +113,18 @@ All steps performed to setup initial infrastructure and to current state.
 
 5. **Configure monitoring:**
    - Email alerts are automatically configured via Terraform
-   - Ensure `krijnvdburg@protonmail.com` receives test alerts
+   - Terraform configures email alerts for changes to role assignments (for example, Global Administrator role assignments), **not** for break-glass sign-ins themselves
+   - To monitor break-glass account sign-ins, configure Entra ID diagnostic settings and alert rules on sign-in logs separately from this Terraform configuration
+   - Ensure `krijnvdburg@protonmail.com` receives test alerts for the configured role assignment change alerts
    - Test alert delivery quarterly
 
 ### Testing Procedure
 
 **Perform quarterly (every 3 months):**
 
-1. Test one break-glass account sign-in
+1. Test one break-glass account sign-in to verify the account is operational
 2. Verify Global Administrator access works
-3. Confirm alert email is received within 5 minutes
-4. Document test results in security log
+3. If Entra ID sign-in monitoring has been configured, confirm a corresponding alert email is received within 5 minutes; otherwise, verify that Terraform-managed alerts still fire as expected for role assignment changes (for example, using a non-production change)
 5. Rotate passwords if breach suspected
 
 ### Password Requirements
