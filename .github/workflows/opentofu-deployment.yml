@@ -22,8 +22,8 @@ jobs:
     with:
       working_directory: ./2_platform_identity/environments/dev
 
-  pl-storage-dev-lint:
-    name: pl-storage-dev lint
+  alz-drive-dev-lint:
+    name: alz-drive-dev lint
     uses: ./.github/workflows/opentofu-lint.yml
     with:
       working_directory: ./3_platform_storage/environments/dev
@@ -64,18 +64,18 @@ jobs:
       artifact_name: pl-identity-dev
       state_key: pl-identity-dev.tfstate
 
-  pl-storage-dev-plan:
-    name: pl-storage-dev plan
-    needs: [pl-storage-dev-lint]
+  alz-drive-dev-plan:
+    name: alz-drive-dev plan
+    needs: [alz-drive-dev-lint]
     uses: ./.github/workflows/opentofu-plan.yml
     with:
       working_directory: ./3_alz_drives/environments/dev
       artifact_name: alz-drive-dev
       state_key: alz-drive-dev.tfstate
 
-  pl-storage-dev-apply:
-    name: pl-storage-dev apply
-    needs: [pl-storage-dev-plan]
+  alz-drive-dev-apply:
+    name: alz-drive-dev apply
+    needs: [alz-drive-dev-plan]
     uses: ./.github/workflows/opentofu-apply.yml
     with:
       working_directory: ./3_alz_drives/environments/dev
