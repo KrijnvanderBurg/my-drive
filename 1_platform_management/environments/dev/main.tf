@@ -44,12 +44,12 @@ module "pl_management" {
   parent_management_group_id = module.platform.id
 }
 
-# Platform connectivity Management Group - for management resources
-module "pl_connectivity" {
+# Platform identity Management Group - for identity resources
+module "pl_identity" {
   source = "../../modules/management-group"
 
-  name                       = "mg-pl-connectivity-${var.environment}-na-01"
-  display_name               = "mg-pl-connectivity-${var.environment}-na-01"
+  name                       = "mg-pl-identity-${var.environment}-na-01"
+  display_name               = "mg-pl-identity-${var.environment}-na-01"
   parent_management_group_id = module.platform.id
 }
 
@@ -97,18 +97,18 @@ module "pl_management_subscription_association" {
 }
 
 # =============================================================================
-# Platform Connectivity Subscription
+# Platform Identity Subscription
 # =============================================================================
 
-resource "azurerm_subscription" "platform_connectivity" {
-  alias             = "pl-connectivity-co-dev-glb-01"
-  subscription_name = "pl-connectivity-co-dev-glb-01"
+resource "azurerm_subscription" "platform_identity" {
+  alias             = "pl-identity-co-dev-na-01"
+  subscription_name = "pl-identity-co-dev-na-01"
   subscription_id   = "9312c5c5-b089-4b62-bb90-0d92d421d66c"
 }
 
-module "pl_connectivity_subscription_association" {
+module "pl_identity_subscription_association" {
   source = "../../modules/subscription-association"
 
-  management_group_id = module.pl_connectivity.id
-  subscription_id     = azurerm_subscription.platform_connectivity.subscription_id
+  management_group_id = module.pl_identity.id
+  subscription_id     = azurerm_subscription.platform_identity.subscription_id
 }

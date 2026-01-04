@@ -23,19 +23,3 @@ variable "tags" {
   description = "Common tags to apply to all resources that support tagging"
   type        = map(string)
 }
-
-# =============================================================================
-# Billing Configuration (Microsoft Customer Agreement)
-# =============================================================================
-# Define multiple billing scopes for different subscriptions. Each key is a
-# logical name you can reference when creating subscriptions.
-# =============================================================================
-
-variable "billing_scopes" {
-  description = "Map of billing scopes for MCA subscription creation"
-  type = map(object({
-    billing_account_name = string
-    billing_profile_name = string
-    invoice_section_name = string
-  }))
-}

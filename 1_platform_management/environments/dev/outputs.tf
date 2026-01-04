@@ -34,12 +34,12 @@ output "platform_management_management_group" {
   }
 }
 
-output "platform_connectivity_management_group" {
-  description = "Platform Connectivity management group details"
+output "platform_identity_management_group" {
+  description = "Platform Identity management group details"
   value = {
-    id           = module.pl_connectivity.id
-    name         = module.pl_connectivity.name
-    display_name = module.pl_connectivity.display_name
+    id           = module.pl_identity.id
+    name         = module.pl_identity.name
+    display_name = module.pl_identity.display_name
   }
 }
 
@@ -56,12 +56,12 @@ output "pl_management_subscription_association" {
   }
 }
 
-output "pl_connectivity_subscription_association" {
-  description = "Platform Connectivity subscription association details"
+output "pl_identity_subscription_association" {
+  description = "Platform Identity subscription association details"
   value = {
-    id                  = module.pl_connectivity_subscription_association.id
-    management_group_id = module.pl_connectivity_subscription_association.management_group_id
-    subscription_id     = module.pl_connectivity_subscription_association.subscription_id
+    id                  = module.pl_identity_subscription_association.id
+    management_group_id = module.pl_identity_subscription_association.management_group_id
+    subscription_id     = module.pl_identity_subscription_association.subscription_id
   }
 }
 
@@ -73,11 +73,11 @@ output "pl_management_subscription" {
   }
 }
 
-output "pl_connectivity_subscription" {
-  description = "Platform Connectivity subscription"
+output "pl_identity_subscription" {
+  description = "Platform Identity subscription"
   value = {
-    id              = azurerm_subscription.platform_connectivity.id
-    subscription_id = azurerm_subscription.platform_connectivity.subscription_id
+    id              = azurerm_subscription.platform_identity.id
+    subscription_id = azurerm_subscription.platform_identity.subscription_id
   }
 }
 
