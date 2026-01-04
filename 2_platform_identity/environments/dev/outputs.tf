@@ -18,15 +18,18 @@ output "sg_rbac_platform_contributors" {
 output "action_group_identity_alerts" {
   description = "Identity alerts action group details"
   value = {
-    id   = azurerm_monitor_action_group.identity_alerts.id
-    name = azurerm_monitor_action_group.identity_alerts.name
+    id = module.monitoring_alerts.action_group_id
   }
 }
 
 output "alert_rule_admin_activity" {
   description = "Administrative activity alert rule details"
   value = {
-    id   = azurerm_monitor_activity_log_alert.admin_activity.id
-    name = azurerm_monitor_activity_log_alert.admin_activity.name
+    id = module.monitoring_alerts.activity_log_alert_id
   }
+}
+
+output "monitoring_resource_group" {
+  description = "Monitoring resource group name"
+  value       = module.monitoring_alerts.resource_group_name
 }
