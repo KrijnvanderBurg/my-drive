@@ -10,6 +10,8 @@ permissions:
   id-token: write
 
 jobs:
+  # ===== Platform Management (dev) =====
+  # Lint, plan and apply for platform management
   pl-management-dev-lint:
     name: pl-management-dev lint
     uses: ./.github/workflows/opentofu-lint.yml
@@ -34,6 +36,8 @@ jobs:
       artifact_name: pl-management-dev
       state_key: pl-management-dev.tfstate
 
+  # ===== Platform Identity (dev) =====
+  # Lint, plan and apply for platform identity
   pl-identity-dev-lint:
     name: pl-identity-dev lint
     uses: ./.github/workflows/opentofu-lint.yml
@@ -58,6 +62,8 @@ jobs:
       artifact_name: pl-identity-dev
       state_key: pl-identity-dev.tfstate
 
+  # ===== ALZ Drives (dev) =====
+  # Lint, plan and apply for ALZ drives (storage)
   alz-drive-dev-lint:
     name: alz-drive-dev lint
     uses: ./.github/workflows/opentofu-lint.yml
