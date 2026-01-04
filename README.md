@@ -90,19 +90,20 @@ All steps performed to setup initial infrastructure and to current state.
    6. Click **Grant admin consent for [tenant name]** (CRITICAL - must click this button)
 
 11. **Granted Entra ID directory roles for identity management (Portal only):**
-   API permissions alone are insufficient for role-assignable groups and CA policies.
+   API permissions alone are insufficient. Creating role-assignable groups and CA policies requires directory role assignments.
+
+   **Option A - Azure Portal:**
    1. Go to **Azure Portal** → **Entra ID** → **Roles and administrators**
-   2. Search for and select **Conditional Access Administrator**
+   2. Search for and select **Privileged Role Administrator**
    3. Click **Add assignments**
-   4. Select the service principal `github-opentofu-deployment`
-   5. Click **Add**
-   6. Repeat for **Groups Administrator** role
+   4. Search for `github-opentofu-deployment` service principal
+   5. Select it and click **Add**
 
-   These roles grant the service principal permission to:
-   - Create/manage role-assignable security groups
-   - Create/manage conditional access policies
-   - Manage named locations
-
+   **Why this role is required:**
+   - **Privileged Role Administrator** is needed to create/manage role-assignable security groups
+   - Role-assignable groups can be assigned to Entra ID roles (used for PIM and admin access)
+   - This is a high-privilege role - only grant in non-production or use PIM for time-limited access
+   ```
 ---
 
 ## Emergency Break-glass Account Setup
