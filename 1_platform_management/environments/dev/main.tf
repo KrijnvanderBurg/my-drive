@@ -53,6 +53,15 @@ module "pl_identity" {
   parent_management_group_id = module.platform.id
 }
 
+# Platform connectivity Management Group - for management resources
+module "pl_connectivity" {
+  source = "../../modules/management-group"
+
+  name                       = "mg-pl-connectivity-${var.environment}-na-01"
+  display_name               = "mg-pl-connectivity-${var.environment}-na-01"
+  parent_management_group_id = module.platform.id
+}
+
 # =============================================================================
 # Policy Definitions
 # =============================================================================
