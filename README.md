@@ -76,151 +76,83 @@ All steps performed to setup initial infrastructure and to current state.
    5. Select the CI/CD service principal (`github-opentofu-deployment` / `167a99fd-6289-4088-a9e0-dd2dc1a2c509`)
 
 10. **Granted Microsoft Graph API permissions for Entra ID management (Portal only):**
-   Required for managing Entra ID resources (groups, named locations, conditional access policies).
-   1. Go to **Azure Portal** → **Entra ID** → **App registrations**
-   2. Find `github-opentofu-deployment` (`167a99fd-6289-4088-a9e0-dd2dc1a2c509`)
-   3. Navigate to **API permissions** → **Add a permission**
-   4. Select **Microsoft Graph** → **Application permissions**
-   5. Add the following permissions:
-      - `Group.ReadWrite.All` - Create and manage security groups
-      - `Policy.Read.ConditionalAccess` - Read conditional access policies
-      - `Policy.ReadWrite.ConditionalAccess` - Create and manage conditional access policies
-      - `Policy.Read.All` - Read all policies
-      - `Application.Read.All` - Read applications (for named locations)
-   6. Click **Grant admin consent for [tenant name]** (CRITICAL - must click this button)
-
-11. **Granted Entra ID directory roles for identity management (Portal only):**
-   API permissions alone are insufficient. Creating role-assignable groups and CA policies requires directory role assignments.
-
-   **Option A - Azure Portal:**
-   1. Go to **Azure Portal** → **Entra ID** → **Roles and administrators**
-   2. Search for and select **Privileged Role Administrator**
-   3. Click **Add assignments**
-   4. Search for `github-opentofu-deployment` service principal
-   5. Select it and click **Add**
-
-   **Why this role is required:**
-   - **Privileged Role Administrator** is needed to create/manage role-assignable security groups
-   - Role-assignable groups can be assigned to Entra ID roles (used for PIM and admin access)
-   - This is a high-privilege role - only grant in non-production or use PIM for time-limited access
-   ```
----
-
-## Emergency Break-glass Account Setup
-
-**CRITICAL:** Emergency accounts provide last-resort access when Conditional Access policies fail or misconfiguration locks out administrators.
-
-### Manual Creation Process
-
-1. **Create two cloud-only Global Administrator accounts:**
-   ```bash
-   # Via Azure Portal (not CLI/Terraform to keep credentials out of automation):
-   # 1. Azure Portal → Entra ID → Users → New user
-   # 2. User principal name: breakglass-01@<your-domain>.onmicrosoft.com
-   # 3. Display name: Break-glass Account 01
-   # 4. Password: Generate 20+ character random password
-   # 5. Uncheck "Require this user to change password on first sign in"
-   # 6. Repeat for breakglass-02@<your-domain>.onmicrosoft.com
-   ```
-
-2. **Assign Global Administrator role:**
-   ```bash
-   # Azure Portal → Entra ID → Roles and administrators → Global Administrator
-   # Add both break-glass accounts as permanent assignments (not PIM eligible)
-   ```
-
-3. **Add accounts to break-glass exclusion group:**
-   - Navigate to Entra ID → Groups
-   - Find group: `sg-ca-exclude-breakglass-dev-na-01`
-   - Add both `breakglass-01` and `breakglass-02` as members
-
-4. **Store credentials securely:**
-   - Print passwords and store in **physical safe** at office
-   - Document safe location in security runbook (not in Git)
-   - Alternative: Store in Azure Key Vault with restricted access
-   - **Never** store in Terraform state or Git repositories
-
-5. **Configure monitoring:**
-   - Email alerts are automatically configured via Terraform
-   - Terraform configures email alerts for changes to role assignments (for example, Global Administrator role assignments), **not** for break-glass sign-ins themselves
-   - To monitor break-glass account sign-ins, configure Entra ID diagnostic settings and alert rules on sign-in logs separately from this Terraform configuration
-   - Ensure `krijnvdburg@protonmail.com` receives test alerts for the configured role assignment change alerts
-   - Test alert delivery quarterly
-
-### Testing Procedure
-
-**Perform quarterly (every 3 months):**
-
-1. Test one break-glass account sign-in to verify the account is operational
-2. Verify Global Administrator access works
-3. If Entra ID sign-in monitoring has been configured, confirm a corresponding alert email is received within 5 minutes; otherwise, verify that Terraform-managed alerts still fire as expected for role assignment changes (for example, using a non-production change)
-5. Rotate passwords if breach suspected
-
-### Password Requirements
-
-- Minimum 20 characters
-- Mix of uppercase, lowercase, numbers, special characters
-- No dictionary words
-- Unique (not reused elsewhere)
-- Changed annually or on suspected compromise
+    Required for managing Entra ID resources (groups).
+    1. Go to **Azure Portal** → **Entra ID** → **App registrations**
+    2. Find `github-opentofu-deployment` (`167a99fd-6289-4088-a9e0-dd2dc1a2c509`)
+    3. Navigate to **API permissions** → **Add a permission**
+    4. Select **Microsoft Graph** → **Application permissions**
+    5. Add the following permissions:
+       - `Group.ReadWrite.All` - Create and manage security groups
+    6. Click **Grant admin consent for [tenant name]** (CRITICAL - must click this button)
 
 ---
 
-## Conditional Access Policy Validation
+## Important Notes
 
-Conditional Access policies are initially deployed in **report-only mode** to prevent accidental lockouts.
+### Entra ID Premium Licensing
 
-### Validation Process
+This deployment uses **only free tier Entra ID features**:
+- ✅ Security groups (non-role-assignable, for Azure RBAC)
+- ✅ Azure Monitor alerts (administrative activity)
+- ❌ Conditional Access policies (requires Premium P1/P2)
+- ❌ Named locations (requires Premium P1/P2)
+- ❌ Role-assignable groups (requires Premium P1/P2)
 
-1. **Monitor for 2 weeks in report-only mode:**
-   ```bash
-   # Check sign-in logs for policy evaluation
-   # Azure Portal → Entra ID → Sign-in logs
-   # Filter by: Conditional Access → Report-only
-   ```
+**Current deployment includes:**
+- Security group for platform contributors (`sg-rbac-platform-contributors-dev-na-01`)
+- Resource group for monitoring
+- Action group for email alerts
+- Activity log alert for role assignment changes
 
-2. **Review impact:**
-   - Verify no legitimate users would be blocked
-   - Check for unexpected application/device combinations
-   - Confirm break-glass accounts are properly excluded
+---
 
-3. **Enable policies one at a time:**
-   ```bash
-   # Edit 2_platform_identity/environments/dev/main.tf
-   # Change state from "enabledForReportingButNotEnforced" to "enabled"
-   # For one policy at a time, then apply:
+## Service Principal Documentation
 
-   cd 2_platform_identity/environments/dev
-   tofu plan
-   tofu apply
-   ```
+### github-opentofu-deployment
 
-4. **Recommended enablement order:**
-   - **Week 1-2:** All policies in report-only mode
-   - **Week 3:** Enable `CA001: Block legacy authentication`
-   - **Week 4:** Enable `CA003: Require MFA for Azure management`
-   - **Week 5:** Enable `CA002: Require MFA for all users`
+**Purpose:** CI/CD service principal for OpenTofu deployments via GitHub Actions OIDC.
 
-5. **Monitor after each enablement:**
-   - Watch for support tickets about access issues
-   - Check sign-in failure rates
-   - Be ready to disable policy if issues occur
+| Property | Value |
+|----------|-------|
+| App ID | `167a99fd-6289-4088-a9e0-dd2dc1a2c509` |
+| Display Name | `github-opentofu-deployment` |
+| Authentication | OIDC federated credential |
+| Subject | `repo:KrijnvanderBurg/my-cloud:environment:dev` |
 
-### Rollback Procedure
+**Azure RBAC Roles:**
+- Contributor on management subscription
+- Management Group Contributor at tenant root
+- Resource Policy Contributor at tenant root
+- User Access Administrator at tenant root
 
-If a policy causes issues:
+**Microsoft Graph API Permissions:**
+- `Application.Read.All`
+- `Group.ReadWrite.All`
+- `Policy.Read.All`
+- `Policy.Read.ConditionalAccess`
+- `Policy.ReadWrite.ConditionalAccess`
 
+---
+
+## Managing Users and Groups
+
+### Adding Users to Platform Contributors Group
+
+Users in `sg-rbac-platform-contributors-dev-na-01` will have Contributor access to platform subscriptions once RBAC assignments are configured.
+
+**Via Azure Portal:**
+1. Go to **Entra ID** → **Groups**
+2. Search for `sg-rbac-platform-contributors-dev-na-01`
+3. Click **Members** → **Add members**
+4. Select users and click **Select**
+
+**Via Azure CLI:**
 ```bash
-# Immediately set policy to disabled in Terraform
-# File: 2_platform_identity/environments/dev/main.tf
-# Change: state = "disabled"
+# Get group object ID
+GROUP_ID=$(az ad group show --group "sg-rbac-platform-contributors-dev-na-01" --query id -o tsv)
 
-cd 2_platform_identity/environments/dev
-tofu apply
-
-# Investigate root cause
-# Fix policy configuration
-# Re-enable in report-only mode first
+# Add user to group
+az ad group member add --group $GROUP_ID --member-id <user-object-id>
 ```
 
 ---

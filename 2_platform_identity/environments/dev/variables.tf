@@ -8,12 +8,6 @@ variable "tags" {
   type        = map(string)
 }
 
-variable "trusted_ips" {
-  description = "List of trusted IP addresses or CIDR ranges for named location"
-  type        = list(string)
-  default     = ["192.168.1.1/32"]
-}
-
 variable "alert_email" {
   description = "Email address for identity security alerts"
   type        = string
