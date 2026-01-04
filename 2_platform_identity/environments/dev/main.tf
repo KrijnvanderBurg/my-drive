@@ -97,4 +97,9 @@ resource "azurerm_monitor_activity_log_alert" "breakglass_signin" {
   }
 
   enabled = true
+
+  depends_on = [
+    azurerm_resource_group.monitoring,
+    azurerm_monitor_action_group.identity_alerts
+  ]
 }

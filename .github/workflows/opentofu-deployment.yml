@@ -24,7 +24,7 @@ jobs:
 
   pl-management-dev-plan:
     name: pl-management-dev plan
-    needs: [pl-management-dev-lint, pl-identity-dev-lint]
+    needs: [pl-management-dev-lint]
     uses: ./.github/workflows/opentofu-plan.yml
     with:
       working_directory: ./1_platform_management/environments/dev
@@ -42,7 +42,7 @@ jobs:
 
   pl-identity-dev-plan:
     name: pl-identity-dev plan
-    needs: [pl-management-dev-apply]
+    needs: [pl-identity-dev-lint]
     uses: ./.github/workflows/opentofu-plan.yml
     with:
       working_directory: ./2_platform_identity/environments/dev
