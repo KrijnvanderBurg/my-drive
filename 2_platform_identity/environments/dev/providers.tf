@@ -14,6 +14,7 @@ terraform {
 
 provider "azurerm" {
   features {}
+  subscription_id     = data.terraform_remote_state.management.outputs.pl_identity_subscription.subscription_id
   storage_use_azuread = true
 }
 

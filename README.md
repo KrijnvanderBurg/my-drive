@@ -75,6 +75,20 @@ All steps performed to setup initial infrastructure and to current state.
    4. Select role: **Billing account contributor**
    5. Select the CI/CD service principal (`github-opentofu-deployment` / `167a99fd-6289-4088-a9e0-dd2dc1a2c509`)
 
+10. **Granted Microsoft Graph API permissions for Entra ID management (Portal only):**
+   Required for managing Entra ID resources (groups, named locations, conditional access policies).
+   1. Go to **Azure Portal** → **Entra ID** → **App registrations**
+   2. Find `github-opentofu-deployment` (`167a99fd-6289-4088-a9e0-dd2dc1a2c509`)
+   3. Navigate to **API permissions** → **Add a permission**
+   4. Select **Microsoft Graph** → **Application permissions**
+   5. Add the following permissions:
+      - `Group.ReadWrite.All` - Create and manage security groups
+      - `Policy.Read.ConditionalAccess` - Read conditional access policies
+      - `Policy.ReadWrite.ConditionalAccess` - Create and manage conditional access policies
+      - `Policy.Read.All` - Read all policies
+      - `Application.Read.All` - Read applications (for named locations)
+   6. Click **Grant admin consent** for the tenant
+
 ---
 
 ## Emergency Break-glass Account Setup
