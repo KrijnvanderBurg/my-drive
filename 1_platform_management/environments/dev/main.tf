@@ -53,13 +53,13 @@ module "pl_identity" {
   parent_management_group_id = module.platform.id
 }
 
-# Platform connectivity Management Group - for management resources
-module "pl_connectivity" {
+# Landing Zone Management Group - for application workloads
+module "landingzone" {
   source = "../../modules/management-group"
 
-  name                       = "mg-pl-connectivity-${var.environment}-na-01"
-  display_name               = "mg-pl-connectivity-${var.environment}-na-01"
-  parent_management_group_id = module.platform.id
+  name                       = "mg-landingzone-${var.environment}-na-01"
+  display_name               = "mg-landingzone-${var.environment}-na-01"
+  parent_management_group_id = module.levendaal.id
 }
 
 # =============================================================================
@@ -85,6 +85,16 @@ resource "azurerm_management_group_policy_assignment" "platform_management_deny_
   description          = "Prevents deletion of any resources under platform management management group"
   policy_definition_id = module.policy_deny_delete.id
   management_group_id  = module.pl_management.id
+  enforce              = true
+}
+
+# Protect landing zone management group from accidental deletions
+resource "azurerm_management_group_policy_assignment" "landingzone_deny_delete" {
+  name                 = "deny-del-landingzone"
+  display_name         = "Deny Delete Operations - Landing Zone"
+  description          = "Prevents deletion of any resources under landing zone management group"
+  policy_definition_id = module.policy_deny_delete.id
+  management_group_id  = module.landingzone.id
   enforce              = true
 }
 
@@ -120,4 +130,21 @@ module "pl_identity_subscription_association" {
 
   management_group_id = module.pl_identity.id
   subscription_id     = azurerm_subscription.platform_identity.subscription_id
+}
+
+# =============================================================================
+# Drive Subscription
+# =============================================================================
+
+resource "azurerm_subscription" "alz_drive" {
+  alias             = "alz-drive-on-dev-na-01"
+  subscription_name = "alz-drive-on-dev-na-01"
+  subscription_id   = "4111975b-f6ca-4e08-b7b6-87d7b6c35840"
+}
+
+module "alz_drive_subscription_association" {
+  source = "../../modules/subscription-association"
+
+  management_group_id = module.landingzone.id
+  subscription_id     = azurerm_subscription.alz_drive.subscription_id
 }

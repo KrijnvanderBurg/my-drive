@@ -22,6 +22,12 @@ jobs:
     with:
       working_directory: ./2_platform_identity/environments/dev
 
+  pl-storage-dev-lint:
+    name: pl-storage-dev lint
+    uses: ./.github/workflows/opentofu-lint.yml
+    with:
+      working_directory: ./3_platform_storage/environments/dev
+
   pl-management-dev-plan:
     name: pl-management-dev plan
     needs: [pl-management-dev-lint]
@@ -57,3 +63,21 @@ jobs:
       working_directory: ./2_platform_identity/environments/dev
       artifact_name: pl-identity-dev
       state_key: pl-identity-dev.tfstate
+
+  pl-storage-dev-plan:
+    name: pl-storage-dev plan
+    needs: [pl-storage-dev-lint]
+    uses: ./.github/workflows/opentofu-plan.yml
+    with:
+      working_directory: ./3_platform_storage/environments/dev
+      artifact_name: pl-storage-dev
+      state_key: pl-storage-dev.tfstate
+
+  pl-storage-dev-apply:
+    name: pl-storage-dev apply
+    needs: [pl-storage-dev-plan]
+    uses: ./.github/workflows/opentofu-apply.yml
+    with:
+      working_directory: ./3_platform_storage/environments/dev
+      artifact_name: pl-storage-dev
+      state_key: pl-storage-dev.tfstate

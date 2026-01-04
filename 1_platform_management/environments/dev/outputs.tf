@@ -43,6 +43,15 @@ output "platform_identity_management_group" {
   }
 }
 
+output "landingzone_management_group" {
+  description = "Landing Zone management group details"
+  value = {
+    id           = module.landingzone.id
+    name         = module.landingzone.name
+    display_name = module.landingzone.display_name
+  }
+}
+
 # =============================================================================
 # Subscription Association Outputs
 # =============================================================================
@@ -65,6 +74,15 @@ output "pl_identity_subscription_association" {
   }
 }
 
+output "alz_drive_subscription_association" {
+  description = "ALZ Drive subscription association details"
+  value = {
+    id                  = module.alz_drive_subscription_association.id
+    management_group_id = module.alz_drive_subscription_association.management_group_id
+    subscription_id     = module.alz_drive_subscription_association.subscription_id
+  }
+}
+
 output "pl_management_subscription" {
   description = "Platform Management subscription"
   value = {
@@ -78,6 +96,14 @@ output "pl_identity_subscription" {
   value = {
     id              = azurerm_subscription.platform_identity.id
     subscription_id = azurerm_subscription.platform_identity.subscription_id
+  }
+}
+
+output "alz_drive_subscription" {
+  description = "ALZ Drive subscription"
+  value = {
+    id              = azurerm_subscription.alz_drive.id
+    subscription_id = azurerm_subscription.alz_drive.subscription_id
   }
 }
 

@@ -12,11 +12,6 @@ variable "tenant_id" {
 variable "environment" {
   description = "Environment name (dev, test, accp, prod)"
   type        = string
-
-  validation {
-    condition     = contains(["dev", "test", "accp", "prod"], var.environment)
-    error_message = "Environment must be one of: dev, test, accp, prod."
-  }
 }
 
 variable "tags" {

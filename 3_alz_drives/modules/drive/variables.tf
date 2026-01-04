@@ -1,0 +1,24 @@
+variable "environment" {
+  description = "The environment for the deployment (dev, test, accp, prod)"
+  type        = string
+}
+
+variable "region" {
+  description = "The short region code (e.g., na, weu, gwc)"
+  type        = string
+}
+
+variable "location" {
+  description = "The Azure region for the resources"
+  type        = string
+}
+
+variable "allowed_ips" {
+  description = "List of IP addresses or CIDR ranges allowed to access the storage account"
+  type        = list(string)
+}
+
+variable "tags" {
+  description = "A map of tags to apply to all resources"
+  type        = map(string)
+}
