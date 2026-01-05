@@ -39,54 +39,54 @@ jobs:
       artifact_name: pl-management-dev
       state_key: pl-management-dev.tfstate
 
-  # ===== Platform Identity (dev) =====
-  # Lint, plan and apply for platform identity
-  pl-identity-dev-lint:
-    name: pl-identity-dev lint
-    uses: ./.github/workflows/opentofu-lint.yml
-    with:
-      working_directory: ./2_platform_identity/environments/dev
+  # # ===== Platform Identity (dev) =====
+  # # Lint, plan and apply for platform identity
+  # pl-identity-dev-lint:
+  #   name: pl-identity-dev lint
+  #   uses: ./.github/workflows/opentofu-lint.yml
+  #   with:
+  #     working_directory: ./2_platform_identity/environments/dev
 
-  pl-identity-dev-plan:
-    name: pl-identity-dev plan
-    needs: [pl-identity-dev-lint]
-    uses: ./.github/workflows/opentofu-plan.yml
-    with:
-      working_directory: ./2_platform_identity/environments/dev
-      artifact_name: pl-identity-dev
-      state_key: pl-identity-dev.tfstate
+  # pl-identity-dev-plan:
+  #   name: pl-identity-dev plan
+  #   needs: [pl-identity-dev-lint]
+  #   uses: ./.github/workflows/opentofu-plan.yml
+  #   with:
+  #     working_directory: ./2_platform_identity/environments/dev
+  #     artifact_name: pl-identity-dev
+  #     state_key: pl-identity-dev.tfstate
 
-  pl-identity-dev-apply:
-    name: pl-identity-dev apply
-    needs: [pl-identity-dev-plan]
-    uses: ./.github/workflows/opentofu-apply.yml
-    with:
-      working_directory: ./2_platform_identity/environments/dev
-      artifact_name: pl-identity-dev
-      state_key: pl-identity-dev.tfstate
+  # pl-identity-dev-apply:
+  #   name: pl-identity-dev apply
+  #   needs: [pl-identity-dev-plan]
+  #   uses: ./.github/workflows/opentofu-apply.yml
+  #   with:
+  #     working_directory: ./2_platform_identity/environments/dev
+  #     artifact_name: pl-identity-dev
+  #     state_key: pl-identity-dev.tfstate
 
-  # ===== ALZ Drives (dev) =====
-  # Lint, plan and apply for ALZ drives (storage)
-  alz-drive-dev-lint:
-    name: alz-drive-dev lint
-    uses: ./.github/workflows/opentofu-lint.yml
-    with:
-      working_directory: ./3_alz_drives/environments/dev
+  # # ===== ALZ Drives (dev) =====
+  # # Lint, plan and apply for ALZ drives (storage)
+  # alz-drive-dev-lint:
+  #   name: alz-drive-dev lint
+  #   uses: ./.github/workflows/opentofu-lint.yml
+  #   with:
+  #     working_directory: ./3_alz_drives/environments/dev
 
-  alz-drive-dev-plan:
-    name: alz-drive-dev plan
-    needs: [alz-drive-dev-lint]
-    uses: ./.github/workflows/opentofu-plan.yml
-    with:
-      working_directory: ./3_alz_drives/environments/dev
-      artifact_name: alz-drive-dev
-      state_key: alz-drive-dev.tfstate
+  # alz-drive-dev-plan:
+  #   name: alz-drive-dev plan
+  #   needs: [alz-drive-dev-lint]
+  #   uses: ./.github/workflows/opentofu-plan.yml
+  #   with:
+  #     working_directory: ./3_alz_drives/environments/dev
+  #     artifact_name: alz-drive-dev
+  #     state_key: alz-drive-dev.tfstate
 
-  alz-drive-dev-apply:
-    name: alz-drive-dev apply
-    needs: [alz-drive-dev-plan]
-    uses: ./.github/workflows/opentofu-apply.yml
-    with:
-      working_directory: ./3_alz_drives/environments/dev
-      artifact_name: alz-drive-dev
-      state_key: alz-drive-dev.tfstate
+  # alz-drive-dev-apply:
+  #   name: alz-drive-dev apply
+  #   needs: [alz-drive-dev-plan]
+  #   uses: ./.github/workflows/opentofu-apply.yml
+  #   with:
+  #     working_directory: ./3_alz_drives/environments/dev
+  #     artifact_name: alz-drive-dev
+  #     state_key: alz-drive-dev.tfstate
