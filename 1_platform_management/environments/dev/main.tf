@@ -137,8 +137,8 @@ module "pl_identity_subscription_association" {
 # =============================================================================
 
 resource "azurerm_subscription" "alz_drive" {
-  alias             = "alz-drive-on-dev-na-01"
-  subscription_name = "alz-drive-on-dev-na-01"
+  alias             = "alz-drive-on-dev-na-02"
+  subscription_name = "alz-drive-on-dev-na-02"
   subscription_id   = "9af01e5c-f933-4b86-a389-a8ac837965a5"
 }
 
