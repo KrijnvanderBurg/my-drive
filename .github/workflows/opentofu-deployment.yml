@@ -15,6 +15,32 @@ concurrency:
 jobs:
   # Jobs in reverse order of dependency; then its in right order in the gh actions UI
 
+  # ===== ALZ Drives (dev) =====
+  # Lint, plan and apply for ALZ drives (storage)
+  alz-drive-dev-lint:
+    name: alz-drive-dev lint
+    uses: ./.github/workflows/opentofu-lint.yml
+    with:
+      working_directory: ./3_alz_drives/environments/dev
+
+  alz-drive-dev-plan:
+    name: alz-drive-dev plan
+    needs: [alz-drive-dev-lint]
+    uses: ./.github/workflows/opentofu-plan.yml
+    with:
+      working_directory: ./3_alz_drives/environments/dev
+      artifact_name: alz-drive-dev
+      state_key: alz-drive-dev.tfstate
+
+  alz-drive-dev-apply:
+    name: alz-drive-dev apply
+    needs: [alz-drive-dev-plan]
+    uses: ./.github/workflows/opentofu-apply.yml
+    with:
+      working_directory: ./3_alz_drives/environments/dev
+      artifact_name: alz-drive-dev
+      state_key: alz-drive-dev.tfstate
+
   # ===== Platform Identity (dev) =====
   # Lint, plan and apply for platform identity
   pl-identity-dev-lint:
@@ -66,29 +92,3 @@ jobs:
       working_directory: ./1_platform_management/environments/dev
       artifact_name: pl-management-dev
       state_key: pl-management-dev.tfstate
-
-  # # ===== ALZ Drives (dev) =====
-  # # Lint, plan and apply for ALZ drives (storage)
-  # alz-drive-dev-lint:
-  #   name: alz-drive-dev lint
-  #   uses: ./.github/workflows/opentofu-lint.yml
-  #   with:
-  #     working_directory: ./3_alz_drives/environments/dev
-
-  # alz-drive-dev-plan:
-  #   name: alz-drive-dev plan
-  #   needs: [alz-drive-dev-lint]
-  #   uses: ./.github/workflows/opentofu-plan.yml
-  #   with:
-  #     working_directory: ./3_alz_drives/environments/dev
-  #     artifact_name: alz-drive-dev
-  #     state_key: alz-drive-dev.tfstate
-
-  # alz-drive-dev-apply:
-  #   name: alz-drive-dev apply
-  #   needs: [alz-drive-dev-plan]
-  #   uses: ./.github/workflows/opentofu-apply.yml
-  #   with:
-  #     working_directory: ./3_alz_drives/environments/dev
-  #     artifact_name: alz-drive-dev
-  #     state_key: alz-drive-dev.tfstate
