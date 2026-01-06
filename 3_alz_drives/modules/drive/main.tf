@@ -39,7 +39,7 @@ resource "azurerm_storage_account" "this" {
   # Network restrictions - deny all by default, allow only whitelisted IPs
   network_rules {
     default_action = "Deny"
-    bypass         = []
+    bypass         = ["AzureServices"]
     ip_rules       = var.allowed_ips
   }
 
