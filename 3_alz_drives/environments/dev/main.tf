@@ -12,6 +12,6 @@ module "drive" {
   tags        = local.common_tags
 
   containers = [
-    "p1",
+    "tier1",
   ]
 }
