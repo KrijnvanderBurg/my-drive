@@ -36,12 +36,8 @@ resource "azurerm_storage_account" "this" {
     }
   }
 
-  # Network restrictions - Allow to enable container creation
-  network_rules {
-    default_action = "Allow"
-    bypass         = []
-    ip_rules       = var.allowed_ips
-  }
+  # Network rules applied separately after container creation
+  # See azurerm_storage_account_network_rules resource below
 
   tags = var.tags
 }
@@ -51,4 +47,16 @@ resource "azurerm_storage_data_lake_gen2_filesystem" "containers" {
 
   name               = each.value
   storage_account_id = azurerm_storage_account.this.id
+}
+
+# Apply network lockdown AFTER containers are created
+resource "azurerm_storage_account_network_rules" "this" {
+  storage_account_id = azurerm_storage_account.this.id
+
+  default_action = "Deny"
+  bypass         = []
+  ip_rules       = var.allowed_ips
+
+  # Ensure containers exist before locking down network
+  depends_on = [azurerm_storage_data_lake_gen2_filesystem.containers]
 }
