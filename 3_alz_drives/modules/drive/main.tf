@@ -46,11 +46,6 @@ resource "azurerm_storage_data_lake_gen2_filesystem" "containers" {
   storage_account_id = azurerm_storage_account.this.id
 }
 
-import {
-  to = azurerm_storage_account_network_rules.this
-  id = azurerm_storage_account.this.id
-}
-
 resource "azurerm_storage_account_network_rules" "this" {
   storage_account_id = azurerm_storage_account.this.id
 
