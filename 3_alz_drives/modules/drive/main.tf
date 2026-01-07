@@ -49,7 +49,7 @@ resource "azurerm_storage_data_lake_gen2_filesystem" "containers" {
 resource "azurerm_storage_account_network_rules" "this" {
   storage_account_id = azurerm_storage_account.this.id
 
-  default_action = "Allow"
+  default_action = "Deny"
   bypass         = []
   ip_rules       = var.allowed_ips
 
