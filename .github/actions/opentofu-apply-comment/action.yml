@@ -18,14 +18,11 @@ inputs:
   github_token:
     description: GitHub token for API calls
     required: true
-  pr_number:
-    description: PR number
-    required: true
 
 outputs:
   pr_number:
     description: The PR number that was commented on
-    value: ${{ inputs.pr_number }}
+    value: ${{ github.event.pull_request.number }}
   comment_body:
     description: The generated comment body
     value: ${{ steps.comment.outputs.comment_body }}
@@ -47,7 +44,7 @@ runs:
       id: find-comment
       uses: peter-evans/find-comment@v3
       with:
-        issue-number: ${{ inputs.pr_number }}
+        issue-number: ${{ github.event.pull_request.number }}
         comment-author: github-actions[bot]
         body-includes: "OpenTofu Apply - ${{ inputs.environment }}"
 
@@ -56,6 +53,6 @@ runs:
       uses: peter-evans/create-or-update-comment@v4
       with:
         comment-id: ${{ steps.find-comment.outputs.comment-id }}
-        issue-number: ${{ inputs.pr_number }}
+        issue-number: ${{ github.event.pull_request.number }}
         body: ${{ steps.comment.outputs.comment_body }}
         edit-mode: replace
