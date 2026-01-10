@@ -12,6 +12,10 @@ concurrency:
   group: ${{ github.workflow }}
   cancel-in-progress: false
 
+env:
+  # Service Principal Client IDs (from 2_platform_identity outputs)
+  SP_PLATFORM_MANAGEMENT_CLIENT_ID: "" # TODO: Add after applying 2_platform_identity
+
 jobs:
   # Jobs in reverse order of dependency; then its in right order in the gh actions UI
 
@@ -31,6 +35,7 @@ jobs:
       working_directory: ./1_platform_management/environments/dev
       artifact_name: pl-management-dev
       state_key: pl-management-dev.tfstate
+      client_id: ${{ env.SP_PLATFORM_MANAGEMENT_CLIENT_ID }}
 
   pl-management-dev-apply:
     name: pl-management-dev apply
@@ -40,6 +45,7 @@ jobs:
       working_directory: ./1_platform_management/environments/dev
       artifact_name: pl-management-dev
       state_key: pl-management-dev.tfstate
+      client_id: ${{ env.SP_PLATFORM_MANAGEMENT_CLIENT_ID }}
 
   # ===== Platform Identity (dev) =====
   # Lint, plan and apply for platform identity
