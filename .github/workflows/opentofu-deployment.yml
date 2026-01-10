@@ -12,10 +12,6 @@ concurrency:
   group: ${{ github.workflow }}
   cancel-in-progress: false
 
-env:
-  # Service Principal Client IDs (from 2_platform_identity outputs)
-  SP_PLATFORM_MANAGEMENT_CLIENT_ID: "" # TODO: Add after applying 2_platform_identity
-
 jobs:
   # Jobs in reverse order of dependency; then its in right order in the gh actions UI
 
@@ -35,7 +31,7 @@ jobs:
       working_directory: ./1_platform_management/environments/dev
       artifact_name: pl-management-dev
       state_key: pl-management-dev.tfstate
-      client_id: ${{ env.SP_PLATFORM_MANAGEMENT_CLIENT_ID }}
+      client_id: "167a99fd-6289-4088-a9e0-dd2dc1a2c509"
 
   pl-management-dev-apply:
     name: pl-management-dev apply
@@ -45,7 +41,7 @@ jobs:
       working_directory: ./1_platform_management/environments/dev
       artifact_name: pl-management-dev
       state_key: pl-management-dev.tfstate
-      client_id: ${{ env.SP_PLATFORM_MANAGEMENT_CLIENT_ID }}
+      client_id: "167a99fd-6289-4088-a9e0-dd2dc1a2c509"
 
   # ===== Platform Identity (dev) =====
   # Lint, plan and apply for platform identity
@@ -63,6 +59,7 @@ jobs:
       working_directory: ./2_platform_identity/environments/dev
       artifact_name: pl-identity-dev
       state_key: pl-identity-dev.tfstate
+      client_id: "167a99fd-6289-4088-a9e0-dd2dc1a2c509"
 
   pl-identity-dev-apply:
     name: pl-identity-dev apply
@@ -72,6 +69,7 @@ jobs:
       working_directory: ./2_platform_identity/environments/dev
       artifact_name: pl-identity-dev
       state_key: pl-identity-dev.tfstate
+      client_id: "167a99fd-6289-4088-a9e0-dd2dc1a2c509"
 
   # ===== ALZ Drives (dev) =====
   # Lint, plan and apply for ALZ drives (storage)
@@ -89,6 +87,7 @@ jobs:
       working_directory: ./3_alz_drives/environments/dev
       artifact_name: alz-drive-dev
       state_key: alz-drive-dev.tfstate
+      client_id: "167a99fd-6289-4088-a9e0-dd2dc1a2c509"
     secrets: inherit
 
   alz-drive-dev-apply:
@@ -99,4 +98,5 @@ jobs:
       working_directory: ./3_alz_drives/environments/dev
       artifact_name: alz-drive-dev
       state_key: alz-drive-dev.tfstate
+      client_id: "167a99fd-6289-4088-a9e0-dd2dc1a2c509"
     secrets: inherit
