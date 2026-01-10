@@ -127,3 +127,17 @@ output "environment_info" {
     environment = var.environment
   }
 }
+
+# =============================================================================
+# Terraform State Storage
+# =============================================================================
+
+output "tfstate_storage_account" {
+  description = "Terraform state storage account details"
+  value = {
+    id                  = "/subscriptions/e388ddce-c79d-4db0-8a6f-cd69b1708954/resourceGroups/rg-tfstate-co-dev-gwc-01/providers/Microsoft.Storage/storageAccounts/sttfstatecodevgwc01"
+    name                = "sttfstatecodevgwc01"
+    resource_group_name = "rg-tfstate-co-dev-gwc-01"
+    subscription_id     = "e388ddce-c79d-4db0-8a6f-cd69b1708954"
+  }
+}
