@@ -105,8 +105,6 @@ All steps performed to setup initial infrastructure and to current state.
       --assignee $SP_OBJECT_ID \
       --role "Reader" \
       --scope "/subscriptions/$ALZ_SUB_ID"
-
-    echo "✅ Complete! Client ID: $APP_ID"
     ```
     **Note:** Step 5 (admin consent) requires Global Administrator or Privileged Role Administrator role. If CLI fails, grant via Portal:
     Azure AD → App registrations → sp-platform-identity-co-dev-na-01 → API permissions → Grant admin consent
