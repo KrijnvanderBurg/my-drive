@@ -35,14 +35,14 @@ module "sp_alz_drives" {
 
 # Management Group Contributor at tenant root - for reading tenant root and managing MG hierarchy
 resource "azurerm_role_assignment" "sp_platform_management_tenant_root_mg_contributor" {
-  scope                = "/providers/Microsoft.Management/managementGroups/${data.terraform_remote_state.management.outputs.environment_info.tenant_id}"
+  scope                = data.terraform_remote_state.management.outputs.tenant_root_management_group_id
   role_definition_name = "Management Group Contributor"
   principal_id         = module.sp_platform_management.object_id
 }
 
 # Resource Policy Contributor for policy management
 resource "azurerm_role_assignment" "sp_platform_management_policy_contributor" {
-  scope                = "/providers/Microsoft.Management/managementGroups/${data.terraform_remote_state.management.outputs.environment_info.tenant_id}"
+  scope                = data.terraform_remote_state.management.outputs.tenant_root_management_group_id
   role_definition_name = "Resource Policy Contributor"
   principal_id         = module.sp_platform_management.object_id
 }
@@ -59,20 +59,20 @@ resource "azurerm_role_assignment" "sp_platform_management_tfstate" {
 
 # Reader at tenant root to read role assignments across management groups
 resource "azurerm_role_assignment" "sp_platform_identity_tenant_root_reader" {
-  scope                = "/providers/Microsoft.Management/managementGroups/${data.terraform_remote_state.management.outputs.environment_info.tenant_id}"
+  scope                = data.terraform_remote_state.management.outputs.tenant_root_management_group_id
   role_definition_name = "Reader"
   principal_id         = module.sp_platform_identity.object_id
 }
 
 resource "azurerm_role_assignment" "sp_platform_identity_subscription_contributor" {
-  scope                = "/subscriptions/${data.terraform_remote_state.management.outputs.pl_identity_subscription.subscription_id}"
+  scope                = data.terraform_remote_state.management.outputs.pl_identity_subscription.id
   role_definition_name = "Contributor"
   principal_id         = module.sp_platform_identity.object_id
 }
 
 # Reader on tfstate subscription to read role assignments
 resource "azurerm_role_assignment" "sp_platform_identity_tfstate_subscription_reader" {
-  scope                = "/subscriptions/${data.terraform_remote_state.management.outputs.tfstate_subscription.subscription_id}"
+  scope                = data.terraform_remote_state.management.outputs.tfstate_subscription.id
   role_definition_name = "Reader"
   principal_id         = module.sp_platform_identity.object_id
 }
@@ -88,14 +88,14 @@ resource "azurerm_role_assignment" "sp_platform_identity_tfstate" {
 # =============================================================================
 
 resource "azurerm_role_assignment" "sp_alz_drives_subscription_contributor" {
-  scope                = "/subscriptions/${data.terraform_remote_state.management.outputs.alz_drive_subscription.subscription_id}"
+  scope                = data.terraform_remote_state.management.outputs.alz_drive_subscription.id
   role_definition_name = "Contributor"
   principal_id         = module.sp_alz_drives.object_id
 }
 
 # Reader on ALZ drives subscription for sp_platform_identity to read role assignments
 resource "azurerm_role_assignment" "sp_platform_identity_alz_drives_reader" {
-  scope                = "/subscriptions/${data.terraform_remote_state.management.outputs.alz_drive_subscription.subscription_id}"
+  scope                = data.terraform_remote_state.management.outputs.alz_drive_subscription.id
   role_definition_name = "Reader"
   principal_id         = module.sp_platform_identity.object_id
 }
