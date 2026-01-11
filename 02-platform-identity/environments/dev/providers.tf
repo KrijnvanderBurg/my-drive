@@ -35,5 +35,6 @@ data "terraform_remote_state" "management" {
     storage_account_name = "sttfstatecodevgwc01"
     container_name       = "tfstate-pl-management"
     key                  = "pl-management-dev.tfstate"
+    use_azuread_auth     = true
   }
 }

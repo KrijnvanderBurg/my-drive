@@ -15,11 +15,10 @@ on:
         description: State file key for backend configuration
         required: true
         type: string
-      pr_number:
-        description: PR number for ephemeral deployments
+      client_id:
+        description: Azure AD application client ID for OIDC authentication
         required: false
         type: string
-        default: ""
 
 permissions:
   contents: read
@@ -27,7 +26,7 @@ permissions:
   id-token: write
 
 env:
-  ARM_CLIENT_ID: "167a99fd-6289-4088-a9e0-dd2dc1a2c509"
+  ARM_CLIENT_ID: ${{ inputs.client_id }}
   ARM_TENANT_ID: "90d27970-b92c-43dc-9935-1ed557d8e20e"
   ARM_USE_OIDC: true
   PLAN_BINARY_FILENAME: tfplan
@@ -72,7 +71,6 @@ jobs:
           working_directory: ${{ inputs.working_directory }}
           plan_binary_file: ${{ runner.temp }}/${{ inputs.artifact_name }}-${{ env.PLAN_BINARY_FILENAME }}
           plan_text_file: ${{ runner.temp }}/${{ inputs.artifact_name }}-${{ env.PLAN_TEXT_FILENAME }}
-          pr_number: ${{ inputs.pr_number }}
 
       - name: Upload Plan Binary Artifact
         uses: actions/upload-artifact@v4

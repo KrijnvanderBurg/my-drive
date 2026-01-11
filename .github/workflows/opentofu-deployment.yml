@@ -13,33 +13,34 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  # Jobs in reverse order of dependency; then its in right order in the gh actions UI
-
   # ===== Platform Management (dev) =====
   # Lint, plan and apply for platform management
   pl-management-dev-lint:
     name: pl-management-dev lint
     uses: ./.github/workflows/opentofu-lint.yml
     with:
-      working_directory: ./1_platform_management/environments/dev
+      working_directory: ./01-platform-management/environments/dev
+      client_id: "bcba6fb0-afb6-4e1b-9517-dd7ffb35c2c6"
 
   pl-management-dev-plan:
     name: pl-management-dev plan
     needs: [pl-management-dev-lint]
     uses: ./.github/workflows/opentofu-plan.yml
     with:
-      working_directory: ./1_platform_management/environments/dev
+      working_directory: ./01-platform-management/environments/dev
       artifact_name: pl-management-dev
       state_key: pl-management-dev.tfstate
+      client_id: "bcba6fb0-afb6-4e1b-9517-dd7ffb35c2c6"
 
   pl-management-dev-apply:
     name: pl-management-dev apply
     needs: [pl-management-dev-plan]
     uses: ./.github/workflows/opentofu-apply.yml
     with:
-      working_directory: ./1_platform_management/environments/dev
+      working_directory: ./01-platform-management/environments/dev
       artifact_name: pl-management-dev
       state_key: pl-management-dev.tfstate
+      client_id: "bcba6fb0-afb6-4e1b-9517-dd7ffb35c2c6"
 
   # ===== Platform Identity (dev) =====
   # Lint, plan and apply for platform identity
@@ -47,25 +48,28 @@ jobs:
     name: pl-identity-dev lint
     uses: ./.github/workflows/opentofu-lint.yml
     with:
-      working_directory: ./2_platform_identity/environments/dev
+      working_directory: ./02-platform-identity/environments/dev
+      client_id: "2972657a-4e99-44c6-80f8-1e265595c81b"
 
   pl-identity-dev-plan:
     name: pl-identity-dev plan
     needs: [pl-identity-dev-lint]
     uses: ./.github/workflows/opentofu-plan.yml
     with:
-      working_directory: ./2_platform_identity/environments/dev
+      working_directory: ./02-platform-identity/environments/dev
       artifact_name: pl-identity-dev
       state_key: pl-identity-dev.tfstate
+      client_id: "2972657a-4e99-44c6-80f8-1e265595c81b"
 
   pl-identity-dev-apply:
     name: pl-identity-dev apply
     needs: [pl-identity-dev-plan]
     uses: ./.github/workflows/opentofu-apply.yml
     with:
-      working_directory: ./2_platform_identity/environments/dev
+      working_directory: ./02-platform-identity/environments/dev
       artifact_name: pl-identity-dev
       state_key: pl-identity-dev.tfstate
+      client_id: "2972657a-4e99-44c6-80f8-1e265595c81b"
 
   # ===== ALZ Drives (dev) =====
   # Lint, plan and apply for ALZ drives (storage)
@@ -73,16 +77,18 @@ jobs:
     name: alz-drive-dev lint
     uses: ./.github/workflows/opentofu-lint.yml
     with:
-      working_directory: ./3_alz_drives/environments/dev
+      working_directory: ./03-alz-drives/environments/dev
+      client_id: "7d68fcf5-8620-48ed-9774-4ce00a474045"
 
   alz-drive-dev-plan:
     name: alz-drive-dev plan
     needs: [alz-drive-dev-lint]
     uses: ./.github/workflows/opentofu-plan.yml
     with:
-      working_directory: ./3_alz_drives/environments/dev
+      working_directory: ./03-alz-drives/environments/dev
       artifact_name: alz-drive-dev
       state_key: alz-drive-dev.tfstate
+      client_id: "7d68fcf5-8620-48ed-9774-4ce00a474045"
     secrets: inherit
 
   alz-drive-dev-apply:
@@ -90,7 +96,8 @@ jobs:
     needs: [alz-drive-dev-plan]
     uses: ./.github/workflows/opentofu-apply.yml
     with:
-      working_directory: ./3_alz_drives/environments/dev
+      working_directory: ./03-alz-drives/environments/dev
       artifact_name: alz-drive-dev
       state_key: alz-drive-dev.tfstate
+      client_id: "7d68fcf5-8620-48ed-9774-4ce00a474045"
     secrets: inherit

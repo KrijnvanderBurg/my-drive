@@ -7,6 +7,15 @@ output "tenant_root_management_group_id" {
   value       = data.azurerm_management_group.tenant_root.id
 }
 
+output "levendaal_management_group" {
+  description = "Levendaal root management group details"
+  value = {
+    id           = module.levendaal.id
+    name         = module.levendaal.name
+    display_name = module.levendaal.display_name
+  }
+}
+
 output "sandbox_management_group" {
   description = "Sandbox management group details"
   value = {
@@ -86,24 +95,24 @@ output "alz_drive_subscription_association" {
 output "pl_management_subscription" {
   description = "Platform Management subscription"
   value = {
-    id              = azurerm_subscription.platform_management.id
-    subscription_id = azurerm_subscription.platform_management.subscription_id
+    id              = data.azurerm_subscription.platform_management.id
+    subscription_id = data.azurerm_subscription.platform_management.subscription_id
   }
 }
 
 output "pl_identity_subscription" {
   description = "Platform Identity subscription"
   value = {
-    id              = azurerm_subscription.platform_identity.id
-    subscription_id = azurerm_subscription.platform_identity.subscription_id
+    id              = data.azurerm_subscription.platform_identity.id
+    subscription_id = data.azurerm_subscription.platform_identity.subscription_id
   }
 }
 
 output "alz_drive_subscription" {
   description = "ALZ Drive subscription"
   value = {
-    id              = azurerm_subscription.alz_drive.id
-    subscription_id = azurerm_subscription.alz_drive.subscription_id
+    id              = data.azurerm_subscription.alz_drive.id
+    subscription_id = data.azurerm_subscription.alz_drive.subscription_id
   }
 }
 
@@ -116,5 +125,27 @@ output "environment_info" {
   value = {
     tenant_id   = var.tenant_id
     environment = var.environment
+  }
+}
+
+# =============================================================================
+# Terraform State Storage
+# =============================================================================
+
+output "tfstate_storage_account" {
+  description = "Terraform state storage account details"
+  value = {
+    id                  = "/subscriptions/${data.azurerm_subscription.platform_management.subscription_id}/resourceGroups/rg-tfstate-co-dev-gwc-01/providers/Microsoft.Storage/storageAccounts/sttfstatecodevgwc01"
+    name                = "sttfstatecodevgwc01"
+    resource_group_name = "rg-tfstate-co-dev-gwc-01"
+    subscription_id     = data.azurerm_subscription.platform_management.subscription_id
+  }
+}
+
+output "tfstate_subscription" {
+  description = "Subscription where tfstate storage account is located"
+  value = {
+    id              = data.azurerm_subscription.platform_management.id
+    subscription_id = data.azurerm_subscription.platform_management.subscription_id
   }
 }

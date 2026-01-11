@@ -1,9 +1,3 @@
-variable "pr_number" {
-  description = "PR number for ephemeral deployments (empty for prod)"
-  type        = string
-  default     = ""
-}
-
 variable "tenant_id" {
   description = "Azure Tenant ID (GUID format)"
   type        = string
