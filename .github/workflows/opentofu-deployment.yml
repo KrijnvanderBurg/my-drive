@@ -49,7 +49,7 @@ jobs:
     uses: ./.github/workflows/opentofu-lint.yml
     with:
       working_directory: ./02-platform-identity/environments/dev
-      client_id: "c1594f54-4c7a-401d-bfbb-ff0c975ae894"
+      client_id: "2972657a-4e99-44c6-80f8-1e265595c81b"
 
   pl-identity-dev-plan:
     name: pl-identity-dev plan
@@ -59,7 +59,7 @@ jobs:
       working_directory: ./02-platform-identity/environments/dev
       artifact_name: pl-identity-dev
       state_key: pl-identity-dev.tfstate
-      client_id: "c1594f54-4c7a-401d-bfbb-ff0c975ae894"
+      client_id: "2972657a-4e99-44c6-80f8-1e265595c81b"
 
   pl-identity-dev-apply:
     name: pl-identity-dev apply
@@ -69,7 +69,7 @@ jobs:
       working_directory: ./02-platform-identity/environments/dev
       artifact_name: pl-identity-dev
       state_key: pl-identity-dev.tfstate
-      client_id: "c1594f54-4c7a-401d-bfbb-ff0c975ae894"
+      client_id: "2972657a-4e99-44c6-80f8-1e265595c81b"
 
   # ===== ALZ Drives (dev) =====
   # Lint, plan and apply for ALZ drives (storage)
