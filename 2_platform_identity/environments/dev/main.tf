@@ -33,15 +33,16 @@ module "sp_alz_drives" {
 # RBAC Role Assignments - Platform Management SP
 # =============================================================================
 
-# Management Group Contributor at tenant root - for reading tenant root MG and managing child MGs
+# Management Group Contributor at tenant root - for reading tenant root and managing MG hierarchy
 resource "azurerm_role_assignment" "sp_platform_management_tenant_root_mg_contributor" {
   scope                = "/providers/Microsoft.Management/managementGroups/${data.terraform_remote_state.management.outputs.environment_info.tenant_id}"
   role_definition_name = "Management Group Contributor"
   principal_id         = module.sp_platform_management.object_id
 }
 
+# Resource Policy Contributor for policy management
 resource "azurerm_role_assignment" "sp_platform_management_policy_contributor" {
-  scope                = data.terraform_remote_state.management.outputs.levendaal_management_group.id
+  scope                = "/providers/Microsoft.Management/managementGroups/${data.terraform_remote_state.management.outputs.environment_info.tenant_id}"
   role_definition_name = "Resource Policy Contributor"
   principal_id         = module.sp_platform_management.object_id
 }
