@@ -4,5 +4,6 @@ terraform {
     storage_account_name = "sttfstatecodevgwc01"
     container_name       = "tfstate-pl-identity"
     subscription_id      = "e388ddce-c79d-4db0-8a6f-cd69b1708954"
+    use_azuread_auth     = true
   }
 }
