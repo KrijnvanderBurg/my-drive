@@ -83,19 +83,45 @@ resource "azurerm_role_assignment" "sp_alz_drives_tfstate" {
   principal_id         = module.sp_alz_drives.object_id
 }
 
-# # =============================================================================
-# # Graph API Permissions - Platform Identity SP
-# # Requires manual admin consent in Azure Portal after apply
-# # =============================================================================
+# =============================================================================
+# Graph API Permissions - Platform Identity SP
+# =============================================================================
 
-# resource "azuread_application_api_access" "sp_platform_identity_graph" {
-#   application_id = module.sp_platform_identity.application_id
-#   api_client_id  = "00000003-0000-0000-c000-000000000000" # Microsoft Graph
+# Reference the Microsoft Graph service principal
+data "azuread_service_principal" "msgraph" {
+  client_id = "00000003-0000-0000-c000-000000000000" # Microsoft Graph
+}
 
-#   role_ids = [
-#     "62a82d76-70ea-41e2-9197-370581804d09", # Group.ReadWrite.All
-#   ]
-# }
+# Declare the API permissions on the application
+resource "azuread_application_api_access" "sp_platform_identity_graph" {
+  application_id = module.sp_platform_identity.application_id
+  api_client_id  = "00000003-0000-0000-c000-000000000000" # Microsoft Graph
+
+  role_ids = [
+    "18a4783c-866b-4cc7-a460-3d5e5662c884", # Application.ReadWrite.OwnedBy
+    "62a82d76-70ea-41e2-9197-370581804d09", # Group.ReadWrite.All
+    "9e3f62cf-ca93-4989-b6ce-bf83c28f9fe8", # RoleManagement.ReadWrite.Directory
+  ]
+}
+
+# Grant admin consent by assigning app roles to the service principal
+resource "azuread_app_role_assignment" "sp_platform_identity_application_readwrite" {
+  app_role_id         = "18a4783c-866b-4cc7-a460-3d5e5662c884" # Application.ReadWrite.OwnedBy
+  principal_object_id = module.sp_platform_identity.object_id
+  resource_object_id  = data.azuread_service_principal.msgraph.object_id
+}
+
+resource "azuread_app_role_assignment" "sp_platform_identity_group_readwrite" {
+  app_role_id         = "62a82d76-70ea-41e2-9197-370581804d09" # Group.ReadWrite.All
+  principal_object_id = module.sp_platform_identity.object_id
+  resource_object_id  = data.azuread_service_principal.msgraph.object_id
+}
+
+resource "azuread_app_role_assignment" "sp_platform_identity_rolemanagement" {
+  app_role_id         = "9e3f62cf-ca93-4989-b6ce-bf83c28f9fe8" # RoleManagement.ReadWrite.Directory
+  principal_object_id = module.sp_platform_identity.object_id
+  resource_object_id  = data.azuread_service_principal.msgraph.object_id
+}
 
 # =============================================================================
 # Security Groups
