@@ -57,9 +57,23 @@ resource "azurerm_role_assignment" "sp_platform_management_tfstate" {
 # RBAC Role Assignments - Platform Identity SP
 # =============================================================================
 
+# Reader at tenant root to read role assignments across management groups
+resource "azurerm_role_assignment" "sp_platform_identity_tenant_root_reader" {
+  scope                = "/providers/Microsoft.Management/managementGroups/${data.terraform_remote_state.management.outputs.environment_info.tenant_id}"
+  role_definition_name = "Reader"
+  principal_id         = module.sp_platform_identity.object_id
+}
+
 resource "azurerm_role_assignment" "sp_platform_identity_subscription_contributor" {
   scope                = "/subscriptions/${data.terraform_remote_state.management.outputs.pl_identity_subscription.subscription_id}"
   role_definition_name = "Contributor"
+  principal_id         = module.sp_platform_identity.object_id
+}
+
+# Reader on tfstate subscription to read role assignments
+resource "azurerm_role_assignment" "sp_platform_identity_tfstate_subscription_reader" {
+  scope                = "/subscriptions/${data.terraform_remote_state.management.outputs.tfstate_subscription.subscription_id}"
+  role_definition_name = "Reader"
   principal_id         = module.sp_platform_identity.object_id
 }
 
@@ -77,6 +91,13 @@ resource "azurerm_role_assignment" "sp_alz_drives_subscription_contributor" {
   scope                = "/subscriptions/${data.terraform_remote_state.management.outputs.alz_drive_subscription.subscription_id}"
   role_definition_name = "Contributor"
   principal_id         = module.sp_alz_drives.object_id
+}
+
+# Reader on ALZ drives subscription for sp_platform_identity to read role assignments
+resource "azurerm_role_assignment" "sp_platform_identity_alz_drives_reader" {
+  scope                = "/subscriptions/${data.terraform_remote_state.management.outputs.alz_drive_subscription.subscription_id}"
+  role_definition_name = "Reader"
+  principal_id         = module.sp_platform_identity.object_id
 }
 
 resource "azurerm_role_assignment" "sp_alz_drives_tfstate" {

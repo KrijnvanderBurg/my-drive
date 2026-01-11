@@ -19,7 +19,6 @@ on:
         description: Azure AD application client ID for OIDC authentication
         required: false
         type: string
-        default: "167a99fd-6289-4088-a9e0-dd2dc1a2c509"
 
 permissions:
   contents: read
