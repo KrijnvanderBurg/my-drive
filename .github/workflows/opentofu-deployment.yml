@@ -59,7 +59,7 @@ jobs:
       working_directory: ./2_platform_identity/environments/dev
       artifact_name: pl-identity-dev
       state_key: pl-identity-dev.tfstate
-      client_id: "167a99fd-6289-4088-a9e0-dd2dc1a2c509"
+      client_id: "c1594f54-4c7a-401d-bfbb-ff0c975ae894"
 
   pl-identity-dev-apply:
     name: pl-identity-dev apply
@@ -69,7 +69,7 @@ jobs:
       working_directory: ./2_platform_identity/environments/dev
       artifact_name: pl-identity-dev
       state_key: pl-identity-dev.tfstate
-      client_id: "167a99fd-6289-4088-a9e0-dd2dc1a2c509"
+      client_id: "c1594f54-4c7a-401d-bfbb-ff0c975ae894"
 
   # ===== ALZ Drives (dev) =====
   # Lint, plan and apply for ALZ drives (storage)
@@ -87,7 +87,7 @@ jobs:
       working_directory: ./3_alz_drives/environments/dev
       artifact_name: alz-drive-dev
       state_key: alz-drive-dev.tfstate
-      client_id: "167a99fd-6289-4088-a9e0-dd2dc1a2c509"
+      client_id: "7d68fcf5-8620-48ed-9774-4ce00a474045"
     secrets: inherit
 
   alz-drive-dev-apply:
@@ -98,5 +98,5 @@ jobs:
       working_directory: ./3_alz_drives/environments/dev
       artifact_name: alz-drive-dev
       state_key: alz-drive-dev.tfstate
-      client_id: "167a99fd-6289-4088-a9e0-dd2dc1a2c509"
+      client_id: "7d68fcf5-8620-48ed-9774-4ce00a474045"
     secrets: inherit
