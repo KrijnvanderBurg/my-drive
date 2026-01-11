@@ -11,6 +11,9 @@ module "sp_platform_management" {
   ]
 }
 
+# No SP for platform identity, using manual SP instead to avoid circular dependencies
+# and Identity has elevated permissions that we don't want to automate creation for.
+
 module "sp_alz_drives" {
   source = "../../modules/service-principal-federated"
 
