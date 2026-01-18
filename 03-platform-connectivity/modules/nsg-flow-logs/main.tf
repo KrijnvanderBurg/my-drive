@@ -5,16 +5,31 @@
 # Logs are stored in a storage account with automatic retention.
 # =============================================================================
 
-# Network Watcher is auto-created by Azure, reference it
-data "azurerm_network_watcher" "this" {
+# Network Watcher Resource Group
+resource "azurerm_resource_group" "network_watcher" {
+  name     = "NetworkWatcherRG"
+  location = var.location
+
+  lifecycle {
+    ignore_changes = [tags]
+  }
+}
+
+# Network Watcher - create if it doesn't exist
+resource "azurerm_network_watcher" "this" {
   name                = "NetworkWatcher_${var.location}"
-  resource_group_name = "NetworkWatcherRG"
+  location            = var.location
+  resource_group_name = azurerm_resource_group.network_watcher.name
+
+  lifecycle {
+    ignore_changes = [tags]
+  }
 }
 
 resource "azurerm_network_watcher_flow_log" "this" {
   name                 = var.name
-  network_watcher_name = data.azurerm_network_watcher.this.name
-  resource_group_name  = data.azurerm_network_watcher.this.resource_group_name
+  network_watcher_name = azurerm_network_watcher.this.name
+  resource_group_name  = azurerm_network_watcher.this.resource_group_name
   location             = var.location
 
   target_resource_id = var.network_security_group_id
