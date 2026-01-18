@@ -18,7 +18,27 @@ All steps performed to setup initial infrastructure and to current state.
    az storage container create --name "tfstate-pl-identity" --account-name "sttfstatecodevgwc01"
    ```
 4. **Configured backend** in `environments/dev/backend.tf`
-5. **Created sp-platform-identity Service Principal (Manual - Cannot Manage Itself):**
+5. **Manually associate subscriptions to management groups:**
+   ```bash
+   # Associate each subscription to its management group
+   az account management-group subscription add \
+     --name "mg-pl-management-dev-na-01" \
+     --subscription "e388ddce-c79d-4db0-8a6f-cd69b1708954"
+
+   az account management-group subscription add \
+     --name "mg-pl-identity-dev-na-01" \
+     --subscription "9312c5c5-b089-4b62-bb90-0d92d421d66c"
+
+   az account management-group subscription add \
+     --name "mg-pl-connectivity-dev-na-01" \
+     --subscription "6018b0fb-7b8c-491f-8abf-375d2c07ef97"
+
+   az account management-group subscription add \
+     --name "mg-landingzone-dev-na-01" \
+     --subscription "4111975b-f6ca-4e08-b7b6-87d7b6c35840"
+   ```
+   **Note:** This requires Owner or User Access Administrator on each subscription. Done manually to avoid granting excessive permissions to service principals.
+6. **Created sp-platform-identity Service Principal (Manual - Cannot Manage Itself):**
     ```bash
     # 1. Create the app registration
     az ad app create \
@@ -71,40 +91,20 @@ All steps performed to setup initial infrastructure and to current state.
     az ad app permission admin-consent --id $APP_ID
 
     # 6. Assign Azure RBAC roles
-    TENANT_ROOT_ID="90d27970-b92c-43dc-9935-1ed557d8e20e"
     IDENTITY_SUB_ID="9312c5c5-b089-4b62-bb90-0d92d421d66c"
-    TFSTATE_SUB_ID="e388ddce-c79d-4db0-8a6f-cd69b1708954"
-    ALZ_SUB_ID="4111975b-f6ca-4e08-b7b6-87d7b6c35840"
+    TFSTATE_STORAGE_ID="/subscriptions/e388ddce-c79d-4db0-8a6f-cd69b1708954/resourceGroups/rg-tfstate-co-dev-gwc-01/providers/Microsoft.Storage/storageAccounts/sttfstatecodevgwc01"
 
-    # Reader at tenant root
-    az role assignment create \
-      --assignee $SP_OBJECT_ID \
-      --role "Reader" \
-      --scope "/providers/Microsoft.Management/managementGroups/$TENANT_ROOT_ID"
-
-    # Contributor on identity subscription
+    # Contributor on identity subscription (to manage identity resources)
     az role assignment create \
       --assignee $SP_OBJECT_ID \
       --role "Contributor" \
       --scope "/subscriptions/$IDENTITY_SUB_ID"
 
-    # Reader on tfstate subscription
-    az role assignment create \
-      --assignee $SP_OBJECT_ID \
-      --role "Reader" \
-      --scope "/subscriptions/$TFSTATE_SUB_ID"
-
-    # Storage Blob Data Contributor on tfstate storage
+    # Storage Blob Data Contributor on tfstate storage (to read/write state)
     az role assignment create \
       --assignee $SP_OBJECT_ID \
       --role "Storage Blob Data Contributor" \
-      --scope "/subscriptions/$TFSTATE_SUB_ID/resourceGroups/rg-tfstate-co-dev-gwc-01/providers/Microsoft.Storage/storageAccounts/sttfstatecodevgwc01"
-
-    # Reader on ALZ drives subscription
-    az role assignment create \
-      --assignee $SP_OBJECT_ID \
-      --role "Reader" \
-      --scope "/subscriptions/$ALZ_SUB_ID"
+      --scope "$TFSTATE_STORAGE_ID"
     ```
     **Note:** Step 5 (admin consent) requires Global Administrator or Privileged Role Administrator role. If CLI fails, grant via Portal:
     Azure AD → App registrations → sp-platform-identity-co-dev-na-01 → API permissions → Grant admin consent

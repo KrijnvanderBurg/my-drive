@@ -128,49 +128,22 @@ resource "azurerm_management_group_policy_assignment" "landingzone_deny_delete" 
 }
 
 # =============================================================================
-# Subscription Associations
+# Subscription Data Sources
 # =============================================================================
+# Keep data sources for outputs but associations are done manually
 
 data "azurerm_subscription" "platform_management" {
   subscription_id = "e388ddce-c79d-4db0-8a6f-cd69b1708954"
-}
-
-module "pl_management_subscription_association" {
-  source = "../../modules/subscription-association"
-
-  management_group_id = module.pl_management.id
-  subscription_id     = data.azurerm_subscription.platform_management.subscription_id
 }
 
 data "azurerm_subscription" "platform_identity" {
   subscription_id = "9312c5c5-b089-4b62-bb90-0d92d421d66c"
 }
 
-module "pl_identity_subscription_association" {
-  source = "../../modules/subscription-association"
-
-  management_group_id = module.pl_identity.id
-  subscription_id     = data.azurerm_subscription.platform_identity.subscription_id
-}
-
 data "azurerm_subscription" "platform_connectivity" {
   subscription_id = "6018b0fb-7b8c-491f-8abf-375d2c07ef97"
 }
 
-module "pl_connectivity_subscription_association" {
-  source = "../../modules/subscription-association"
-
-  management_group_id = module.pl_connectivity.id
-  subscription_id     = data.azurerm_subscription.platform_connectivity.subscription_id
-}
-
 data "azurerm_subscription" "alz_drive" {
   subscription_id = "4111975b-f6ca-4e08-b7b6-87d7b6c35840"
-}
-
-module "alz_drive_subscription_association" {
-  source = "../../modules/subscription-association"
-
-  management_group_id = module.landingzone.id
-  subscription_id     = data.azurerm_subscription.alz_drive.subscription_id
 }

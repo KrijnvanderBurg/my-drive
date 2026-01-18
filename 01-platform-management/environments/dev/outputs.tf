@@ -80,44 +80,8 @@ output "landingzone_management_group" {
 }
 
 # =============================================================================
-# Subscription Association Outputs
+# Subscription Outputs
 # =============================================================================
-
-output "pl_management_subscription_association" {
-  description = "Platform Management subscription association details"
-  value = {
-    id                  = module.pl_management_subscription_association.id
-    management_group_id = module.pl_management_subscription_association.management_group_id
-    subscription_id     = module.pl_management_subscription_association.subscription_id
-  }
-}
-
-output "pl_identity_subscription_association" {
-  description = "Platform Identity subscription association details"
-  value = {
-    id                  = module.pl_identity_subscription_association.id
-    management_group_id = module.pl_identity_subscription_association.management_group_id
-    subscription_id     = module.pl_identity_subscription_association.subscription_id
-  }
-}
-
-output "pl_connectivity_subscription_association" {
-  description = "Platform Connectivity subscription association details"
-  value = {
-    id                  = module.pl_connectivity_subscription_association.id
-    management_group_id = module.pl_connectivity_subscription_association.management_group_id
-    subscription_id     = module.pl_connectivity_subscription_association.subscription_id
-  }
-}
-
-output "alz_drive_subscription_association" {
-  description = "ALZ Drive subscription association details"
-  value = {
-    id                  = module.alz_drive_subscription_association.id
-    management_group_id = module.alz_drive_subscription_association.management_group_id
-    subscription_id     = module.alz_drive_subscription_association.subscription_id
-  }
-}
 
 output "pl_management_subscription" {
   description = "Platform Management subscription"

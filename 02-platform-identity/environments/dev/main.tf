@@ -56,31 +56,6 @@ resource "azurerm_role_assignment" "sp_platform_management_tfstate" {
   principal_id         = module.sp_platform_management.object_id
 }
 
-# User Access Administrator on subscriptions - minimum for management group association
-resource "azurerm_role_assignment" "sp_platform_management_management_uaa" {
-  scope                = local.pl_management_subscription_id
-  role_definition_name = "User Access Administrator"
-  principal_id         = module.sp_platform_management.object_id
-}
-
-resource "azurerm_role_assignment" "sp_platform_management_identity_uaa" {
-  scope                = local.pl_identity_subscription_id
-  role_definition_name = "User Access Administrator"
-  principal_id         = module.sp_platform_management.object_id
-}
-
-resource "azurerm_role_assignment" "sp_platform_management_connectivity_uaa" {
-  scope                = local.pl_connectivity_subscription_id
-  role_definition_name = "User Access Administrator"
-  principal_id         = module.sp_platform_management.object_id
-}
-
-resource "azurerm_role_assignment" "sp_platform_management_alz_drives_uaa" {
-  scope                = local.alz_drive_subscription_id
-  role_definition_name = "User Access Administrator"
-  principal_id         = module.sp_platform_management.object_id
-}
-
 # =============================================================================
 # RBAC Role Assignments - ALZ Drives SP
 # =============================================================================
