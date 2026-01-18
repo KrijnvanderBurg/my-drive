@@ -1,11 +1,20 @@
 # =============================================================================
-# Management Group Outputs
+# Tenant Outputs
 # =============================================================================
+
+output "tenant_id" {
+  description = "The Azure AD tenant ID"
+  value       = local.tenant_id
+}
 
 output "tenant_root_management_group_id" {
   description = "The fully qualified ID of the tenant root management group"
   value       = data.azurerm_management_group.tenant_root.id
 }
+
+# =============================================================================
+# Management Group Outputs
+# =============================================================================
 
 output "levendaal_management_group" {
   description = "Levendaal root management group details"
@@ -146,12 +155,9 @@ output "alz_drive_subscription" {
 # Environment Information
 # =============================================================================
 
-output "environment_info" {
-  description = "Current environment configuration"
-  value = {
-    tenant_id   = local.tenant_id
-    environment = local.environment
-  }
+output "environment" {
+  description = "The current environment name"
+  value       = local.environment
 }
 
 # =============================================================================
