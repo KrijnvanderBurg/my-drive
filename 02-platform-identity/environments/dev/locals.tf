@@ -11,12 +11,18 @@ locals {
   tfstate_storage_account_id      = data.terraform_remote_state.management.outputs.tfstate_storage_account.id
 
   # ---------------------------------------------------------------------------
-  # Subscription IDs (full resource IDs for role assignment scopes)
+  # Subscription Scopes (full paths for role assignment scopes)
   # ---------------------------------------------------------------------------
-  pl_management_subscription_id   = data.terraform_remote_state.management.outputs.pl_management_subscription.id
-  pl_identity_subscription_id     = data.terraform_remote_state.management.outputs.pl_identity_subscription.id
-  pl_connectivity_subscription_id = data.terraform_remote_state.management.outputs.pl_connectivity_subscription.id
-  alz_drive_subscription_id       = data.terraform_remote_state.management.outputs.alz_drive_subscription.id
+  pl_management_subscription_scope   = data.terraform_remote_state.management.outputs.pl_management_subscription.id
+  pl_identity_subscription_scope     = data.terraform_remote_state.management.outputs.pl_identity_subscription.id
+  pl_connectivity_subscription_scope = data.terraform_remote_state.management.outputs.pl_connectivity_subscription.id
+  alz_drive_subscription_scope       = data.terraform_remote_state.management.outputs.alz_drive_subscription.id
+
+  # Subscription IDs (UUIDs only)
+  pl_management_subscription_id   = data.terraform_remote_state.management.outputs.pl_management_subscription.subscription_id
+  pl_identity_subscription_id     = data.terraform_remote_state.management.outputs.pl_identity_subscription.subscription_id
+  pl_connectivity_subscription_id = data.terraform_remote_state.management.outputs.pl_connectivity_subscription.subscription_id
+  alz_drive_subscription_id       = data.terraform_remote_state.management.outputs.alz_drive_subscription.subscription_id
 
   # ---------------------------------------------------------------------------
   # Region Configuration

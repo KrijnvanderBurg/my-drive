@@ -61,7 +61,7 @@ resource "azurerm_role_assignment" "sp_platform_management_tfstate" {
 # =============================================================================
 
 resource "azurerm_role_assignment" "sp_alz_drives_subscription_contributor" {
-  scope                = local.alz_drive_subscription_id
+  scope                = local.alz_drive_subscription_scope
   role_definition_name = "Contributor"
   principal_id         = module.sp_alz_drives.object_id
 }
@@ -77,7 +77,7 @@ resource "azurerm_role_assignment" "sp_alz_drives_tfstate" {
 # =============================================================================
 
 resource "azurerm_role_assignment" "sp_platform_connectivity_subscription_contributor" {
-  scope                = local.pl_connectivity_subscription_id
+  scope                = local.pl_connectivity_subscription_scope
   role_definition_name = "Contributor"
   principal_id         = module.sp_platform_connectivity.object_id
 }
