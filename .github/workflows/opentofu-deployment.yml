@@ -71,13 +71,104 @@ jobs:
       state_key: pl-identity-dev.tfstate
       client_id: "2972657a-4e99-44c6-80f8-1e265595c81b"
 
+  # ===== Platform Connectivity (dev-weu) =====
+  # Lint, plan and apply for platform connectivity - West Europe
+  pl-connectivity-dev-weu-lint:
+    name: pl-connectivity-dev-weu lint
+    uses: ./.github/workflows/opentofu-lint.yml
+    with:
+      working_directory: ./03-platform-connectivity/environments/dev-weu
+      client_id: "YOURSPID" # sp-platform-connectivity-on-dev-na-01
+
+  pl-connectivity-dev-weu-plan:
+    name: pl-connectivity-dev-weu plan
+    uses: ./.github/workflows/opentofu-plan.yml
+    with:
+      working_directory: ./03-platform-connectivity/environments/dev-weu
+      artifact_name: pl-connectivity-dev-weu
+      state_key: pl-connectivity-dev-weu.tfstate
+      client_id: "YOURSPID" # sp-platform-connectivity-on-dev-na-01
+    secrets: inherit
+
+  pl-connectivity-dev-weu-apply:
+    name: pl-connectivity-dev-weu apply
+    needs: [pl-connectivity-dev-weu-plan]
+    uses: ./.github/workflows/opentofu-apply.yml
+    with:
+      working_directory: ./03-platform-connectivity/environments/dev-weu
+      artifact_name: pl-connectivity-dev-weu
+      state_key: pl-connectivity-dev-weu.tfstate
+      client_id: "YOURSPID" # sp-platform-connectivity-on-dev-na-01
+    secrets: inherit
+
+  # ===== Platform Connectivity (dev-gwc) =====
+  # Lint, plan and apply for platform connectivity - Germany West Central
+  pl-connectivity-dev-gwc-lint:
+    name: pl-connectivity-dev-gwc lint
+    uses: ./.github/workflows/opentofu-lint.yml
+    with:
+      working_directory: ./03-platform-connectivity/environments/dev-gwc
+      client_id: "YOURSPID" # sp-platform-connectivity-on-dev-na-01
+
+  pl-connectivity-dev-gwc-plan:
+    name: pl-connectivity-dev-gwc plan
+    uses: ./.github/workflows/opentofu-plan.yml
+    with:
+      working_directory: ./03-platform-connectivity/environments/dev-gwc
+      artifact_name: pl-connectivity-dev-gwc
+      state_key: pl-connectivity-dev-gwc.tfstate
+      client_id: "YOURSPID" # sp-platform-connectivity-on-dev-na-01
+    secrets: inherit
+
+  pl-connectivity-dev-gwc-apply:
+    name: pl-connectivity-dev-gwc apply
+    needs: [pl-connectivity-dev-gwc-plan]
+    uses: ./.github/workflows/opentofu-apply.yml
+    with:
+      working_directory: ./03-platform-connectivity/environments/dev-gwc
+      artifact_name: pl-connectivity-dev-gwc
+      state_key: pl-connectivity-dev-gwc.tfstate
+      client_id: "YOURSPID" # sp-platform-connectivity-on-dev-na-01
+    secrets: inherit
+
+  # ===== Platform Connectivity (dev-glb) =====
+  # Lint, plan and apply for platform connectivity - Global (hub-to-hub peering)
+  pl-connectivity-dev-glb-lint:
+    name: pl-connectivity-dev-glb lint
+    uses: ./.github/workflows/opentofu-lint.yml
+    with:
+      working_directory: ./03-platform-connectivity/environments/dev-glb
+      client_id: "YOURSPID" # sp-platform-connectivity-on-dev-na-01
+
+  pl-connectivity-dev-glb-plan:
+    name: pl-connectivity-dev-glb plan
+    needs: [pl-connectivity-dev-glb-lint, pl-connectivity-dev-weu-apply, pl-connectivity-dev-gwc-apply]
+    uses: ./.github/workflows/opentofu-plan.yml
+    with:
+      working_directory: ./03-platform-connectivity/environments/dev-glb
+      artifact_name: pl-connectivity-dev-glb
+      state_key: pl-connectivity-dev-glb.tfstate
+      client_id: "YOURSPID" # sp-platform-connectivity-on-dev-na-01
+    secrets: inherit
+
+  pl-connectivity-dev-glb-apply:
+    name: pl-connectivity-dev-glb apply
+    needs: [pl-connectivity-dev-glb-plan]
+    uses: ./.github/workflows/opentofu-apply.yml
+    with:
+      working_directory: ./03-platform-connectivity/environments/dev-glb
+      artifact_name: pl-connectivity-dev-glb
+      state_key: pl-connectivity-dev-glb.tfstate
+      client_id: "YOURSPID" # sp-platform-connectivity-on-dev-na-01
+    secrets: inherit
+
   # ===== ALZ Drives (dev) =====
   # Lint, plan and apply for ALZ drives (storage)
   alz-drive-dev-lint:
     name: alz-drive-dev lint
     uses: ./.github/workflows/opentofu-lint.yml
     with:
-      working_directory: ./03-alz-drives/environments/dev
+      working_directory: ./04-alz-drives/environments/dev
       client_id: "7d68fcf5-8620-48ed-9774-4ce00a474045"
 
   alz-drive-dev-plan:
@@ -85,7 +176,7 @@ jobs:
     needs: [alz-drive-dev-lint]
     uses: ./.github/workflows/opentofu-plan.yml
     with:
-      working_directory: ./03-alz-drives/environments/dev
+      working_directory: ./04-alz-drives/environments/dev
       artifact_name: alz-drive-dev
       state_key: alz-drive-dev.tfstate
       client_id: "7d68fcf5-8620-48ed-9774-4ce00a474045"
@@ -96,7 +187,7 @@ jobs:
     needs: [alz-drive-dev-plan]
     uses: ./.github/workflows/opentofu-apply.yml
     with:
-      working_directory: ./03-alz-drives/environments/dev
+      working_directory: ./04-alz-drives/environments/dev
       artifact_name: alz-drive-dev
       state_key: alz-drive-dev.tfstate
       client_id: "7d68fcf5-8620-48ed-9774-4ce00a474045"

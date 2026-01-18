@@ -4,10 +4,11 @@
 
 locals {
   # ---------------------------------------------------------------------------
-  # Environment Configuration
+  # Region Configuration
   # ---------------------------------------------------------------------------
-  tenant_id   = "90d27970-b92c-43dc-9935-1ed557d8e20e"
   environment = "dev"
+  region      = "gwc"
+  location    = "germanywestcentral"
 
   # ---------------------------------------------------------------------------
   # Common Tags
@@ -16,8 +17,13 @@ locals {
     environment = local.environment
     managed_by  = "opentofu"
     project     = "levendaal"
-    layer       = "platform-management"
-    owner       = "kvdb"
-    cost_center = "platform"
+    layer       = "alz-drives"
+    department  = "platform"
+    cost_center = "platform-storage"
   }
+
+  # ---------------------------------------------------------------------------
+  # Network Configuration
+  # ---------------------------------------------------------------------------
+  allowed_ips = [] # Add allowed IPs here if needed
 }

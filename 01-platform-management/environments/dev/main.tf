@@ -4,15 +4,15 @@
 
 # Reference the existing Azure Tenant Root Group
 data "azurerm_management_group" "tenant_root" {
-  name = var.tenant_id
+  name = local.tenant_id
 }
 
 # Levendaal Group - organisational root management group
 module "levendaal" {
   source = "../../modules/management-group"
 
-  name                       = "mg-levendaal-${var.environment}-na-01"
-  display_name               = "mg-levendaal-${var.environment}-na-01"
+  name                       = "mg-levendaal-${local.environment}-na-01"
+  display_name               = "mg-levendaal-${local.environment}-na-01"
   parent_management_group_id = data.azurerm_management_group.tenant_root.id
 }
 
@@ -21,8 +21,8 @@ module "levendaal" {
 module "sandbox" {
   source = "../../modules/management-group"
 
-  name                       = "mg-sandbox-${var.environment}-na-01"
-  display_name               = "mg-sandbox-${var.environment}-na-01"
+  name                       = "mg-sandbox-${local.environment}-na-01"
+  display_name               = "mg-sandbox-${local.environment}-na-01"
   parent_management_group_id = module.levendaal.id
 }
 
@@ -30,8 +30,8 @@ module "sandbox" {
 module "platform" {
   source = "../../modules/management-group"
 
-  name                       = "mg-platform-${var.environment}-na-01"
-  display_name               = "mg-platform-${var.environment}-na-01"
+  name                       = "mg-platform-${local.environment}-na-01"
+  display_name               = "mg-platform-${local.environment}-na-01"
   parent_management_group_id = module.levendaal.id
 }
 
@@ -39,8 +39,8 @@ module "platform" {
 module "pl_management" {
   source = "../../modules/management-group"
 
-  name                       = "mg-pl-management-${var.environment}-na-01"
-  display_name               = "mg-pl-management-${var.environment}-na-01"
+  name                       = "mg-pl-management-${local.environment}-na-01"
+  display_name               = "mg-pl-management-${local.environment}-na-01"
   parent_management_group_id = module.platform.id
 }
 
@@ -48,8 +48,17 @@ module "pl_management" {
 module "pl_identity" {
   source = "../../modules/management-group"
 
-  name                       = "mg-pl-identity-${var.environment}-na-01"
-  display_name               = "mg-pl-identity-${var.environment}-na-01"
+  name                       = "mg-pl-identity-${local.environment}-na-01"
+  display_name               = "mg-pl-identity-${local.environment}-na-01"
+  parent_management_group_id = module.platform.id
+}
+
+# Platform connectivity Management Group - for networking resources
+module "pl_connectivity" {
+  source = "../../modules/management-group"
+
+  name                       = "mg-pl-connectivity-${local.environment}-na-01"
+  display_name               = "mg-pl-connectivity-${local.environment}-na-01"
   parent_management_group_id = module.platform.id
 }
 
@@ -57,8 +66,8 @@ module "pl_identity" {
 module "landingzone" {
   source = "../../modules/management-group"
 
-  name                       = "mg-landingzone-${var.environment}-na-01"
-  display_name               = "mg-landingzone-${var.environment}-na-01"
+  name                       = "mg-landingzone-${local.environment}-na-01"
+  display_name               = "mg-landingzone-${local.environment}-na-01"
   parent_management_group_id = module.levendaal.id
 }
 
@@ -85,6 +94,26 @@ resource "azurerm_management_group_policy_assignment" "platform_management_deny_
   description          = "Prevents deletion of any resources under platform management management group"
   policy_definition_id = module.policy_deny_delete.id
   management_group_id  = module.pl_management.id
+  enforce              = true
+}
+
+# Protect platform identity management group from accidental deletions
+resource "azurerm_management_group_policy_assignment" "platform_identity_deny_delete" {
+  name                 = "deny-del-pl-identity"
+  display_name         = "Deny Delete Operations - Platform Identity"
+  description          = "Prevents deletion of any resources under platform identity management group"
+  policy_definition_id = module.policy_deny_delete.id
+  management_group_id  = module.pl_identity.id
+  enforce              = true
+}
+
+# Protect platform connectivity management group from accidental deletions
+resource "azurerm_management_group_policy_assignment" "platform_connectivity_deny_delete" {
+  name                 = "deny-del-pl-connect"
+  display_name         = "Deny Delete Operations - Platform Connectivity"
+  description          = "Prevents deletion of any resources under platform connectivity management group"
+  policy_definition_id = module.policy_deny_delete.id
+  management_group_id  = module.pl_connectivity.id
   enforce              = true
 }
 
@@ -122,6 +151,17 @@ module "pl_identity_subscription_association" {
 
   management_group_id = module.pl_identity.id
   subscription_id     = data.azurerm_subscription.platform_identity.subscription_id
+}
+
+data "azurerm_subscription" "platform_connectivity" {
+  subscription_id = "6018b0fb-7b8c-491f-8abf-375d2c07ef97"
+}
+
+module "pl_connectivity_subscription_association" {
+  source = "../../modules/subscription-association"
+
+  management_group_id = module.pl_connectivity.id
+  subscription_id     = data.azurerm_subscription.platform_connectivity.subscription_id
 }
 
 data "azurerm_subscription" "alz_drive" {

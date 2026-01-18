@@ -20,6 +20,15 @@ output "sp_alz_drives" {
   }
 }
 
+output "sp_platform_connectivity" {
+  description = "Platform connectivity service principal for GitHub Actions OIDC"
+  value = {
+    client_id    = module.sp_platform_connectivity.client_id
+    object_id    = module.sp_platform_connectivity.object_id
+    display_name = module.sp_platform_connectivity.display_name
+  }
+}
+
 # =============================================================================
 # Security Group Outputs
 # =============================================================================
