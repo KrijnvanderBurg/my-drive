@@ -91,7 +91,10 @@ All steps performed to setup initial infrastructure and to current state.
     az ad app permission admin-consent --id $APP_ID
 
     # 6. Assign Azure RBAC roles
+    MANAGEMENT_SUB_ID="e388ddce-c79d-4db0-8a6f-cd69b1708954"
     IDENTITY_SUB_ID="9312c5c5-b089-4b62-bb90-0d92d421d66c"
+    CONNECTIVITY_SUB_ID="6018b0fb-7b8c-491f-8abf-375d2c07ef97"
+    ALZ_DRIVES_SUB_ID="4111975b-f6ca-4e08-b7b6-87d7b6c35840"
     TFSTATE_STORAGE_ID="/subscriptions/e388ddce-c79d-4db0-8a6f-cd69b1708954/resourceGroups/rg-tfstate-co-dev-gwc-01/providers/Microsoft.Storage/storageAccounts/sttfstatecodevgwc01"
 
     # Contributor on identity subscription (to manage identity resources)
@@ -99,6 +102,22 @@ All steps performed to setup initial infrastructure and to current state.
       --assignee $SP_OBJECT_ID \
       --role "Contributor" \
       --scope "/subscriptions/$IDENTITY_SUB_ID"
+
+    # User Access Administrator on subscriptions (to create role assignments for other SPs)
+    az role assignment create \
+      --assignee $SP_OBJECT_ID \
+      --role "User Access Administrator" \
+      --scope "/subscriptions/$MANAGEMENT_SUB_ID"
+
+    az role assignment create \
+      --assignee $SP_OBJECT_ID \
+      --role "User Access Administrator" \
+      --scope "/subscriptions/$CONNECTIVITY_SUB_ID"
+
+    az role assignment create \
+      --assignee $SP_OBJECT_ID \
+      --role "User Access Administrator" \
+      --scope "/subscriptions/$ALZ_DRIVES_SUB_ID"
 
     # Storage Blob Data Contributor on tfstate storage (to read/write state)
     az role assignment create \
