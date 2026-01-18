@@ -6,8 +6,7 @@ locals {
   # ---------------------------------------------------------------------------
   # Remote State References
   # ---------------------------------------------------------------------------
-  # TODO: Change to .outputs.tenant_id after management layer is applied
-  tenant_id                       = data.terraform_remote_state.management.outputs.environment_info.tenant_id
+  tenant_id                       = data.terraform_remote_state.management.outputs.tenant_id
   tenant_root_management_group_id = data.terraform_remote_state.management.outputs.tenant_root_management_group_id
   tfstate_storage_account_id      = data.terraform_remote_state.management.outputs.tfstate_storage_account.id
 
