@@ -89,10 +89,9 @@ module "private_dns" {
   name                = each.value
   resource_group_name = azurerm_resource_group.connectivity.name
 
-  # Link to BOTH WEU and GWC hub VNets for global DNS resolution
   virtual_network_links = {
-    hub-weu = module.hub.id
-    hub-gwc = data.terraform_remote_state.gwc.outputs.hub.id
+    hub-weu = local.hub_weu_id
+    hub-gwc = local.hub_gwc_id
   }
 
   tags = merge(
