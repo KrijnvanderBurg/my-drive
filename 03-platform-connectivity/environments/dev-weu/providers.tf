@@ -7,6 +7,15 @@ terraform {
       version = "~> 4.57"
     }
   }
+
+  backend "azurerm" {
+    subscription_id      = "e388ddce-c79d-4db0-8a6f-cd69b1708954"
+    resource_group_name  = "rg-tfstate-co-dev-gwc-01"
+    storage_account_name = "sttfstatecodevgwc01"
+    container_name       = "tfstate-pl-connectivity"
+    key                  = "pl-connectivity-dev-weu.tfstate"
+    use_azuread_auth     = true
+  }
 }
 
 provider "azurerm" {
@@ -24,10 +33,12 @@ data "terraform_remote_state" "management" {
   backend = "azurerm"
 
   config = {
-    resource_group_name  = "rg-terraform-state-on-dev-glb-01"
-    storage_account_name = "sttfstateondevglb01"
-    container_name       = "tfstate"
-    key                  = "02-platform-management/dev-glb.tfstate"
+    subscription_id      = "e388ddce-c79d-4db0-8a6f-cd69b1708954"
+    resource_group_name  = "rg-tfstate-co-dev-gwc-01"
+    storage_account_name = "sttfstatecodevgwc01"
+    container_name       = "tfstate-pl-management"
+    key                  = "pl-management-dev.tfstate"
+    use_azuread_auth     = true
   }
 }
 
@@ -39,9 +50,11 @@ data "terraform_remote_state" "gwc" {
   backend = "azurerm"
 
   config = {
-    resource_group_name  = "rg-terraform-state-on-dev-glb-01"
-    storage_account_name = "sttfstateondevglb01"
-    container_name       = "tfstate"
-    key                  = "03-platform-connectivity/dev-gwc.tfstate"
+    subscription_id      = "e388ddce-c79d-4db0-8a6f-cd69b1708954"
+    resource_group_name  = "rg-tfstate-co-dev-gwc-01"
+    storage_account_name = "sttfstatecodevgwc01"
+    container_name       = "tfstate-pl-connectivity"
+    key                  = "pl-connectivity-dev-gwc.tfstate"
+    use_azuread_auth     = true
   }
 }
