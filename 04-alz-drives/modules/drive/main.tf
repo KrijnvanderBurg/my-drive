@@ -4,6 +4,13 @@ resource "azurerm_resource_group" "this" {
   tags     = var.tags
 }
 
+resource "azurerm_management_lock" "resource_group" {
+  name       = "lock-prevent-delete"
+  scope      = azurerm_resource_group.this.id
+  lock_level = "CanNotDelete"
+  notes      = "Prevents accidental deletion of drive resource group"
+}
+
 resource "azurerm_storage_account" "this" {
   name                     = "dlsdriveon${var.environment}${var.region}01"
   resource_group_name      = azurerm_resource_group.this.name
@@ -42,7 +49,18 @@ resource "azurerm_storage_account" "this" {
     ip_rules       = var.allowed_ips
   }
 
+  lifecycle {
+    prevent_destroy = true
+  }
+
   tags = var.tags
+}
+
+resource "azurerm_management_lock" "storage_account" {
+  name       = "lock-prevent-delete"
+  scope      = azurerm_storage_account.this.id
+  lock_level = "CanNotDelete"
+  notes      = "Prevents accidental deletion of drive storage account"
 }
 
 resource "azurerm_storage_data_lake_gen2_filesystem" "containers" {
