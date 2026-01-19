@@ -77,8 +77,10 @@ module "spoke_to_hub_peering" {
 }
 
 # =============================================================================
-# Private DNS Zones
+# Private DNS Zones (CENTRALIZED - Global DNS Management)
 # =============================================================================
+# Best Practice: DNS zones created once in WEU, linked to all regional hubs
+# Source: https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/ready/azure-best-practices/private-link-and-dns-integration-at-scale
 
 module "private_dns" {
   source   = "../../modules/private-dns-zone"
@@ -87,10 +89,17 @@ module "private_dns" {
   name                = each.value
   resource_group_name = azurerm_resource_group.connectivity.name
 
-  # Link to hub VNet for DNS resolution
+  # Link to BOTH WEU and GWC hub VNets for global DNS resolution
   virtual_network_links = {
-    hub = module.hub.id
+    hub-weu = module.hub.id
+    hub-gwc = data.terraform_remote_state.gwc.outputs.hub.id
   }
 
-  tags = local.common_tags
+  tags = merge(
+    local.common_tags,
+    {
+      "dns-scope"  = "global"
+      "managed-in" = "weu"
+    }
+  )
 }

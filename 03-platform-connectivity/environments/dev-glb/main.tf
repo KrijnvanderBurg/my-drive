@@ -4,8 +4,9 @@
 #
 # This deployment manages cross-region resources:
 # - Hub-to-Hub VNet peering (global peering between regional hubs)
-# - Cross-region Private DNS links
 #
+# NOTE: Cross-region Private DNS links are now managed in the WEU deployment
+# The centralized DNS architecture links zones to all hubs directly
 # =============================================================================
 
 # =============================================================================
@@ -38,37 +39,4 @@ module "hub_gwc_to_hub_weu" {
   remote_virtual_network_id = local.hubs.weu.id
   allow_forwarded_traffic   = true
   allow_gateway_transit     = true # Allow GWC hub to act as transit
-}
-
-# =============================================================================
-# Cross-Region Private DNS Links
-# =============================================================================
-# Link each region's DNS zones to the other region's hub VNet.
-# This enables DNS resolution for Private Endpoints across regions.
-# =============================================================================
-
-# Link WEU DNS zones to GWC hub
-resource "azurerm_private_dns_zone_virtual_network_link" "weu_dns_to_gwc_hub" {
-  for_each = local.private_dns_zones_weu
-
-  name                  = "link-weu-${replace(each.key, ".", "-")}-to-gwc-hub"
-  resource_group_name   = data.terraform_remote_state.weu.outputs.resource_group.name
-  private_dns_zone_name = each.value.name
-  virtual_network_id    = local.hubs.gwc.id
-  registration_enabled  = false
-
-  tags = local.common_tags
-}
-
-# Link GWC DNS zones to WEU hub
-resource "azurerm_private_dns_zone_virtual_network_link" "gwc_dns_to_weu_hub" {
-  for_each = local.private_dns_zones_gwc
-
-  name                  = "link-gwc-${replace(each.key, ".", "-")}-to-weu-hub"
-  resource_group_name   = data.terraform_remote_state.gwc.outputs.resource_group.name
-  private_dns_zone_name = each.value.name
-  virtual_network_id    = local.hubs.weu.id
-  registration_enabled  = false
-
-  tags = local.common_tags
 }

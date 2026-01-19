@@ -75,3 +75,10 @@ module "spoke_to_hub_peering" {
   allow_forwarded_traffic   = true
   use_remote_gateways       = false # Enable when gateway is deployed
 }
+
+# =============================================================================
+# Private DNS Zones
+# =============================================================================
+# DNS zones are centrally managed in West Europe (WEU) region
+# This region consumes DNS via VNet link from WEU
+# No local DNS zones are created to avoid namespace conflicts
