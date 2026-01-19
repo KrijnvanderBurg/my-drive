@@ -1,42 +1,33 @@
 # =============================================================================
-# Global (glb) - Outputs
-# =============================================================================
-
-# =============================================================================
-# Hub-to-Hub Peerings
+# Hub Peering Outputs
 # =============================================================================
 
 output "hub_peerings" {
-  description = "Hub-to-hub VNet peering details"
+  description = "Hub-to-hub peering details"
   value = {
     weu_to_gwc = {
-      id   = module.hub_weu_to_hub_gwc.id
-      name = module.hub_weu_to_hub_gwc.name
+      id                  = module.hub_weu_to_hub_gwc.id
+      name                = module.hub_weu_to_hub_gwc.name
+      peering_state       = module.hub_weu_to_hub_gwc.peering_state
     }
     gwc_to_weu = {
-      id   = module.hub_gwc_to_hub_weu.id
-      name = module.hub_gwc_to_hub_weu.name
+      id                  = module.hub_gwc_to_hub_weu.id
+      name                = module.hub_gwc_to_hub_weu.name
+      peering_state       = module.hub_gwc_to_hub_weu.peering_state
     }
   }
 }
 
-# =============================================================================
-# Cross-Region DNS Links
-# =============================================================================
-
-output "cross_region_dns_links" {
-  description = "Cross-region Private DNS VNet links"
+output "hub_summary" {
+  description = "Summary of all regional hubs"
   value = {
-    weu_dns_to_gwc_hub = { for k, v in azurerm_private_dns_zone_virtual_network_link.weu_dns_to_gwc_hub : k => v.id }
-    gwc_dns_to_weu_hub = { for k, v in azurerm_private_dns_zone_virtual_network_link.gwc_dns_to_weu_hub : k => v.id }
+    weu = {
+      id   = local.hubs.weu.id
+      name = local.hubs.weu.name
+    }
+    gwc = {
+      id   = local.hubs.gwc.id
+      name = local.hubs.gwc.name
+    }
   }
-}
-
-# =============================================================================
-# Regional References (passthrough for convenience)
-# =============================================================================
-
-output "regional_hubs" {
-  description = "Regional hub details (from remote state)"
-  value       = local.hubs
 }
