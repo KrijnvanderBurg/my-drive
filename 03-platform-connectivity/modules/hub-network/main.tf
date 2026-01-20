@@ -1,16 +1,21 @@
 # =============================================================================
 # Hub Network Module
 # =============================================================================
-# Creates a hub virtual network with reserved subnets for platform services.
-# Managed subnets get zero-trust NSGs (deny all by default) and route tables.
-# Azure subnets (GatewaySubnet, etc.) are created without NSG/RT per Azure requirements.
+# Creates a hub virtual network with Azure and managed subnets.
 # =============================================================================
+
+resource "azurerm_resource_group" "this" {
+  name     = var.resource_group_name
+  location = var.location
+
+  tags = var.tags
+}
 
 resource "azurerm_virtual_network" "this" {
   name                = var.name
   location            = var.location
-  resource_group_name = var.resource_group_name
-  address_space       = [var.address_space]
+  resource_group_name = azurerm_resource_group.this.name
+  address_space       = var.address_space
 
   tags = var.tags
 }

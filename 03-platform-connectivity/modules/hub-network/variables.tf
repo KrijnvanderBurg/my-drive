@@ -18,19 +18,19 @@ variable "location" {
 }
 
 variable "address_space" {
-  description = "Address space for the hub VNet (e.g., 10.1.0.0/20)"
-  type        = string
+  description = "Address space for the hub VNet"
+  type        = list(string)
 }
 
 variable "azure_subnets" {
-  description = "Azure reserved subnets (GatewaySubnet, AzureFirewallSubnet, etc.) - no NSG/RT"
-  type        = map(string)
+  description = "Azure-managed subnets configuration"
+  type        = any
   default     = {}
 }
 
 variable "managed_subnets" {
-  description = "Platform managed subnets - get NSG and route table"
-  type        = map(string)
+  description = "Customer-managed subnets configuration"
+  type        = any
   default     = {}
 }
 
@@ -38,4 +38,10 @@ variable "tags" {
   description = "Tags to apply to all resources"
   type        = map(string)
   default     = {}
+}
+
+variable "create_resource_group" {
+  description = "Create a new resource group for the hub"
+  type        = bool
+  default     = true
 }

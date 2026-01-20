@@ -31,7 +31,6 @@ locals {
   # ---------------------------------------------------------------------------
   # Hub VNet IDs - All Regions
   # ---------------------------------------------------------------------------
-
   hub_weu_id = module.hub.id
   hub_gwc_id = data.terraform_remote_state.gwc.outputs.hub.id
 

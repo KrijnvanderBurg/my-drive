@@ -12,15 +12,21 @@ output "name" {
   value       = azurerm_virtual_network.this.name
 }
 
+output "resource_group_id" {
+  description = "ID of the resource group"
+  value       = var.create_resource_group ? azurerm_resource_group.this[0].id : null
+}
+
 output "resource_group_name" {
-  description = "Resource group name of the hub virtual network"
-  value       = azurerm_virtual_network.this.resource_group_name
+  description = "Name of the resource group"
+  value       = var.create_resource_group ? azurerm_resource_group.this[0].name : var.resource_group_name
 }
 
 output "address_space" {
   description = "Address space of the hub virtual network"
   value       = azurerm_virtual_network.this.address_space
 }
+
 
 output "subnets" {
   description = "Map of subnet names to their IDs"

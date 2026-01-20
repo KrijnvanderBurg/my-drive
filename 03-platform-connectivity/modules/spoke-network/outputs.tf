@@ -1,7 +1,3 @@
-# =============================================================================
-# Spoke Network Module - Outputs
-# =============================================================================
-
 output "id" {
   description = "ID of the spoke virtual network"
   value       = azurerm_virtual_network.this.id
@@ -12,9 +8,14 @@ output "name" {
   value       = azurerm_virtual_network.this.name
 }
 
+output "resource_group_id" {
+  description = "ID of the resource group"
+  value       = azurerm_resource_group.this.id
+}
+
 output "resource_group_name" {
   description = "Resource group name of the spoke virtual network"
-  value       = azurerm_virtual_network.this.resource_group_name
+  value       = azurerm_resource_group.this.name
 }
 
 output "address_space" {
