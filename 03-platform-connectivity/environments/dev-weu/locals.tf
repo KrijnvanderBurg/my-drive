@@ -7,6 +7,7 @@ locals {
   # Remote State Outputs
   # ---------------------------------------------------------------------------
   connectivity_subscription_id = data.terraform_remote_state.management.outputs.pl_connectivity_subscription.subscription_id
+  plz_drives_subscription_id   = data.terraform_remote_state.management.outputs.plz_drives_subscription.subscription_id
 
   # ---------------------------------------------------------------------------
   # Region Configuration
@@ -111,6 +112,17 @@ locals {
     app      = cidrsubnet(local.region_cidr, 4, 3) # 10.1.48.0/20  (4,096 IPs)
     web      = cidrsubnet(local.region_cidr, 4, 4) # 10.1.64.0/20  (4,096 IPs)
     shared   = cidrsubnet(local.region_cidr, 4, 5) # 10.1.80.0/20  (4,096 IPs)
+  }
+
+  # ---------------------------------------------------------------------------
+  # Landing Zone Spoke VNets (deployed in LZ subscriptions)
+  # ---------------------------------------------------------------------------
+  # These spokes are created in their respective landing zone subscriptions
+  # but managed by connectivity for network topology consistency.
+  # ---------------------------------------------------------------------------
+
+  lz_spoke_cidrs = {
+    drives = cidrsubnet(local.region_cidr, 4, 6) # 10.1.96.0/20  (4,096 IPs)
   }
 
   # ---------------------------------------------------------------------------

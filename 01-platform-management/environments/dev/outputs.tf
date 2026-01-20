@@ -115,6 +115,14 @@ output "alz_drive_subscription" {
   }
 }
 
+output "plz_drives_subscription" {
+  description = "Platform Landing Zone Drives subscription"
+  value = {
+    id              = data.azurerm_subscription.plz_drives.id
+    subscription_id = data.azurerm_subscription.plz_drives.subscription_id
+  }
+}
+
 # =============================================================================
 # Environment Information
 # =============================================================================

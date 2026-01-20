@@ -42,3 +42,19 @@ output "private_dns_zones" {
     }
   }
 }
+
+# =============================================================================
+# Landing Zone Spoke Outputs
+# =============================================================================
+
+output "lz_drives_spoke" {
+  description = "Drives landing zone spoke VNet details"
+  value = {
+    id                     = module.spoke_drives.id
+    name                   = module.spoke_drives.name
+    address_space          = module.spoke_drives.address_space
+    resource_group_name    = azurerm_resource_group.lz_drives.name
+    default_nsg_id         = module.spoke_drives.default_nsg_id
+    default_route_table_id = module.spoke_drives.default_route_table_id
+  }
+}

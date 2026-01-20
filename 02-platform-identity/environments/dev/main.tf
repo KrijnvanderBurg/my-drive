@@ -32,6 +32,15 @@ module "sp_alz_drives" {
   ]
 }
 
+module "sp_plz_drives" {
+  source = "../../modules/service-principal-federated"
+
+  name = "sp-plz-drives-on-${local.environment}-na-01"
+  subjects = [
+    "repo:KrijnvanderBurg/my-cloud:environment:dev"
+  ]
+}
+
 # =============================================================================
 # RBAC Role Assignments - Platform Management SP
 # =============================================================================
@@ -88,10 +97,39 @@ resource "azurerm_role_assignment" "sp_platform_connectivity_subscription_contri
   principal_id         = module.sp_platform_connectivity.object_id
 }
 
+# Connectivity SP needs Contributor on PLZ Drives subscription to create spoke VNet
+resource "azurerm_role_assignment" "sp_platform_connectivity_plz_drives_contributor" {
+  scope                = local.plz_drives_subscription_scope
+  role_definition_name = "Contributor"
+  principal_id         = module.sp_platform_connectivity.object_id
+}
+
 resource "azurerm_role_assignment" "sp_platform_connectivity_tfstate" {
   scope                = local.tfstate_storage_account_id
   role_definition_name = "Storage Blob Data Contributor"
   principal_id         = module.sp_platform_connectivity.object_id
+}
+
+# =============================================================================
+# RBAC Role Assignments - PLZ Drives SP
+# =============================================================================
+
+resource "azurerm_role_assignment" "sp_plz_drives_subscription_contributor" {
+  scope                = local.plz_drives_subscription_scope
+  role_definition_name = "Contributor"
+  principal_id         = module.sp_plz_drives.object_id
+}
+
+resource "azurerm_role_assignment" "sp_plz_drives_subscription_uaa" {
+  scope                = local.plz_drives_subscription_scope
+  role_definition_name = "User Access Administrator"
+  principal_id         = module.sp_plz_drives.object_id
+}
+
+resource "azurerm_role_assignment" "sp_plz_drives_tfstate" {
+  scope                = local.tfstate_storage_account_id
+  role_definition_name = "Storage Blob Data Contributor"
+  principal_id         = module.sp_plz_drives.object_id
 }
 
 # =============================================================================

@@ -102,3 +102,29 @@ module "private_dns" {
     }
   )
 }
+
+# =============================================================================
+# Landing Zone: Drives - Spoke Network (deployed in LZ subscription)
+# =============================================================================
+
+module "lz_spoke_drives" {
+  source = "../../modules/landing-zone-spoke"
+
+  providers = {
+    azurerm     = azurerm.plz_drives
+    azurerm.hub = azurerm
+  }
+
+  landing_zone_name               = "drives"
+  environment                     = local.environment
+  region                          = local.region
+  location                        = local.location
+  address_space                   = local.lz_spoke_cidrs["drives"]
+  hub_vnet_name                   = module.hub.name
+  hub_vnet_id                     = module.hub.id
+  hub_resource_group_name         = azurerm_resource_group.connectivity.name
+  private_dns_zones               = toset(local.private_dns_zones)
+  private_dns_resource_group_name = azurerm_resource_group.connectivity.name
+
+  tags = local.common_tags
+}

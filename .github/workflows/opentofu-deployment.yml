@@ -188,3 +188,32 @@ jobs:
       state_key: alz-drive-dev.tfstate
       client_id: "7d68fcf5-8620-48ed-9774-4ce00a474045"
     secrets: inherit
+
+  # ===== Platform Landing Zone - Drives (dev) =====
+  # Lint, plan and apply for drives landing zone
+  plz-drives-dev-lint:
+    name: plz-drives-dev lint
+    uses: ./.github/workflows/opentofu-lint.yml
+    with:
+      working_directory: ./05-platform-landing-zones/environments/drives-dev
+      client_id: "<SP_CLIENT_ID_PLZ_DRIVES_DEV>" # sp-plz-drives-on-dev-na-01
+
+  plz-drives-dev-plan:
+    name: plz-drives-dev plan
+    needs: [plz-drives-dev-lint, pl-connectivity-dev-weu-apply]
+    uses: ./.github/workflows/opentofu-plan.yml
+    with:
+      working_directory: ./05-platform-landing-zones/environments/drives-dev
+      artifact_name: plz-drives-dev
+      state_key: plz-drives-dev.tfstate
+      client_id: "<SP_CLIENT_ID_PLZ_DRIVES_DEV>" # sp-plz-drives-on-dev-na-01
+
+  plz-drives-dev-apply:
+    name: plz-drives-dev apply
+    needs: [plz-drives-dev-plan]
+    uses: ./.github/workflows/opentofu-apply.yml
+    with:
+      working_directory: ./05-platform-landing-zones/environments/drives-dev
+      artifact_name: plz-drives-dev
+      state_key: plz-drives-dev.tfstate
+      client_id: "<SP_CLIENT_ID_PLZ_DRIVES_DEV>" # sp-plz-drives-on-dev-na-01
