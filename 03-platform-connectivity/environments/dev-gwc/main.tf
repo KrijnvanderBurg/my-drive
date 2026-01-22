@@ -12,7 +12,7 @@ module "hub" {
   name                = "vnet-hub-co-${local.environment}-${local.region}-01"
   resource_group_name = "rg-connectivity-on-${local.environment}-${local.region}-01"
   location            = local.location
-  address_space       = local.hub_cidr
+  address_space       = [local.hub_cidr]
   azure_subnets       = local.hub_azure_subnets
   managed_subnets     = local.hub_managed_subnets
 

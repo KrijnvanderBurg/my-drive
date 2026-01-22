@@ -36,9 +36,8 @@ output "private_dns_zones" {
   description = "Centralized Private DNS zones (managed in WEU)"
   value = {
     for zone_name, zone in module.private_dns : zone_name => {
-      id                  = zone.id
-      name                = zone.name
-      resource_group_name = azurerm_resource_group.connectivity.name
+      id   = zone.id
+      name = zone.name
     }
   }
 }

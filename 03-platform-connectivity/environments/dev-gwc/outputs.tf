@@ -7,7 +7,7 @@ output "hub" {
   value = {
     id                  = module.hub.id
     name                = module.hub.name
-    resource_group_name = azurerm_resource_group.connectivity.name
+    resource_group_name = module.hub.resource_group_name
     address_space       = module.hub.address_space
   }
 }
@@ -15,9 +15,9 @@ output "hub" {
 output "resource_group" {
   description = "Connectivity resource group"
   value = {
-    name     = azurerm_resource_group.connectivity.name
-    location = azurerm_resource_group.connectivity.location
-    id       = azurerm_resource_group.connectivity.id
+    name     = module.hub.resource_group_name
+    location = local.location
+    id       = module.hub.resource_group_id
   }
 }
 
