@@ -99,28 +99,11 @@ locals {
   # ---------------------------------------------------------------------------
 
   spoke_cidrs = {
-    identity = cidrsubnet(local.region_cidr, 4, 1) # 10.2.16.0/20  (4,096 IPs)
-    data     = cidrsubnet(local.region_cidr, 4, 2) # 10.2.32.0/20  (4,096 IPs)
-    app      = cidrsubnet(local.region_cidr, 4, 3) # 10.2.48.0/20  (4,096 IPs)
-    web      = cidrsubnet(local.region_cidr, 4, 4) # 10.2.64.0/20  (4,096 IPs)
-    shared   = cidrsubnet(local.region_cidr, 4, 5) # 10.2.80.0/20  (4,096 IPs)
+    # identity = cidrsubnet(local.region_cidr, 4, 1) # 10.2.16.0/20  (4,096 IPs)
+    # data     = cidrsubnet(local.region_cidr, 4, 2) # 10.2.32.0/20  (4,096 IPs)
+    # app      = cidrsubnet(local.region_cidr, 4, 3) # 10.2.48.0/20  (4,096 IPs)
+    # web      = cidrsubnet(local.region_cidr, 4, 4) # 10.2.64.0/20  (4,096 IPs)
+    # shared   = cidrsubnet(local.region_cidr, 4, 5) # 10.2.80.0/20  (4,096 IPs)
   }
 
-  # ---------------------------------------------------------------------------
-  # Private DNS Zones
-  # ---------------------------------------------------------------------------
-  # Common Private Link DNS zones for Azure services
-  # ---------------------------------------------------------------------------
-
-  private_dns_zones = [
-    "privatelink.blob.core.windows.net",
-    "privatelink.file.core.windows.net",
-    "privatelink.queue.core.windows.net",
-    "privatelink.table.core.windows.net",
-    "privatelink.vaultcore.azure.net",
-    "privatelink.database.windows.net",
-    "privatelink.documents.azure.com",
-    "privatelink.azurecr.io",
-    "privatelink.azurewebsites.net",
-  ]
 }
