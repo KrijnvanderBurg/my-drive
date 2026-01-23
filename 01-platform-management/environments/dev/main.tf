@@ -88,44 +88,44 @@ module "policy_deny_delete" {
 # =============================================================================
 
 # Protect a management group from accidental deletions
-resource "azurerm_management_group_policy_assignment" "platform_management_deny_delete" {
-  name                 = "deny-del-pl-management"
-  display_name         = "Deny Delete Operations - Platform Management"
-  description          = "Prevents deletion of any resources under platform management management group"
-  policy_definition_id = module.policy_deny_delete.id
-  management_group_id  = module.pl_management.id
-  enforce              = true
-}
+# resource "azurerm_management_group_policy_assignment" "platform_management_deny_delete" {
+#   name                 = "deny-del-pl-management"
+#   display_name         = "Deny Delete Operations - Platform Management"
+#   description          = "Prevents deletion of any resources under platform management management group"
+#   policy_definition_id = module.policy_deny_delete.id
+#   management_group_id  = module.pl_management.id
+#   enforce              = true
+# }
 
-# Protect platform identity management group from accidental deletions
-resource "azurerm_management_group_policy_assignment" "platform_identity_deny_delete" {
-  name                 = "deny-del-pl-identity"
-  display_name         = "Deny Delete Operations - Platform Identity"
-  description          = "Prevents deletion of any resources under platform identity management group"
-  policy_definition_id = module.policy_deny_delete.id
-  management_group_id  = module.pl_identity.id
-  enforce              = true
-}
+# # Protect platform identity management group from accidental deletions
+# resource "azurerm_management_group_policy_assignment" "platform_identity_deny_delete" {
+#   name                 = "deny-del-pl-identity"
+#   display_name         = "Deny Delete Operations - Platform Identity"
+#   description          = "Prevents deletion of any resources under platform identity management group"
+#   policy_definition_id = module.policy_deny_delete.id
+#   management_group_id  = module.pl_identity.id
+#   enforce              = true
+# }
 
-# Protect platform connectivity management group from accidental deletions
-resource "azurerm_management_group_policy_assignment" "platform_connectivity_deny_delete" {
-  name                 = "deny-del-pl-connect"
-  display_name         = "Deny Delete Operations - Platform Connectivity"
-  description          = "Prevents deletion of any resources under platform connectivity management group"
-  policy_definition_id = module.policy_deny_delete.id
-  management_group_id  = module.pl_connectivity.id
-  enforce              = true
-}
+# # Protect platform connectivity management group from accidental deletions
+# resource "azurerm_management_group_policy_assignment" "platform_connectivity_deny_delete" {
+#   name                 = "deny-del-pl-connect"
+#   display_name         = "Deny Delete Operations - Platform Connectivity"
+#   description          = "Prevents deletion of any resources under platform connectivity management group"
+#   policy_definition_id = module.policy_deny_delete.id
+#   management_group_id  = module.pl_connectivity.id
+#   enforce              = true
+# }
 
-# Protect landing zone management group from accidental deletions
-resource "azurerm_management_group_policy_assignment" "landingzone_deny_delete" {
-  name                 = "deny-del-landingzone"
-  display_name         = "Deny Delete Operations - Landing Zone"
-  description          = "Prevents deletion of any resources under landing zone management group"
-  policy_definition_id = module.policy_deny_delete.id
-  management_group_id  = module.landingzone.id
-  enforce              = true
-}
+# # Protect landing zone management group from accidental deletions
+# resource "azurerm_management_group_policy_assignment" "landingzone_deny_delete" {
+#   name                 = "deny-del-landingzone"
+#   display_name         = "Deny Delete Operations - Landing Zone"
+#   description          = "Prevents deletion of any resources under landing zone management group"
+#   policy_definition_id = module.policy_deny_delete.id
+#   management_group_id  = module.landingzone.id
+#   enforce              = true
+# }
 
 # =============================================================================
 # Subscription Data Sources
