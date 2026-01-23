@@ -26,12 +26,12 @@ locals {
     weu = {
       id                  = data.terraform_remote_state.weu.outputs.hub.id
       name                = data.terraform_remote_state.weu.outputs.hub.name
-      resource_group_name = data.terraform_remote_state.weu.outputs.hub.resource_group.name
+      resource_group_name = data.terraform_remote_state.weu.outputs.hub.resource_group_name
     }
     gwc = {
       id                  = data.terraform_remote_state.gwc.outputs.hub.id
       name                = data.terraform_remote_state.gwc.outputs.hub.name
-      resource_group_name = data.terraform_remote_state.gwc.outputs.hub.resource_group.name
+      resource_group_name = data.terraform_remote_state.gwc.outputs.hub.resource_group_name
     }
   }
 
