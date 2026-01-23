@@ -26,8 +26,8 @@ locals {
   # ---------------------------------------------------------------------------
   # Hub VNet IDs - All Regions
   # ---------------------------------------------------------------------------
-  hub_weu_id = module.hub.id
-  hub_gwc_id = data.terraform_remote_state.gwc.outputs.hub.id
+  hub_gwc_id = module.hub.id
+  hub_weu_id = data.terraform_remote_state.weu.outputs.hub.id
 
   # ---------------------------------------------------------------------------
   # IP Address Space
