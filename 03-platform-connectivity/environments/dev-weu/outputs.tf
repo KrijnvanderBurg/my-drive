@@ -15,7 +15,7 @@ output "hub" {
 output "spoke_networks" {
   description = "Spoke VNet details"
   value = {
-    for key, spoke in module.spoke : key => {
+    for key, spoke in module.spokes : key => {
       id            = spoke.id
       name          = spoke.name
       address_space = spoke.address_space
