@@ -13,7 +13,7 @@ variable "resource_group_name" {
 }
 
 variable "location" {
-  description = "Azure region for the Container Registry"
+  description = "Azure location_short for the Container Registry"
   type        = string
 }
 

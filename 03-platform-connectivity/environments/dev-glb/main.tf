@@ -2,10 +2,10 @@
 # Global (glb) - Main Configuration
 # =============================================================================
 #
-# This deployment manages cross-region resources:
-# - Hub-to-Hub VNet peering (global peering between regional hubs)
+# This deployment manages cross-location_short resources:
+# - Hub-to-Hub VNet peering (global peering between location_shortal hubs)
 #
-# NOTE: Cross-region Private DNS links are managed in the WEU deployment
+# NOTE: Cross-location_short Private DNS links are managed in the WEU deployment
 # =============================================================================
 
 # West Europe Hub -> Germany West Central Hub

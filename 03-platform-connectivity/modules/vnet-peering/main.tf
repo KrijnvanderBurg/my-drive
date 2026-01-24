@@ -3,7 +3,7 @@
 # =============================================================================
 # Creates a single direction VNet peering.
 # For bidirectional peering, call this module twice with swapped parameters.
-# Supports global peering (cross-region) automatically.
+# Supports global peering (cross-location_short) automatically.
 # =============================================================================
 
 resource "azurerm_virtual_network_peering" "this" {

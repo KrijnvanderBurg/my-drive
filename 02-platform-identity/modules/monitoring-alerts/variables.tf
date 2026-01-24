@@ -4,12 +4,12 @@ variable "environment" {
 }
 
 variable "location" {
-  description = "Azure region for the resource group"
+  description = "Azure location_short for the resource group"
   type        = string
 }
 
-variable "region" {
-  description = "Short region code for naming (e.g., gwc for germanywestcentral)"
+variable "location_short" {
+  description = "Short location_short code for naming (e.g., gwc for germanywestcentral)"
   type        = string
 }
 

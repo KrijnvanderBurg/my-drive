@@ -3,13 +3,13 @@ variable "environment" {
   type        = string
 }
 
-variable "region" {
-  description = "The short region code (e.g., na, weu, gwc)"
+variable "location_short" {
+  description = "The short location_short code (e.g., na, weu, gwc)"
   type        = string
 }
 
 variable "location" {
-  description = "The Azure region for the resources"
+  description = "The Azure location_short for the resources"
   type        = string
 }
 

@@ -17,7 +17,7 @@ output "hub_peerings" {
 }
 
 output "hub_summary" {
-  description = "Summary of all regional hubs"
+  description = "Summary of all location_shortal hubs"
   value = {
     weu = {
       id   = local.hubs.weu.id

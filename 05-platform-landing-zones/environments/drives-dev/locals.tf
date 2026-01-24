@@ -19,7 +19,7 @@ locals {
   private_dns_zones = keys(data.terraform_remote_state.connectivity_weu.outputs.private_dns_zones)
 
   # ---------------------------------------------------------------------------
-  # Region Configuration (easily changeable)
+  # location_short Configuration (easily changeable)
   # ---------------------------------------------------------------------------
   location       = "westeurope"
   location_short = "weu"
@@ -30,19 +30,19 @@ locals {
   # Common Tags
   # ---------------------------------------------------------------------------
   common_tags = {
-    environment  = local.environment
-    managed_by   = "opentofu"
-    project      = "levendaal"
-    layer        = "platform-landing-zone"
-    landing_zone = local.landing_zone
-    region       = local.location_short
+    environment    = local.environment
+    managed_by     = "opentofu"
+    project        = "levendaal"
+    layer          = "platform-landing-zone"
+    landing_zone   = local.landing_zone
+    location_short = local.location_short
   }
 
   # ---------------------------------------------------------------------------
   # Spoke Network Configuration
   # ---------------------------------------------------------------------------
   # IP allocation follows connectivity layer convention:
-  # Region WEU = 10.1.0.0/16, slot 6 = LZ drives
+  # location_short WEU = 10.1.0.0/16, slot 6 = LZ drives
   # ---------------------------------------------------------------------------
 
   spoke_cidr = "10.1.96.0/20" # 4,096 IPs for drives landing zone

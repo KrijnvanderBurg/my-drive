@@ -5,7 +5,7 @@ Based on [Azure Cloud Adoption Framework](https://learn.microsoft.com/en-us/azur
 ## Format
 
 ```
-<type>-<workload>-<archetype>-<env>-<region>-<instance>
+<type>-<workload>-<archetype>-<env>-<location_short>-<instance>
 ```
 
 ## Components
@@ -16,14 +16,14 @@ Based on [Azure Cloud Adoption Framework](https://learn.microsoft.com/en-us/azur
 | Workload | Function or application name | `management`, `identity`, `connectivity`, `dataplatform`, `webapp`, `erp` |
 | Archetype | Network/security posture | `co`, `on` |
 | Env | Deployment stage | `dev`, `test`, `accp`, `prod` |
-| Region | Azure region or `glb` for global or `na` if no region | `weu`, `gwc`, `glb`, `na` |
+| location_short | Azure location_short or `glb` for global or `na` if no location_short | `weu`, `gwc`, `glb`, `na` |
 | Instance | Number (2 digits) | `01`, `02` |
 
-## Region Abbreviations
+## location_short Abbreviations
 
-| Region | Abbreviation |
+| location_short | Abbreviation |
 |--------|--------------|
-| Global / Multi-region | `glb` |
+| Global / Multi-location_short | `glb` |
 | Germany West Central | `gwc` |
 | West Europe | `weu` |
 | North Europe | `neu` |

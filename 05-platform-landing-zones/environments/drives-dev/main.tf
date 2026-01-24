@@ -20,6 +20,32 @@ module "spoke" {
   tags = local.common_tags
 }
 
+# spoke_cidrs = {
+#   identity = cidrsubnet(local.location_cidr, 4, 1) # 10.1.16.0/20  (4,096 IPs)
+#   data     = cidrsubnet(local.location_cidr, 4, 2) # 10.1.32.0/20  (4,096 IPs)
+#   app      = cidrsubnet(local.location_cidr, 4, 3) # 10.1.48.0/20  (4,096 IPs)
+#   web      = cidrsubnet(local.location_cidr, 4, 4) # 10.1.64.0/20  (4,096 IPs)
+#   shared   = cidrsubnet(local.location_cidr, 4, 5) # 10.1.80.0/20  (4,096 IPs)
+# }
+
+
+# module "spokes" {
+#   source     = "../../modules/spoke-network"
+#   for_each   = local.spoke_cidrs
+#   depends_on = [module.hub]
+
+#   name                = "vnet-${each.key}-co-${local.environment}-${local.location_short}-01"
+#   resource_group_name = module.hub.resource_group_name
+#   location            = local.location
+#   address_space       = [each.value]
+
+#   hub_vnet_id   = module.hub.id
+#   hub_vnet_name = module.hub.name
+
+#   tags = local.common_tags
+# }
+
+
 # =============================================================================
 # Hub-to-Spoke Peering (created in connectivity subscription)
 # =============================================================================

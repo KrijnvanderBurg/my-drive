@@ -1,5 +1,5 @@
 resource "azurerm_resource_group" "this" {
-  name     = "rg-drive-on-${var.environment}-${var.region}-01"
+  name     = "rg-drive-on-${var.environment}-${var.location_short}-01"
   location = var.location
   tags     = var.tags
 }
@@ -12,7 +12,7 @@ resource "azurerm_management_lock" "resource_group" {
 }
 
 resource "azurerm_storage_account" "this" {
-  name                     = "dlsdriveon${var.environment}${var.region}01"
+  name                     = "dlsdriveon${var.environment}${var.location_short}01"
   resource_group_name      = azurerm_resource_group.this.name
   location                 = azurerm_resource_group.this.location
   account_tier             = "Standard"

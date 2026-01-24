@@ -9,7 +9,7 @@ variable "resource_group_name" {
 }
 
 variable "location" {
-  description = "Azure region for resources"
+  description = "Azure location_short for resources"
   type        = string
 }
 

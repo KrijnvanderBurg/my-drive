@@ -11,24 +11,3 @@ output "hub" {
     address_space       = module.hub.address_space
   }
 }
-
-# output "spoke_networks" {
-#   description = "Spoke VNet details"
-#   value = {
-#     for key, spoke in module.spokes : key => {
-#       id            = spoke.id
-#       name          = spoke.name
-#       address_space = spoke.address_space
-#     }
-#   }
-# }
-
-# output "private_dns_zones" {
-#   description = "Centralized Private DNS zones (managed in WEU)"
-#   value = {
-#     for zone_name, zone in module.private_dns : zone_name => {
-#       id   = zone.id
-#       name = zone.name
-#     }
-#   }
-# }

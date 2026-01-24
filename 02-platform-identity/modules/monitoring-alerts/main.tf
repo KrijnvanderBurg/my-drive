@@ -1,11 +1,11 @@
 resource "azurerm_resource_group" "monitoring" {
-  name     = "rg-identity-monitoring-${var.environment}-${var.region}-01"
+  name     = "rg-identity-monitoring-${var.environment}-${var.location_short}-01"
   location = var.location
   tags     = var.tags
 }
 
 resource "azurerm_monitor_action_group" "identity_alerts" {
-  name                = "ag-identity-alerts-${var.environment}-${var.region}-01"
+  name                = "ag-identity-alerts-${var.environment}-${var.location_short}-01"
   resource_group_name = azurerm_resource_group.monitoring.name
   short_name          = "id-alert"
   tags                = var.tags
@@ -18,7 +18,7 @@ resource "azurerm_monitor_action_group" "identity_alerts" {
 }
 
 resource "azurerm_monitor_activity_log_alert" "admin_activity" {
-  name                = "alert-admin-activity-${var.environment}-${var.region}-01"
+  name                = "alert-admin-activity-${var.environment}-${var.location_short}-01"
   resource_group_name = azurerm_resource_group.monitoring.name
   location            = "westeurope"
   scopes              = ["/subscriptions/${var.subscription_id}"]

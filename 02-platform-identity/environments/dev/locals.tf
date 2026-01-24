@@ -27,11 +27,11 @@ locals {
   alz_drive_subscription_id       = data.terraform_remote_state.management.outputs.alz_drive_subscription.subscription_id
 
   # ---------------------------------------------------------------------------
-  # Region Configuration
+  # location_short Configuration
   # ---------------------------------------------------------------------------
-  environment = "dev"
-  region      = "gwc"
-  location    = "germanywestcentral"
+  environment    = "dev"
+  location_short = "gwc"
+  location       = "germanywestcentral"
 
   # ---------------------------------------------------------------------------
   # Common Tags

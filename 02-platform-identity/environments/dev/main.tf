@@ -153,7 +153,7 @@ module "monitoring_alerts" {
 
   environment     = local.environment
   location        = local.location
-  region          = local.region
+  location_short  = local.location_short
   subscription_id = local.pl_identity_subscription_id
   alert_email     = local.alert_email
   tags            = local.common_tags

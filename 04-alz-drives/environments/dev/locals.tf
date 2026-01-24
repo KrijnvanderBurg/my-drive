@@ -4,11 +4,11 @@
 
 locals {
   # ---------------------------------------------------------------------------
-  # Region Configuration
+  # location_short Configuration
   # ---------------------------------------------------------------------------
-  environment = "dev"
-  region      = "gwc"
-  location    = "germanywestcentral"
+  environment    = "dev"
+  location_short = "gwc"
+  location       = "germanywestcentral"
 
   # ---------------------------------------------------------------------------
   # Common Tags

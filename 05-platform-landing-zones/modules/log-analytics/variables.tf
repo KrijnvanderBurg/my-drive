@@ -13,7 +13,7 @@ variable "resource_group_name" {
 }
 
 variable "location" {
-  description = "Azure region for the workspace"
+  description = "Azure location_short for the workspace"
   type        = string
 }
 

@@ -23,7 +23,7 @@ variable "address_prefixes" {
 }
 
 variable "location" {
-  description = "Azure region for resources (NSG, Route Table)"
+  description = "Azure location_short for resources (NSG, Route Table)"
   type        = string
 }
 
