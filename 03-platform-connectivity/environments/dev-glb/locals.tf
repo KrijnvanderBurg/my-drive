@@ -34,10 +34,4 @@ locals {
       resource_group_name = data.terraform_remote_state.gwc.outputs.hub.resource_group_name
     }
   }
-
-  # ---------------------------------------------------------------------------
-  # Private DNS Zones (from regional deployments)
-  # ---------------------------------------------------------------------------
-  # Used for cross-region DNS linking
-  private_dns_zones_weu = data.terraform_remote_state.weu.outputs.private_dns_zones
 }
