@@ -78,5 +78,30 @@ locals {
   }
 
   # Azure delegated subnets: Delegated to Azure services (no NSG/route table per delegation requirements)
-  azure_delegated_subnets = {}
+  azure_delegated_subnets = {
+    "snet-appservice-${local.landing_zone}-${local.environment}-${local.location_short}-01" = {
+      address_prefix    = cidrsubnet(local.spoke_cidr, 6, 8) # 64 IPs for App Service integration
+      service_endpoints = ["Microsoft.Storage", "Microsoft.KeyVault"]
+      delegation = {
+        name = "appservice-delegation"
+        service_delegation = {
+          name    = "Microsoft.Web/serverFarms"
+          actions = ["Microsoft.Network/virtualNetworks/subnets/action"]
+        }
+      }
+    }
+    "snet-containerinstances-${local.landing_zone}-${local.environment}-${local.location_short}-01" = {
+      address_prefix    = cidrsubnet(local.spoke_cidr, 6, 9) # 64 IPs for Container Instances
+      service_endpoints = []
+      delegation = {
+        name = "containerinstances-delegation"
+        service_delegation = {
+          name = "Microsoft.ContainerInstance/containerGroups"
+          actions = [
+            "Microsoft.Network/virtualNetworks/subnets/action"
+          ]
+        }
+      }
+    }
+  }
 }
