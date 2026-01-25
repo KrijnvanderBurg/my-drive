@@ -78,7 +78,7 @@ module "rbac_alz_drives" {
 }
 
 module "rbac_plz_drives" {
-  source = "../../modules/02d-rbac-plz-drives"
+  source = "../../modules/02d-rbac-plz"
 
   principal_id                  = module.sp_plz_drives.object_id
   plz_drives_subscription_scope = local.plz_drives_subscription_scope
