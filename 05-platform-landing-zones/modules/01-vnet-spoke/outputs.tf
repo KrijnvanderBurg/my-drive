@@ -24,47 +24,49 @@ output "address_space" {
 }
 
 # =============================================================================
-# Subnet Outputs
+# Spoke VNet Output (Nested Structure)
 # =============================================================================
 
-output "lz_managed_subnets" {
-  description = "Landing zone managed subnets with NSG and route table"
+output "spoke" {
+  description = "Spoke virtual network with all subnets and associated resources"
   value = {
-    for key, subnet in azurerm_subnet.lz_managed : key => {
-      id             = subnet.id
-      name           = subnet.name
-      address_prefix = subnet.address_prefixes[0]
-    }
-  }
-}
+    id            = azurerm_virtual_network.this.id
+    name          = azurerm_virtual_network.this.name
+    address_space = azurerm_virtual_network.this.address_space
 
-output "azure_managed_subnets" {
-  description = "Azure managed subnets with delegation"
-  value = {
-    for key, subnet in azurerm_subnet.azure_managed : key => {
-      id             = subnet.id
-      name           = subnet.name
-      address_prefix = subnet.address_prefixes[0]
+    # Landing zone managed subnets (with NSG and route table)
+    lz_managed_subnets = {
+      for key, subnet in azurerm_subnet.lz_managed : key => {
+        id             = subnet.id
+        name           = subnet.name
+        address_prefix = subnet.address_prefixes[0]
+        nsg = {
+          id   = azurerm_network_security_group.lz_managed[key].id
+          name = azurerm_network_security_group.lz_managed[key].name
+        }
+        route_table = {
+          id   = azurerm_route_table.lz_managed[key].id
+          name = azurerm_route_table.lz_managed[key].name
+        }
+      }
     }
-  }
-}
 
-output "nsgs" {
-  description = "Network security groups for landing zone managed subnets"
-  value = {
-    for key, nsg in azurerm_network_security_group.lz_managed : key => {
-      id   = nsg.id
-      name = nsg.name
+    # Azure reserved subnets (no NSG/route table)
+    azure_reserved_subnets = {
+      for key, subnet in azurerm_subnet.azure_reserved : key => {
+        id             = subnet.id
+        name           = subnet.name
+        address_prefix = subnet.address_prefixes[0]
+      }
     }
-  }
-}
 
-output "route_tables" {
-  description = "Route tables for landing zone managed subnets"
-  value = {
-    for key, rt in azurerm_route_table.lz_managed : key => {
-      id   = rt.id
-      name = rt.name
+    # Azure delegated subnets (no NSG/route table)
+    azure_delegated_subnets = {
+      for key, subnet in azurerm_subnet.azure_delegated : key => {
+        id             = subnet.id
+        name           = subnet.name
+        address_prefix = subnet.address_prefixes[0]
+      }
     }
   }
 }

@@ -52,21 +52,30 @@ variable "lz_managed_subnets" {
   description = "Landing zone managed subnets with NSG and route table enforcement (zero-trust by default)"
   type = map(object({
     address_prefix    = string
-    service_endpoints = optional(list(string), [])
+    service_endpoints = list(string)
   }))
   default = {}
 }
 
-variable "azure_managed_subnets" {
-  description = "Azure managed subnets with delegation (no NSG/route table per Azure requirements)"
+variable "azure_reserved_subnets" {
+  description = "Azure reserved subnets (GatewaySubnet, AzureFirewallSubnet, etc. - no NSG/route table)"
   type = map(object({
     address_prefix    = string
-    service_endpoints = optional(list(string), [])
+    service_endpoints = list(string)
+  }))
+  default = {}
+}
+
+variable "azure_delegated_subnets" {
+  description = "Azure delegated subnets for services (App Service, Container Instances, etc. - no NSG/route table)"
+  type = map(object({
+    address_prefix    = string
+    service_endpoints = list(string)
     delegation = object({
       name = string
       service_delegation = object({
         name    = string
-        actions = optional(list(string))
+        actions = list(string)
       })
     })
   }))

@@ -11,8 +11,9 @@ module "vnet-spoke" {
   use_remote_gateways     = true
   hub_resource_group_name = local.hub_resource_group_name
 
-  lz_managed_subnets    = local.lz_managed_subnets
-  azure_managed_subnets = local.azure_managed_subnets
+  lz_managed_subnets      = local.lz_managed_subnets
+  azure_reserved_subnets  = local.azure_reserved_subnets
+  azure_delegated_subnets = local.azure_delegated_subnets
 
   tags = local.common_tags
 }

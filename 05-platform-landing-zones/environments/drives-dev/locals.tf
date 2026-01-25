@@ -53,6 +53,30 @@ locals {
     }
   }
 
-  # Azure managed subnets: Delegated to Azure services (no NSG/route table)
-  azure_managed_subnets = {}
+  # Azure reserved subnets: Azure-reserved names (no NSG/route table per Azure requirements)
+  azure_reserved_subnets = {
+    GatewaySubnet = {
+      address_prefix    = cidrsubnet(local.spoke_cidr, 6, 3) # 64 IPs for VPN/ExpressRoute Gateway
+      service_endpoints = []
+    }
+    AzureFirewallSubnet = {
+      address_prefix    = cidrsubnet(local.spoke_cidr, 6, 4) # 64 IPs for Azure Firewall
+      service_endpoints = []
+    }
+    AzureBastionSubnet = {
+      address_prefix    = cidrsubnet(local.spoke_cidr, 6, 5) # 64 IPs for Azure Bastion
+      service_endpoints = []
+    }
+    RouteServerSubnet = {
+      address_prefix    = cidrsubnet(local.spoke_cidr, 6, 6) # 64 IPs for Route Server
+      service_endpoints = []
+    }
+    AzureFirewallManagementSubnet = {
+      address_prefix    = cidrsubnet(local.spoke_cidr, 6, 7) # 64 IPs for Firewall Management
+      service_endpoints = []
+    }
+  }
+
+  # Azure delegated subnets: Delegated to Azure services (no NSG/route table per delegation requirements)
+  azure_delegated_subnets = {}
 }
