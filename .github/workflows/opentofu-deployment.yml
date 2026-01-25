@@ -19,7 +19,7 @@ jobs:
     uses: ./.github/workflows/opentofu-lint.yml
     with:
       working_directory: ./01-platform-management/environments/dev
-      client_id: "bcba6fb0-afb6-4e1b-9517-dd7ffb35c2c6"
+      client_id: "bcba6fb0-afb6-4e1b-9517-dd7ffb35c2c6" # sp-platform-management-on-dev-na-01
 
   pl-management-dev-plan:
     name: pl-management-dev plan
@@ -29,7 +29,7 @@ jobs:
       working_directory: ./01-platform-management/environments/dev
       artifact_name: pl-management-dev
       state_key: pl-management-dev.tfstate
-      client_id: "bcba6fb0-afb6-4e1b-9517-dd7ffb35c2c6"
+      client_id: "bcba6fb0-afb6-4e1b-9517-dd7ffb35c2c6" # sp-platform-management-on-dev-na-01
 
   pl-management-dev-apply:
     name: pl-management-dev apply
@@ -39,7 +39,7 @@ jobs:
       working_directory: ./01-platform-management/environments/dev
       artifact_name: pl-management-dev
       state_key: pl-management-dev.tfstate
-      client_id: "bcba6fb0-afb6-4e1b-9517-dd7ffb35c2c6"
+      client_id: "bcba6fb0-afb6-4e1b-9517-dd7ffb35c2c6" # sp-platform-management-on-dev-na-01
 
   # ===== Platform Identity (dev) =====
   pl-identity-dev-lint:
@@ -47,7 +47,7 @@ jobs:
     uses: ./.github/workflows/opentofu-lint.yml
     with:
       working_directory: ./02-platform-identity/environments/dev
-      client_id: "2972657a-4e99-44c6-80f8-1e265595c81b"
+      client_id: "2972657a-4e99-44c6-80f8-1e265595c81b" # sp-platform-identity-on-dev-na-01
 
   pl-identity-dev-plan:
     name: pl-identity-dev plan
@@ -57,7 +57,7 @@ jobs:
       working_directory: ./02-platform-identity/environments/dev
       artifact_name: pl-identity-dev
       state_key: pl-identity-dev.tfstate
-      client_id: "2972657a-4e99-44c6-80f8-1e265595c81b"
+      client_id: "2972657a-4e99-44c6-80f8-1e265595c81b" # sp-platform-identity-on-dev-na-01
 
   pl-identity-dev-apply:
     name: pl-identity-dev apply
@@ -67,7 +67,7 @@ jobs:
       working_directory: ./02-platform-identity/environments/dev
       artifact_name: pl-identity-dev
       state_key: pl-identity-dev.tfstate
-      client_id: "2972657a-4e99-44c6-80f8-1e265595c81b"
+      client_id: "2972657a-4e99-44c6-80f8-1e265595c81b" # sp-platform-identity-on-dev-na-01
 
   # ===== Platform Connectivity (dev-weu) =====
   pl-connectivity-dev-weu-lint:
@@ -152,36 +152,6 @@ jobs:
       artifact_name: pl-connectivity-dev-glb
       state_key: pl-connectivity-dev-glb.tfstate
       client_id: "869a0c27-8210-4f91-8a16-80082b8462fd" # sp-platform-connectivity-on-dev-na-01
-
-  # ===== ALZ Drives (dev) =====
-  alz-drive-dev-lint:
-    name: alz-drive-dev lint
-    uses: ./.github/workflows/opentofu-lint.yml
-    with:
-      working_directory: ./04-alz-drives/environments/dev
-      client_id: "7d68fcf5-8620-48ed-9774-4ce00a474045"
-
-  alz-drive-dev-plan:
-    name: alz-drive-dev plan
-    needs: [alz-drive-dev-lint]
-    uses: ./.github/workflows/opentofu-plan.yml
-    with:
-      working_directory: ./04-alz-drives/environments/dev
-      artifact_name: alz-drive-dev
-      state_key: alz-drive-dev.tfstate
-      client_id: "7d68fcf5-8620-48ed-9774-4ce00a474045"
-    secrets: inherit
-
-  alz-drive-dev-apply:
-    name: alz-drive-dev apply
-    needs: [alz-drive-dev-plan]
-    uses: ./.github/workflows/opentofu-apply.yml
-    with:
-      working_directory: ./04-alz-drives/environments/dev
-      artifact_name: alz-drive-dev
-      state_key: alz-drive-dev.tfstate
-      client_id: "7d68fcf5-8620-48ed-9774-4ce00a474045"
-    secrets: inherit
 
   # ===== Platform Landing Zone - Drives (dev) =====
   plz-drives-dev-lint:
