@@ -11,3 +11,13 @@ output "hub" {
     address_space       = module.hub.address_space
   }
 }
+
+output "spokes" {
+  description = "Spoke VNet details"
+  value = {
+    plz_drives = {
+      cidr = local.plz_drives_cidr
+    }
+    # ... additional spokes can be added similarly
+  }
+}

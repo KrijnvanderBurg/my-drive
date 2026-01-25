@@ -8,19 +8,9 @@ variable "resource_group_name" {
   type        = string
 }
 
-variable "location" {
-  description = "Azure location_short for resources"
+variable "hub_resource_group_name" {
+  description = "Name of the hub resource group for peering"
   type        = string
-}
-
-variable "address_space" {
-  description = "Address space for the spoke VNet (e.g., ['10.1.16.0/20'])"
-  type        = list(string)
-}
-
-variable "tags" {
-  description = "Tags to apply to all resources"
-  type        = map(string)
 }
 
 variable "hub_vnet_id" {
@@ -37,4 +27,19 @@ variable "use_remote_gateways" {
   description = "Use hub's gateways for spoke traffic"
   type        = bool
   default     = false
+}
+
+variable "location" {
+  description = "Azure location_short for resources"
+  type        = string
+}
+
+variable "address_space" {
+  description = "Address space for the spoke VNet (e.g., ['10.1.16.0/20'])"
+  type        = list(string)
+}
+
+variable "tags" {
+  description = "Tags to apply to all resources"
+  type        = map(string)
 }

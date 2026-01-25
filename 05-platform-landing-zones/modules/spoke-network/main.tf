@@ -71,8 +71,17 @@ resource "azurerm_route_table" "default" {
 }
 
 # =============================================================================
-# Spoke-to-Hub Peering
+# Peering
 # =============================================================================
+
+resource "azurerm_virtual_network_peering" "hub_to_spoke" {
+  name                      = "peer-${var.hub_vnet_name}-to-${var.name}"
+  resource_group_name       = var.hub_resource_group_name
+  virtual_network_name      = var.hub_vnet_name
+  remote_virtual_network_id = azurerm_virtual_network.this.id
+  allow_forwarded_traffic   = true
+  use_remote_gateways       = false
+}
 
 resource "azurerm_virtual_network_peering" "spoke_to_hub" {
   name                      = "peer-${var.name}-to-${var.hub_vnet_name}"

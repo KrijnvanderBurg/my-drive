@@ -45,6 +45,9 @@ locals {
   location_cidr = cidrsubnet(local.enterprise_cidr, 8, local.location_index) # 10.1.0.0/16
   # Hub network /20 (4,096 IPs)
   hub_cidr = cidrsubnet(local.location_cidr, 4, 0) # 10.1.0.0/20
+  # Spoke networks /20 (4,096 IPs) each
+  plz_drives_cidr = cidrsubnet(local.location_cidr, 4, 1) # 10.1.16.0/20  (4,096 IPs)
+  # ... additional spoke /20s can be allocated similarly
 
   # Reserved azure managed subnets
   hub_azure_subnets = {
