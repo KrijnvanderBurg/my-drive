@@ -6,6 +6,7 @@ locals {
   # ---------------------------------------------------------------------------
   # Remote State Outputs
   # ---------------------------------------------------------------------------
+  tenant_id                    = data.azurerm_client_config.current.tenant_id
   subscription_id              = data.terraform_remote_state.management.outputs.plz_drives_subscription.subscription_id
   connectivity_subscription_id = data.terraform_remote_state.management.outputs.pl_connectivity_subscription.subscription_id
 
