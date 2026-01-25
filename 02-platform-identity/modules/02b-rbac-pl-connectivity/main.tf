@@ -1,0 +1,24 @@
+# =============================================================================
+# RBAC Role Assignments - Platform Connectivity SP
+# =============================================================================
+
+# Contributor for managing connectivity resources
+resource "azurerm_role_assignment" "subscription_contributor" {
+  scope                = var.pl_connectivity_subscription_scope
+  role_definition_name = "Contributor"
+  principal_id         = var.principal_id
+}
+
+# Contributor on PLZ Drives subscription to create spoke VNet
+resource "azurerm_role_assignment" "plz_drives_contributor" {
+  scope                = var.plz_drives_subscription_scope
+  role_definition_name = "Contributor"
+  principal_id         = var.principal_id
+}
+
+# Storage Blob Data Contributor for Terraform state access
+resource "azurerm_role_assignment" "tfstate" {
+  scope                = var.tfstate_storage_account_id
+  role_definition_name = "Storage Blob Data Contributor"
+  principal_id         = var.principal_id
+}

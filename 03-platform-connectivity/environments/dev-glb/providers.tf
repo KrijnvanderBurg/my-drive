@@ -33,7 +33,7 @@ data "terraform_remote_state" "management" {
 }
 
 # =============================================================================
-# Remote State - Regional Deployments
+# Remote State - location_shortal Deployments
 # =============================================================================
 
 data "terraform_remote_state" "weu" {

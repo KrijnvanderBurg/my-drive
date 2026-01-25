@@ -1,7 +1,3 @@
-# =============================================================================
-# Local Variables
-# =============================================================================
-
 locals {
   # ---------------------------------------------------------------------------
   # Remote State References
@@ -16,20 +12,22 @@ locals {
   pl_management_subscription_scope   = data.terraform_remote_state.management.outputs.pl_management_subscription.id
   pl_identity_subscription_scope     = data.terraform_remote_state.management.outputs.pl_identity_subscription.id
   pl_connectivity_subscription_scope = data.terraform_remote_state.management.outputs.pl_connectivity_subscription.id
+  plz_drives_subscription_scope      = data.terraform_remote_state.management.outputs.plz_drives_subscription.id
   alz_drive_subscription_scope       = data.terraform_remote_state.management.outputs.alz_drive_subscription.id
 
   # Subscription IDs (UUIDs only)
   pl_management_subscription_id   = data.terraform_remote_state.management.outputs.pl_management_subscription.subscription_id
   pl_identity_subscription_id     = data.terraform_remote_state.management.outputs.pl_identity_subscription.subscription_id
   pl_connectivity_subscription_id = data.terraform_remote_state.management.outputs.pl_connectivity_subscription.subscription_id
+  plz_drives_subscription_id      = data.terraform_remote_state.management.outputs.plz_drives_subscription.subscription_id
   alz_drive_subscription_id       = data.terraform_remote_state.management.outputs.alz_drive_subscription.subscription_id
 
   # ---------------------------------------------------------------------------
-  # Region Configuration
+  # location_short Configuration
   # ---------------------------------------------------------------------------
-  environment = "dev"
-  region      = "gwc"
-  location    = "germanywestcentral"
+  environment    = "dev"
+  location_short = "gwc"
+  location       = "germanywestcentral"
 
   # ---------------------------------------------------------------------------
   # Common Tags

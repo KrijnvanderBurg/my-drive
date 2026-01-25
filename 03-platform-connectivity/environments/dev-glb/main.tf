@@ -2,24 +2,15 @@
 # Global (glb) - Main Configuration
 # =============================================================================
 #
-# This deployment manages cross-region resources:
-# - Hub-to-Hub VNet peering (global peering between regional hubs)
+# This deployment manages cross-location_short resources:
+# - Hub-to-Hub VNet peering (global peering between location_shortal hubs)
 #
-# NOTE: Cross-region Private DNS links are now managed in the WEU deployment
-# The centralized DNS architecture links zones to all hubs directly
-# =============================================================================
-
-# =============================================================================
-# Hub-to-Hub Global VNet Peering
-# =============================================================================
-# Global VNet peering allows the regional hubs to communicate directly.
-# Traffic flows hub <-> hub for cross-region connectivity.
-# This enables spokes in different regions to reach each other via their hubs.
+# NOTE: Cross-location_short Private DNS links are managed in the WEU deployment
 # =============================================================================
 
 # West Europe Hub -> Germany West Central Hub
 module "hub_weu_to_hub_gwc" {
-  source = "../../modules/vnet-peering"
+  source = "../../modules/02-vnet-peering"
 
   name                      = "peer-hub-weu-to-hub-gwc"
   resource_group_name       = local.hubs.weu.resource_group_name
@@ -31,7 +22,7 @@ module "hub_weu_to_hub_gwc" {
 
 # Germany West Central Hub -> West Europe Hub
 module "hub_gwc_to_hub_weu" {
-  source = "../../modules/vnet-peering"
+  source = "../../modules/02-vnet-peering"
 
   name                      = "peer-hub-gwc-to-hub-weu"
   resource_group_name       = local.hubs.gwc.resource_group_name

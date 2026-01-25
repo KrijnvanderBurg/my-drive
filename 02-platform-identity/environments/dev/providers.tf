@@ -18,9 +18,7 @@ provider "azurerm" {
   storage_use_azuread = true
 }
 
-provider "azuread" {
-  # tenant_id automatically derived from Azure CLI/environment authentication
-}
+provider "azuread" {}
 
 # =============================================================================
 # Remote State Data Sources

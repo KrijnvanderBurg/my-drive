@@ -29,6 +29,39 @@ output "sp_platform_connectivity" {
   }
 }
 
+output "sp_plz_drives" {
+  description = "PLZ drives service principal for GitHub Actions OIDC"
+  value = {
+    client_id    = module.sp_plz_drives.client_id
+    object_id    = module.sp_plz_drives.object_id
+    display_name = module.sp_plz_drives.display_name
+  }
+}
+
+# =============================================================================
+# RBAC Role Assignment Outputs
+# =============================================================================
+
+output "rbac_platform_management" {
+  description = "Role assignment IDs for platform management service principal"
+  value       = module.rbac_platform_management.role_assignment_ids
+}
+
+output "rbac_alz_drives" {
+  description = "Role assignment IDs for ALZ drives service principal"
+  value       = module.rbac_alz_drives.role_assignment_ids
+}
+
+output "rbac_platform_connectivity" {
+  description = "Role assignment IDs for platform connectivity service principal"
+  value       = module.rbac_platform_connectivity.role_assignment_ids
+}
+
+output "rbac_plz_drives" {
+  description = "Role assignment IDs for PLZ drives service principal"
+  value       = module.rbac_plz_drives.role_assignment_ids
+}
+
 # =============================================================================
 # Security Group Outputs
 # =============================================================================
