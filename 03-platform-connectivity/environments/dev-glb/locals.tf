@@ -48,11 +48,13 @@ locals {
       id                  = data.terraform_remote_state.weu.outputs.hub.id
       name                = data.terraform_remote_state.weu.outputs.hub.name
       resource_group_name = data.terraform_remote_state.weu.outputs.hub.resource_group_name
+      address_space       = data.terraform_remote_state.weu.outputs.hub.address_space
     }
     gwc = {
       id                  = data.terraform_remote_state.gwc.outputs.hub.id
       name                = data.terraform_remote_state.gwc.outputs.hub.name
       resource_group_name = data.terraform_remote_state.gwc.outputs.hub.resource_group_name
+      address_space       = data.terraform_remote_state.gwc.outputs.hub.address_space
     }
   }
 
