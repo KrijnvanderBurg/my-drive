@@ -158,7 +158,7 @@ jobs:
     name: plz-drives-dev lint
     uses: ./.github/workflows/opentofu-lint.yml
     with:
-      working_directory: ./05-platform-landing-zones/environments/drives-dev
+      working_directory: ./04-platform-landing-zones/environments/drives-dev
       client_id: "e8716cc9-4c26-4f93-9feb-0860aedfe0e7" # sp-plz-drives-on-dev-na-01
 
   plz-drives-dev-plan:
@@ -166,7 +166,7 @@ jobs:
     needs: [plz-drives-dev-lint]
     uses: ./.github/workflows/opentofu-plan.yml
     with:
-      working_directory: ./05-platform-landing-zones/environments/drives-dev
+      working_directory: ./04-platform-landing-zones/environments/drives-dev
       artifact_name: plz-drives-dev
       state_key: plz-drives-dev.tfstate
       client_id: "e8716cc9-4c26-4f93-9feb-0860aedfe0e7" # sp-plz-drives-on-dev-na-01
@@ -176,7 +176,7 @@ jobs:
     needs: [plz-drives-dev-plan]
     uses: ./.github/workflows/opentofu-apply.yml
     with:
-      working_directory: ./05-platform-landing-zones/environments/drives-dev
+      working_directory: ./04-platform-landing-zones/environments/drives-dev
       artifact_name: plz-drives-dev
       state_key: plz-drives-dev.tfstate
       client_id: "e8716cc9-4c26-4f93-9feb-0860aedfe0e7" # sp-plz-drives-on-dev-na-01
