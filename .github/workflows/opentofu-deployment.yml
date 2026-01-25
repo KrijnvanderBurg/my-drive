@@ -14,7 +14,6 @@ concurrency:
 
 jobs:
   # ===== Platform Management (dev) =====
-  # Lint, plan and apply for platform management
   pl-management-dev-lint:
     name: pl-management-dev lint
     uses: ./.github/workflows/opentofu-lint.yml
@@ -43,7 +42,6 @@ jobs:
       client_id: "bcba6fb0-afb6-4e1b-9517-dd7ffb35c2c6"
 
   # ===== Platform Identity (dev) =====
-  # Lint, plan and apply for platform identity
   pl-identity-dev-lint:
     name: pl-identity-dev lint
     uses: ./.github/workflows/opentofu-lint.yml
@@ -72,7 +70,6 @@ jobs:
       client_id: "2972657a-4e99-44c6-80f8-1e265595c81b"
 
   # ===== Platform Connectivity (dev-weu) =====
-  # Lint, plan and apply for platform connectivity - West Europe
   pl-connectivity-dev-weu-lint:
     name: pl-connectivity-dev-weu lint
     uses: ./.github/workflows/opentofu-lint.yml
@@ -101,7 +98,6 @@ jobs:
       client_id: "869a0c27-8210-4f91-8a16-80082b8462fd" # sp-platform-connectivity-on-dev-na-01
 
   # ===== Platform Connectivity (dev-gwc) =====
-  # Lint, plan and apply for platform connectivity - Germany West Central
   pl-connectivity-dev-gwc-lint:
     name: pl-connectivity-dev-gwc lint
     uses: ./.github/workflows/opentofu-lint.yml
@@ -130,7 +126,6 @@ jobs:
       client_id: "869a0c27-8210-4f91-8a16-80082b8462fd" # sp-platform-connectivity-on-dev-na-01
 
   # ===== Platform Connectivity (dev-glb) =====
-  # Lint, plan and apply for platform connectivity - Global (hub-to-hub peering)
   pl-connectivity-dev-glb-lint:
     name: pl-connectivity-dev-glb lint
     uses: ./.github/workflows/opentofu-lint.yml
@@ -159,7 +154,6 @@ jobs:
       client_id: "869a0c27-8210-4f91-8a16-80082b8462fd" # sp-platform-connectivity-on-dev-na-01
 
   # ===== ALZ Drives (dev) =====
-  # Lint, plan and apply for ALZ drives (storage)
   alz-drive-dev-lint:
     name: alz-drive-dev lint
     uses: ./.github/workflows/opentofu-lint.yml
@@ -189,31 +183,30 @@ jobs:
       client_id: "7d68fcf5-8620-48ed-9774-4ce00a474045"
     secrets: inherit
 
-  # # ===== Platform Landing Zone - Drives (dev) =====
-  # # Lint, plan and apply for drives landing zone
-  # plz-drives-dev-lint:
-  #   name: plz-drives-dev lint
-  #   uses: ./.github/workflows/opentofu-lint.yml
-  #   with:
-  #     working_directory: ./05-platform-landing-zones/environments/drives-dev
-  #     client_id: "<SP_CLIENT_ID_PLZ_DRIVES_DEV>" # sp-plz-drives-on-dev-na-01
+  # ===== Platform Landing Zone - Drives (dev) =====
+  plz-drives-dev-lint:
+    name: plz-drives-dev lint
+    uses: ./.github/workflows/opentofu-lint.yml
+    with:
+      working_directory: ./05-platform-landing-zones/environments/drives-dev
+      client_id: "e8716cc9-4c26-4f93-9feb-0860aedfe0e7" # sp-plz-drives-on-dev-na-01
 
-  # plz-drives-dev-plan:
-  #   name: plz-drives-dev plan
-  #   needs: [plz-drives-dev-lint, pl-connectivity-dev-weu-apply]
-  #   uses: ./.github/workflows/opentofu-plan.yml
-  #   with:
-  #     working_directory: ./05-platform-landing-zones/environments/drives-dev
-  #     artifact_name: plz-drives-dev
-  #     state_key: plz-drives-dev.tfstate
-  #     client_id: "<SP_CLIENT_ID_PLZ_DRIVES_DEV>" # sp-plz-drives-on-dev-na-01
+  plz-drives-dev-plan:
+    name: plz-drives-dev plan
+    needs: [plz-drives-dev-lint, pl-connectivity-dev-weu-apply]
+    uses: ./.github/workflows/opentofu-plan.yml
+    with:
+      working_directory: ./05-platform-landing-zones/environments/drives-dev
+      artifact_name: plz-drives-dev
+      state_key: plz-drives-dev.tfstate
+      client_id: "e8716cc9-4c26-4f93-9feb-0860aedfe0e7" # sp-plz-drives-on-dev-na-01
 
-  # plz-drives-dev-apply:
-  #   name: plz-drives-dev apply
-  #   needs: [plz-drives-dev-plan]
-  #   uses: ./.github/workflows/opentofu-apply.yml
-  #   with:
-  #     working_directory: ./05-platform-landing-zones/environments/drives-dev
-  #     artifact_name: plz-drives-dev
-  #     state_key: plz-drives-dev.tfstate
-  #     client_id: "<SP_CLIENT_ID_PLZ_DRIVES_DEV>" # sp-plz-drives-on-dev-na-01
+  plz-drives-dev-apply:
+    name: plz-drives-dev apply
+    needs: [plz-drives-dev-plan]
+    uses: ./.github/workflows/opentofu-apply.yml
+    with:
+      working_directory: ./05-platform-landing-zones/environments/drives-dev
+      artifact_name: plz-drives-dev
+      state_key: plz-drives-dev.tfstate
+      client_id: "e8716cc9-4c26-4f93-9feb-0860aedfe0e7" # sp-plz-drives-on-dev-na-01
