@@ -94,69 +94,6 @@ module "rbac_plz_drives" {
 }
 
 # =============================================================================
-# Moved Blocks - State Migration for Role Assignments
-# =============================================================================
-moved {
-  from = azurerm_role_assignment.sp_platform_management_tenant_root_mg_contributor
-  to   = module.rbac_platform_management.azurerm_role_assignment.tenant_root_mg_contributor
-}
-
-moved {
-  from = azurerm_role_assignment.sp_platform_management_policy_contributor
-  to   = module.rbac_platform_management.azurerm_role_assignment.policy_contributor
-}
-
-moved {
-  from = azurerm_role_assignment.sp_platform_management_tfstate
-  to   = module.rbac_platform_management.azurerm_role_assignment.tfstate
-}
-
-moved {
-  from = azurerm_role_assignment.sp_alz_drives_subscription_contributor
-  to   = module.rbac_alz_drives.azurerm_role_assignment.subscription_contributor
-}
-
-moved {
-  from = azurerm_role_assignment.sp_alz_drives_subscription_uaa
-  to   = module.rbac_alz_drives.azurerm_role_assignment.subscription_uaa
-}
-
-moved {
-  from = azurerm_role_assignment.sp_alz_drives_tfstate
-  to   = module.rbac_alz_drives.azurerm_role_assignment.tfstate
-}
-
-moved {
-  from = azurerm_role_assignment.sp_platform_connectivity_subscription_contributor
-  to   = module.rbac_platform_connectivity.azurerm_role_assignment.subscription_contributor
-}
-
-moved {
-  from = azurerm_role_assignment.sp_platform_connectivity_plz_drives_contributor
-  to   = module.rbac_platform_connectivity.azurerm_role_assignment.plz_drives_contributor
-}
-
-moved {
-  from = azurerm_role_assignment.sp_platform_connectivity_tfstate
-  to   = module.rbac_platform_connectivity.azurerm_role_assignment.tfstate
-}
-
-moved {
-  from = azurerm_role_assignment.sp_plz_drives_subscription_contributor
-  to   = module.rbac_plz_drives.azurerm_role_assignment.subscription_contributor
-}
-
-moved {
-  from = azurerm_role_assignment.sp_plz_drives_subscription_uaa
-  to   = module.rbac_plz_drives.azurerm_role_assignment.subscription_uaa
-}
-
-moved {
-  from = azurerm_role_assignment.sp_plz_drives_tfstate
-  to   = module.rbac_plz_drives.azurerm_role_assignment.tfstate
-}
-
-# =============================================================================
 # Security Groups
 # =============================================================================
 module "sg_rbac_platform_contributors" {
