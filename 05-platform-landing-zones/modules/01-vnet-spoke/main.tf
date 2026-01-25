@@ -22,55 +22,6 @@ resource "azurerm_virtual_network" "this" {
 }
 
 # =============================================================================
-# Default Network Security Group (Zero Trust)
-# =============================================================================
-
-resource "azurerm_network_security_group" "default" {
-  name                = "nsg-${var.name}-default"
-  location            = var.location
-  resource_group_name = azurerm_resource_group.this.name
-
-  security_rule {
-    name                       = "DenyAllInbound"
-    priority                   = 4096
-    direction                  = "Inbound"
-    access                     = "Deny"
-    protocol                   = "*"
-    source_port_range          = "*"
-    destination_port_range     = "*"
-    source_address_prefix      = "*"
-    destination_address_prefix = "*"
-  }
-
-  security_rule {
-    name                       = "DenyAllOutbound"
-    priority                   = 4096
-    direction                  = "Outbound"
-    access                     = "Deny"
-    protocol                   = "*"
-    source_port_range          = "*"
-    destination_port_range     = "*"
-    source_address_prefix      = "*"
-    destination_address_prefix = "*"
-  }
-
-  tags = var.tags
-}
-
-# =============================================================================
-# Default Route Table
-# =============================================================================
-
-resource "azurerm_route_table" "default" {
-  name                          = "rt-${var.name}-default"
-  location                      = var.location
-  resource_group_name           = azurerm_resource_group.this.name
-  bgp_route_propagation_enabled = false
-
-  tags = var.tags
-}
-
-# =============================================================================
 # Peering
 # =============================================================================
 

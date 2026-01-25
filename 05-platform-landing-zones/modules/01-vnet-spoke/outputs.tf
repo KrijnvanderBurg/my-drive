@@ -23,22 +23,48 @@ output "address_space" {
   value       = azurerm_virtual_network.this.address_space
 }
 
-output "default_nsg_id" {
-  description = "ID of the default NSG for workload subnets"
-  value       = azurerm_network_security_group.default.id
+# =============================================================================
+# Subnet Outputs
+# =============================================================================
+
+output "lz_managed_subnets" {
+  description = "Landing zone managed subnets with NSG and route table"
+  value = {
+    for key, subnet in azurerm_subnet.lz_managed : key => {
+      id             = subnet.id
+      name           = subnet.name
+      address_prefix = subnet.address_prefixes[0]
+    }
+  }
 }
 
-output "default_nsg_name" {
-  description = "Name of the default NSG for workload subnets"
-  value       = azurerm_network_security_group.default.name
+output "azure_managed_subnets" {
+  description = "Azure managed subnets with delegation"
+  value = {
+    for key, subnet in azurerm_subnet.azure_managed : key => {
+      id             = subnet.id
+      name           = subnet.name
+      address_prefix = subnet.address_prefixes[0]
+    }
+  }
 }
 
-output "default_route_table_id" {
-  description = "ID of the default route table for workload subnets"
-  value       = azurerm_route_table.default.id
+output "nsgs" {
+  description = "Network security groups for landing zone managed subnets"
+  value = {
+    for key, nsg in azurerm_network_security_group.lz_managed : key => {
+      id   = nsg.id
+      name = nsg.name
+    }
+  }
 }
 
-output "default_route_table_name" {
-  description = "Name of the default route table for workload subnets"
-  value       = azurerm_route_table.default.name
+output "route_tables" {
+  description = "Route tables for landing zone managed subnets"
+  value = {
+    for key, rt in azurerm_route_table.lz_managed : key => {
+      id   = rt.id
+      name = rt.name
+    }
+  }
 }

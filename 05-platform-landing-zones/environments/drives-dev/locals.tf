@@ -34,10 +34,11 @@ locals {
   # ---------------------------------------------------------------------------
   # Subnet Configuration
   # ---------------------------------------------------------------------------
+  # Landing zone managed subnets: Include NSG (zero-trust) and route table
   # Subnets within the spoke VNet CIDR (10.1.96.0/20 = 4,096 IPs)
   # Using /24 subnets = 256 IPs each, leaving room for growth
   # ---------------------------------------------------------------------------
-  subnets = {
+  lz_managed_subnets = {
     "snet-app-${local.landing_zone}-${local.environment}-${local.location_short}-01" = {
       address_prefix    = cidrsubnet(local.spoke_cidr, 4, 0) # 256 IPs for app services
       service_endpoints = []
@@ -47,8 +48,11 @@ locals {
       service_endpoints = ["Microsoft.Storage", "Microsoft.KeyVault"]
     }
     "snet-privateendpoints-${local.landing_zone}-${local.environment}-${local.location_short}-01" = {
-      address_prefix    = cidrsubnet(local.spoke_cidr, 4, 2) # 256 IPs for future private endpoints
+      address_prefix    = cidrsubnet(local.spoke_cidr, 4, 2) # 256 IPs for private endpoints
       service_endpoints = []
     }
   }
+
+  # Azure managed subnets: Delegated to Azure services (no NSG/route table)
+  azure_managed_subnets = {}
 }

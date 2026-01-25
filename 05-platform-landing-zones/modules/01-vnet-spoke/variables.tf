@@ -43,3 +43,32 @@ variable "tags" {
   description = "Tags to apply to all resources"
   type        = map(string)
 }
+
+# =============================================================================
+# Subnet Configuration
+# =============================================================================
+
+variable "lz_managed_subnets" {
+  description = "Landing zone managed subnets with NSG and route table enforcement (zero-trust by default)"
+  type = map(object({
+    address_prefix    = string
+    service_endpoints = optional(list(string), [])
+  }))
+  default = {}
+}
+
+variable "azure_managed_subnets" {
+  description = "Azure managed subnets with delegation (no NSG/route table per Azure requirements)"
+  type = map(object({
+    address_prefix    = string
+    service_endpoints = optional(list(string), [])
+    delegation = object({
+      name = string
+      service_delegation = object({
+        name    = string
+        actions = optional(list(string))
+      })
+    })
+  }))
+  default = {}
+}
