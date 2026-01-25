@@ -1,5 +1,5 @@
-module "spoke" {
-  source = "../../modules/spoke-network"
+module "vnet-spoke" {
+  source = "../../modules/01-vnet-spoke"
 
   name                = "vnet-${local.landing_zone}-on-${local.environment}-${local.location_short}-01"
   resource_group_name = "rg-connectivity-${local.landing_zone}-${local.environment}-${local.location_short}-01"

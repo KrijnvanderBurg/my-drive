@@ -1,9 +1,8 @@
 # =============================================================================
 # Service Principals (Federated for GitHub Actions)
 # =============================================================================
-
 module "sp_platform_management" {
-  source = "../../modules/service-principal-federated"
+  source = "../../modules/01-service-principal-federated"
 
   name = "sp-platform-management-co-${local.environment}-na-01"
   subjects = [
@@ -15,7 +14,7 @@ module "sp_platform_management" {
 # and Identity has elevated permissions that we don't want to automate creation for.
 
 module "sp_platform_connectivity" {
-  source = "../../modules/service-principal-federated"
+  source = "../../modules/01-service-principal-federated"
 
   name = "sp-platform-connectivity-on-${local.environment}-na-01"
   subjects = [
@@ -24,7 +23,7 @@ module "sp_platform_connectivity" {
 }
 
 module "sp_alz_drives" {
-  source = "../../modules/service-principal-federated"
+  source = "../../modules/01-service-principal-federated"
 
   name = "sp-alz-drives-on-${local.environment}-na-01"
   subjects = [
@@ -33,7 +32,7 @@ module "sp_alz_drives" {
 }
 
 module "sp_plz_drives" {
-  source = "../../modules/service-principal-federated"
+  source = "../../modules/01-service-principal-federated"
 
   name = "sp-plz-drives-on-${local.environment}-na-01"
   subjects = [
@@ -135,9 +134,8 @@ resource "azurerm_role_assignment" "sp_platform_connectivity_tfstate" {
 # =============================================================================
 # Security Groups
 # =============================================================================
-
 module "sg_rbac_platform_contributors" {
-  source = "../../modules/entra-group"
+  source = "../../modules/02-entra-group"
 
   display_name       = "sg-rbac-platform-contributors-${local.environment}-na-01"
   description        = "Members have Contributor access to platform subscriptions via Azure RBAC"
@@ -147,9 +145,8 @@ module "sg_rbac_platform_contributors" {
 # =============================================================================
 # Monitoring Alerts
 # =============================================================================
-
 module "monitoring_alerts" {
-  source = "../../modules/monitoring-alerts"
+  source = "../../modules/03-monitoring-alerts"
 
   environment     = local.environment
   location        = local.location

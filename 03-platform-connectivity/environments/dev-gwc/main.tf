@@ -3,7 +3,7 @@
 # =============================================================================
 
 module "hub" {
-  source = "../../modules/hub-vnet"
+  source = "../../modules/01-hub-vnet"
 
   name                = "vnet-hub-co-${local.environment}-${local.location_short}-01"
   resource_group_name = "rg-connectivity-on-${local.environment}-${local.location_short}-01"

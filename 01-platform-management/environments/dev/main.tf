@@ -1,15 +1,36 @@
-# =============================================================================
-# Dev Environment - Management Groups
-# =============================================================================
-
 # Reference the existing Azure Tenant Root Group
 data "azurerm_management_group" "tenant_root" {
   name = local.tenant_id
 }
 
+# =============================================================================
+# Subscriptions
+# =============================================================================
+# Manually assigned subscriptions to management groups
+
+data "azurerm_subscription" "platform_management" {
+  subscription_id = "e388ddce-c79d-4db0-8a6f-cd69b1708954"
+}
+
+data "azurerm_subscription" "platform_identity" {
+  subscription_id = "9312c5c5-b089-4b62-bb90-0d92d421d66c"
+}
+
+data "azurerm_subscription" "platform_connectivity" {
+  subscription_id = "6018b0fb-7b8c-491f-8abf-375d2c07ef97"
+}
+
+data "azurerm_subscription" "plz_drives" {
+  subscription_id = "9af01e5c-f933-4b86-a389-a8ac837965a5"
+}
+
+data "azurerm_subscription" "alz_drive" {
+  subscription_id = "4111975b-f6ca-4e08-b7b6-87d7b6c35840"
+}
+
 # Levendaal Group - organisational root management group
 module "levendaal" {
-  source = "../../modules/management-group"
+  source = "../../modules/01-management-group"
 
   name                       = "mg-levendaal-${local.environment}-na-01"
   display_name               = "mg-levendaal-${local.environment}-na-01"
@@ -19,7 +40,7 @@ module "levendaal" {
 # Sandbox Management Group - for development and testing
 # Note: Sandbox is intentionally NOT protected to allow experimentation
 module "sandbox" {
-  source = "../../modules/management-group"
+  source = "../../modules/01-management-group"
 
   name                       = "mg-sandbox-${local.environment}-na-01"
   display_name               = "mg-sandbox-${local.environment}-na-01"
@@ -28,7 +49,7 @@ module "sandbox" {
 
 # Platform Management Group - platform management group
 module "platform" {
-  source = "../../modules/management-group"
+  source = "../../modules/01-management-group"
 
   name                       = "mg-platform-${local.environment}-na-01"
   display_name               = "mg-platform-${local.environment}-na-01"
@@ -37,7 +58,7 @@ module "platform" {
 
 # Platform management Management Group - for management resources
 module "pl_management" {
-  source = "../../modules/management-group"
+  source = "../../modules/01-management-group"
 
   name                       = "mg-pl-management-${local.environment}-na-01"
   display_name               = "mg-pl-management-${local.environment}-na-01"
@@ -46,7 +67,7 @@ module "pl_management" {
 
 # Platform identity Management Group - for identity resources
 module "pl_identity" {
-  source = "../../modules/management-group"
+  source = "../../modules/01-management-group"
 
   name                       = "mg-pl-identity-${local.environment}-na-01"
   display_name               = "mg-pl-identity-${local.environment}-na-01"
@@ -55,7 +76,7 @@ module "pl_identity" {
 
 # Platform connectivity Management Group - for networking resources
 module "pl_connectivity" {
-  source = "../../modules/management-group"
+  source = "../../modules/01-management-group"
 
   name                       = "mg-pl-connectivity-${local.environment}-na-01"
   display_name               = "mg-pl-connectivity-${local.environment}-na-01"
@@ -64,7 +85,7 @@ module "pl_connectivity" {
 
 # Landing Zone Management Group - for application workloads
 module "landingzone" {
-  source = "../../modules/management-group"
+  source = "../../modules/01-management-group"
 
   name                       = "mg-landingzone-${local.environment}-na-01"
   display_name               = "mg-landingzone-${local.environment}-na-01"
@@ -76,7 +97,7 @@ module "landingzone" {
 # =============================================================================
 
 module "policy_deny_delete" {
-  source = "../../modules/policy-deny-delete"
+  source = "../../modules/02-policy-deny-delete"
 
   name                = "deny-delete-operations"
   display_name        = "Deny Delete Operations"
@@ -126,28 +147,3 @@ module "policy_deny_delete" {
 #   management_group_id  = module.landingzone.id
 #   enforce              = true
 # }
-
-# =============================================================================
-# Subscription Data Sources
-# =============================================================================
-# Keep data sources for outputs but associations are done manually
-
-data "azurerm_subscription" "platform_management" {
-  subscription_id = "e388ddce-c79d-4db0-8a6f-cd69b1708954"
-}
-
-data "azurerm_subscription" "platform_identity" {
-  subscription_id = "9312c5c5-b089-4b62-bb90-0d92d421d66c"
-}
-
-data "azurerm_subscription" "platform_connectivity" {
-  subscription_id = "6018b0fb-7b8c-491f-8abf-375d2c07ef97"
-}
-
-data "azurerm_subscription" "plz_drives" {
-  subscription_id = "9af01e5c-f933-4b86-a389-a8ac837965a5"
-}
-
-data "azurerm_subscription" "alz_drive" {
-  subscription_id = "4111975b-f6ca-4e08-b7b6-87d7b6c35840"
-}
