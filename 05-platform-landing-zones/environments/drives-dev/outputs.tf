@@ -13,34 +13,6 @@ output "spoke" {
 }
 
 # =============================================================================
-# Resource Group Outputs
-# =============================================================================
-
-# output "resource_group" {
-#   description = "Landing zone workloads resource group"
-#   value = {
-#     id       = azurerm_resource_group.workloads.id
-#     name     = azurerm_resource_group.workloads.name
-#     location = azurerm_resource_group.workloads.location
-#   }
-# }
-
-# =============================================================================
-# Subnet Outputs
-# =============================================================================
-
-# output "subnets" {
-#   description = "Landing zone subnets"
-#   value = {
-#     for name, subnet in module.subnet : name => {
-#       id               = subnet.id
-#       name             = subnet.name
-#       address_prefixes = subnet.address_prefixes
-#     }
-#   }
-# }
-
-# =============================================================================
 # Log Analytics Outputs
 # =============================================================================
 
