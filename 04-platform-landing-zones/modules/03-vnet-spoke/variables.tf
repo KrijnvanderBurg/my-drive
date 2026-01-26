@@ -23,12 +23,6 @@ variable "hub_vnet_name" {
   type        = string
 }
 
-variable "use_remote_gateways" {
-  description = "Use hub's gateways for spoke traffic"
-  type        = bool
-  default     = false
-}
-
 variable "location" {
   description = "Azure location_short for resources"
   type        = string

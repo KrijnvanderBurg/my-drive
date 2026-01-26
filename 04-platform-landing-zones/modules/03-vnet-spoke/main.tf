@@ -42,5 +42,5 @@ resource "azurerm_virtual_network_peering" "spoke_to_hub" {
   virtual_network_name      = azurerm_virtual_network.this.name
   remote_virtual_network_id = var.hub_vnet_id
   allow_forwarded_traffic   = true
-  use_remote_gateways       = var.use_remote_gateways
+  use_remote_gateways       = false
 }

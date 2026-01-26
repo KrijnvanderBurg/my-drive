@@ -56,7 +56,6 @@ module "vnet_spoke" {
 
   hub_vnet_id             = local.hub_vnet_id
   hub_vnet_name           = local.hub_vnet_name
-  use_remote_gateways     = false # Set to true when gateways are deployed in the hub
   hub_resource_group_name = local.hub_resource_group_name
 
   lz_managed_subnets      = local.lz_managed_subnets
