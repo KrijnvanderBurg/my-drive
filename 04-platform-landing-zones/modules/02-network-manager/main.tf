@@ -37,7 +37,7 @@ resource "azurerm_network_manager" "this" {
     subscription_ids = var.scope_subscription_ids
   }
 
-  scope_accesses = ["Connectivity"]
+  scope_accesses = ["Connectivity", "NetworkVerifier"]
 
   tags = var.tags
 }
