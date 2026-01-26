@@ -47,11 +47,6 @@ output "rbac_platform_management" {
   value       = module.rbac_platform_management.role_assignment_ids
 }
 
-output "rbac_alz_drives" {
-  description = "Role assignment IDs for ALZ drives service principal"
-  value       = module.rbac_alz_drives.role_assignment_ids
-}
-
 output "rbac_platform_connectivity" {
   description = "Role assignment IDs for platform connectivity service principal"
   value       = module.rbac_platform_connectivity.role_assignment_ids
