@@ -5,10 +5,10 @@
 output "spoke" {
   description = "Spoke network details for connectivity layer hub-to-spoke peering"
   value = {
-    id                  = module.vnet-spoke.id
-    name                = module.vnet-spoke.name
-    resource_group_name = module.vnet-spoke.resource_group_name
-    address_space       = module.vnet-spoke.address_space
+    id                  = module.vnet_spoke.id
+    name                = module.vnet_spoke.name
+    resource_group_name = module.vnet_spoke.resource_group_name
+    address_space       = module.vnet_spoke.address_space
   }
 }
 
