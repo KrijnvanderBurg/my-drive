@@ -1,8 +1,9 @@
 # =============================================================================
-# Network Verifier Module
+# Network Manager Module
 # =============================================================================
-# Creates Azure Network Manager with Verifier Workspace.
-# Use submodules (03a, 03b, etc.) to add standard intent packages.
+# Creates Azure Network Manager with Verifier Workspace scoped to the landing
+# zone subscription. Network verification intents are managed separately or
+# embedded in other modules (like vnet-spoke).
 # =============================================================================
 
 terraform {
@@ -39,7 +40,7 @@ resource "azurerm_network_manager_verifier_workspace" "this" {
   name               = var.verifier_workspace_name
   network_manager_id = azurerm_network_manager.this.id
   location           = var.location
-  description        = "Verifier workspace for reachability testing"
+  description        = "Verifier workspace for reachability testing from landing zone to hub"
 
   tags = var.tags
 }

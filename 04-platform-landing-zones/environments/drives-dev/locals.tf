@@ -109,4 +109,10 @@ locals {
       }
     }
   }
+
+  # ---------------------------------------------------------------------------
+  # Network Verification Configuration
+  # ---------------------------------------------------------------------------
+  # Source subnet for verification (app subnet in landing zone)
+  verification_source_subnet_name = "snet-app-${local.landing_zone}-${local.environment}-${local.location_short}-01"
 }

@@ -1,5 +1,5 @@
 # =============================================================================
-# Network Verifier Module - Variables
+# Network Manager Module - Variables
 # =============================================================================
 
 variable "name" {
@@ -18,12 +18,12 @@ variable "resource_group_name" {
 }
 
 variable "location" {
-  description = "Azure region for the Network Manager"
+  description = "Azure location for the Network Manager"
   type        = string
 }
 
 variable "scope_subscription_ids" {
-  description = "List of subscription IDs in scope for the Network Manager"
+  description = "List of subscription IDs for Network Manager scope (landing zone subscription only)"
   type        = list(string)
 }
 

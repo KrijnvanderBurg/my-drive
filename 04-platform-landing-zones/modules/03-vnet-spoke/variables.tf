@@ -81,3 +81,41 @@ variable "azure_delegated_subnets" {
   }))
   default = {}
 }
+
+# =============================================================================
+# Network Verification Configuration
+# =============================================================================
+
+variable "verifier_workspace_id" {
+  description = "Network Manager Verifier Workspace ID for embedded network verification (optional)"
+  type        = string
+  default     = null
+}
+
+variable "verification_source_subnet_name" {
+  description = "Name of the source subnet for network verification (must be in lz_managed_subnets)"
+  type        = string
+  default     = null
+}
+
+variable "verification_destination_subnet" {
+  description = "Destination subnet for network verification (e.g., hub shared services subnet)"
+  type = object({
+    id               = string
+    name             = string
+    address_prefixes = list(string)
+  })
+  default = null
+}
+
+variable "verification_destination_ports" {
+  description = "Destination ports to test in network verification"
+  type        = list(string)
+  default     = ["*"]
+}
+
+variable "verification_protocols" {
+  description = "Protocols to test in network verification"
+  type        = list(string)
+  default     = ["Any"]
+}

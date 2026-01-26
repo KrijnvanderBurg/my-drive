@@ -1,5 +1,48 @@
-module "vnet-spoke" {
-  source = "../../modules/01-vnet-spoke"
+# =============================================================================
+# Log Analytics
+# =============================================================================
+# Centralized logging and monitoring workspace for the landing zone.
+# =============================================================================
+
+module "log_analytics" {
+  source = "../../modules/01-log-analytics"
+
+  name                = "law-${local.landing_zone}-${local.environment}-${local.location_short}-01"
+  resource_group_name = "rg-logs-${local.landing_zone}-${local.environment}-${local.location_short}-01"
+  location            = local.location
+  retention_in_days   = 30
+
+  tags = local.common_tags
+}
+
+# =============================================================================
+# Network Manager
+# =============================================================================
+# Network Manager with Verifier Workspace for landing zone connectivity testing.
+# Verification intents are embedded in the vnet-spoke module.
+# =============================================================================
+
+module "network_manager" {
+  source = "../../modules/02-network-manager"
+
+  name                    = "nm-${local.landing_zone}-${local.environment}-${local.location_short}-01"
+  verifier_workspace_name = "vw-${local.landing_zone}-${local.environment}-${local.location_short}-01"
+  resource_group_name     = "rg-connectivity-${local.landing_zone}-${local.environment}-${local.location_short}-01"
+  location                = local.location
+  scope_subscription_ids  = ["/subscriptions/${local.subscription_id}"]
+
+  tags = local.common_tags
+}
+
+# =============================================================================
+# Spoke VNet
+# =============================================================================
+# Landing zone spoke virtual network with peering to hub and embedded
+# network verification from app subnet to hub shared services.
+# =============================================================================
+
+module "vnet_spoke" {
+  source = "../../modules/03-vnet-spoke"
 
   providers = {
     azurerm              = azurerm
@@ -20,44 +63,17 @@ module "vnet-spoke" {
   azure_reserved_subnets  = local.azure_reserved_subnets
   azure_delegated_subnets = local.azure_delegated_subnets
 
-  tags = local.common_tags
-}
-
-# =============================================================================
-# Network Verifier
-# =============================================================================
-# Reachability analysis for spoke-to-hub connectivity testing.
-# Run analysis from Azure Portal: Network Manager > Verifier Workspace > Run
-# =============================================================================
-
-module "network_verifier" {
-  source = "../../../03-platform-connectivity/modules/03-network-verifier"
-
-  name                    = "nm-${local.landing_zone}-${local.environment}-${local.location_short}-01"
-  verifier_workspace_name = "vw-${local.landing_zone}-${local.environment}-${local.location_short}-01"
-  resource_group_name     = module.vnet-spoke.resource_group_name
-  location                = local.location
-  scope_subscription_ids = [
-    "/subscriptions/${local.connectivity_subscription_id}",
-    "/subscriptions/${local.subscription_id}"
-  ]
+  # Network verification configuration
+  verifier_workspace_id           = module.network_manager.verifier_workspace_id
+  verification_source_subnet_name = local.verification_source_subnet_name
+  verification_destination_subnet = local.hub_subnets["snet-shared-services-co-${local.environment}-${local.location_short}-01"]
 
   tags = local.common_tags
 }
 
-module "network_verifier_intents_spoke" {
-  source = "../../../03-platform-connectivity/modules/03b-network-verifier-intents-spoke"
-
-  verifier_workspace_id = module.network_verifier.verifier_workspace_id
-
-  spoke_subnet = {
-    id             = module.vnet-spoke.spoke.lz_managed_subnets["snet-app-${local.landing_zone}-${local.environment}-${local.location_short}-01"].id
-    name           = "snet-app-${local.landing_zone}-${local.environment}-${local.location_short}-01"
-    address_prefix = module.vnet-spoke.spoke.lz_managed_subnets["snet-app-${local.landing_zone}-${local.environment}-${local.location_short}-01"].address_prefix
-  }
-
-  hub_subnet = local.hub_subnets["snet-shared-services-co-${local.environment}-${local.location_short}-01"]
-}
+# =============================================================================
+# Key Vault
+# =============================================================================
 
 module "key_vault" {
   source = "../../modules/key-vault"
@@ -66,7 +82,7 @@ module "key_vault" {
   resource_group_name        = "rg-security-${local.landing_zone}-${local.environment}-${local.location_short}-01"
   location                   = local.location
   tenant_id                  = local.tenant_id
-  log_analytics_workspace_id = "" # Add Log Analytics workspace ID if diagnostic settings are enabled
+  log_analytics_workspace_id = module.log_analytics.id
 
   tags = local.common_tags
 }
