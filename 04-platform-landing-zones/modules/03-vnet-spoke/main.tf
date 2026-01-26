@@ -44,22 +44,3 @@ resource "azurerm_virtual_network_peering" "spoke_to_hub" {
   allow_forwarded_traffic   = true
   use_remote_gateways       = var.use_remote_gateways
 }
-
-# =============================================================================
-# Network Verification (Integrated)
-# =============================================================================
-# Embedded network verifier intent to test connectivity from app subnet to hub.
-# =============================================================================
-
-resource "azurerm_network_manager_verifier_workspace_reachability_analysis_intent" "spoke_to_hub" {
-  source_resource_id      = azurerm_subnet.lz_managed[var.verification_source_subnet_name].id
-  destination_resource_id = var.verification_destination_subnet.id
-
-  ip_traffic {
-    source_ips        = azurerm_subnet.lz_managed[var.verification_source_subnet_name].address_prefixes
-    source_ports      = ["*"]
-    destination_ips   = var.verification_destination_subnet.address_prefixes
-    destination_ports = var.verification_destination_ports
-    protocols         = var.verification_protocols
-  }
-}
