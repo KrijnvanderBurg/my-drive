@@ -27,7 +27,7 @@ module "network_manager" {
 
   name                    = "nm-${local.landing_zone}-${local.environment}-${local.location_short}-01"
   verifier_workspace_name = "vw-${local.landing_zone}-${local.environment}-${local.location_short}-01"
-  resource_group_name     = "rg-connectivity-${local.landing_zone}-${local.environment}-${local.location_short}-01"
+  resource_group_name     = "rg-netmgr-${local.landing_zone}-${local.environment}-${local.location_short}-01"
   location                = local.location
   scope_subscription_ids  = ["/subscriptions/${local.subscription_id}"]
 
