@@ -87,15 +87,13 @@ variable "azure_delegated_subnets" {
 # =============================================================================
 
 variable "verifier_workspace_id" {
-  description = "Network Manager Verifier Workspace ID for embedded network verification (optional)"
+  description = "Network Manager Verifier Workspace ID for embedded network verification"
   type        = string
-  default     = null
 }
 
 variable "verification_source_subnet_name" {
   description = "Name of the source subnet for network verification (must be in lz_managed_subnets)"
   type        = string
-  default     = null
 }
 
 variable "verification_destination_subnet" {
@@ -105,7 +103,6 @@ variable "verification_destination_subnet" {
     name             = string
     address_prefixes = list(string)
   })
-  default = null
 }
 
 variable "verification_destination_ports" {

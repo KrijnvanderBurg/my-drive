@@ -49,17 +49,9 @@ resource "azurerm_virtual_network_peering" "spoke_to_hub" {
 # Network Verification (Integrated)
 # =============================================================================
 # Embedded network verifier intent to test connectivity from app subnet to hub.
-# Requires verifier_workspace_id, verification_source_subnet_name, and
-# verification_destination_subnet to be provided.
 # =============================================================================
 
 resource "azurerm_network_manager_verifier_workspace_reachability_analysis_intent" "spoke_to_hub" {
-  count = var.verifier_workspace_id != null && var.verification_source_subnet_name != null ? 1 : 0
-
-  name                  = "intent-${var.verification_source_subnet_name}-to-${var.verification_destination_subnet.name}"
-  verifier_workspace_id = var.verifier_workspace_id
-  description           = "Verify ${var.verification_source_subnet_name} can reach ${var.verification_destination_subnet.name}"
-
   source_resource_id      = azurerm_subnet.lz_managed[var.verification_source_subnet_name].id
   destination_resource_id = var.verification_destination_subnet.id
 
