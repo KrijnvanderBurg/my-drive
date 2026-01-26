@@ -75,14 +75,14 @@ module "vnet_spoke" {
 # Key Vault
 # =============================================================================
 
-module "key_vault" {
-  source = "../../modules/key-vault"
+# module "key_vault" {
+#   source = "../../modules/key-vault"
 
-  name                       = "kv-${local.landing_zone}-${local.environment}-${local.location_short}-01"
-  resource_group_name        = "rg-security-${local.landing_zone}-${local.environment}-${local.location_short}-01"
-  location                   = local.location
-  tenant_id                  = local.tenant_id
-  log_analytics_workspace_id = module.log_analytics.id
+#   name                       = "kv-${local.landing_zone}-${local.environment}-${local.location_short}-01"
+#   resource_group_name        = "rg-security-${local.landing_zone}-${local.environment}-${local.location_short}-01"
+#   location                   = local.location
+#   tenant_id                  = local.tenant_id
+#   log_analytics_workspace_id = module.log_analytics.id
 
-  tags = local.common_tags
-}
+#   tags = local.common_tags
+# }
