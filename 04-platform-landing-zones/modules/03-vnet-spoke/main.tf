@@ -52,13 +52,17 @@ resource "azurerm_virtual_network_peering" "spoke_to_hub" {
 # =============================================================================
 
 resource "azurerm_network_manager_verifier_workspace_reachability_analysis_intent" "spoke_to_hub" {
-  name                         = "intent-${var.verification_source_subnet_name}-to-${var.verification_destination_subnet.name}"
-  verifier_workspace_id        = var.verifier_workspace_id
-  source_resource_id           = azurerm_subnet.lz_managed[var.verification_source_subnet_name].id
-  destination_resource_id      = var.verification_destination_subnet.id
-  description                  = "Verify connectivity from ${var.verification_source_subnet_name} to hub ${var.verification_destination_subnet.name}"
-  ip_traffic_source_ips        = azurerm_subnet.lz_managed[var.verification_source_subnet_name].address_prefixes
-  ip_traffic_destination_ips   = var.verification_destination_subnet.address_prefixes
-  ip_traffic_protocols         = var.verification_protocols
-  ip_traffic_destination_ports = var.verification_destination_ports
+  name                    = "intent-${var.verification_source_subnet_name}-to-${var.verification_destination_subnet.name}"
+  verifier_workspace_id   = var.verifier_workspace_id
+  source_resource_id      = azurerm_subnet.lz_managed[var.verification_source_subnet_name].id
+  destination_resource_id = var.verification_destination_subnet.id
+  description             = "Verify connectivity from ${var.verification_source_subnet_name} to hub ${var.verification_destination_subnet.name}"
+
+  ip_traffic {
+    source_ips        = azurerm_subnet.lz_managed[var.verification_source_subnet_name].address_prefixes
+    source_ports      = ["*"]
+    destination_ips   = var.verification_destination_subnet.address_prefixes
+    destination_ports = var.verification_destination_ports
+    protocols         = var.verification_protocols
+  }
 }
