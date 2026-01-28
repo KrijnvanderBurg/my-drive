@@ -25,3 +25,12 @@ repos:
         language: system
         files: \.tf(vars)?$
         pass_filenames: true
+
+  - repo: local
+    hooks:
+      - id: tofu-validate
+        name: OpenTofu validate
+        entry: tofu validate
+        language: system
+        files: \.tf(vars)?$
+        pass_filenames: false
