@@ -25,22 +25,13 @@ resource "azurerm_resource_group" "this" {
   tags = var.tags
 }
 
-# =============================================================================
-# Log Analytics Resources
-# =============================================================================
-resource "azurerm_log_analytics_workspace" "this" {
-  name                = local.log_analytics_name
-  resource_group_name = azurerm_resource_group.this.name
-  location            = azurerm_resource_group.this.location
-  sku                 = "PerGB2018"
-  retention_in_days   = var.log_analytics_retention_in_days
-
-  tags = var.tags
-}
+# 01-log-analytics
+# 02-spoke-vnet
 
 # =============================================================================
 # Key Vault Resources
 # =============================================================================
+
 resource "azurerm_key_vault" "this" {
   name                          = local.key_vault_name
   resource_group_name           = azurerm_resource_group.this.name
@@ -48,7 +39,7 @@ resource "azurerm_key_vault" "this" {
   tenant_id                     = var.tenant_id
   sku_name                      = "standard"
   soft_delete_retention_days    = 30
-  purge_protection_enabled      = false
+  purge_protection_enabled      = true
   rbac_authorization_enabled    = true
   public_network_access_enabled = false
 
@@ -71,41 +62,4 @@ resource "azurerm_monitor_diagnostic_setting" "key_vault" {
   enabled_metric {
     category = "AllMetrics"
   }
-}
-
-# =============================================================================
-# Spoke Network Resources
-# =============================================================================
-
-resource "azurerm_virtual_network" "this" {
-  name                = local.vnet_name
-  location            = azurerm_resource_group.this.location
-  resource_group_name = azurerm_resource_group.this.name
-  address_space       = var.address_space
-
-  tags = var.tags
-}
-
-# =============================================================================
-# Peering
-# =============================================================================
-
-resource "azurerm_virtual_network_peering" "hub_to_spoke" {
-  provider = azurerm.connectivity
-
-  name                      = "peer-${var.hub_vnet_name}-to-${local.vnet_name}"
-  resource_group_name       = var.hub_resource_group_name
-  virtual_network_name      = var.hub_vnet_name
-  remote_virtual_network_id = azurerm_virtual_network.this.id
-  allow_forwarded_traffic   = true
-  use_remote_gateways       = false
-}
-
-resource "azurerm_virtual_network_peering" "spoke_to_hub" {
-  name                      = "peer-${local.vnet_name}-to-${var.hub_vnet_name}"
-  resource_group_name       = azurerm_resource_group.this.name
-  virtual_network_name      = azurerm_virtual_network.this.name
-  remote_virtual_network_id = var.hub_vnet_id
-  allow_forwarded_traffic   = true
-  use_remote_gateways       = false
 }
