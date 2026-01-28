@@ -12,6 +12,9 @@ locals {
   log_analytics_name  = "law-${var.landing_zone}-${var.environment}-${var.location_short}-01"
   key_vault_name      = "kv-${var.landing_zone}-${var.environment}-${var.location_short}-01"
   vnet_name           = "vnet-spoke-${var.landing_zone}-${var.environment}-${var.location_short}-01"
+
+  # Storage account name: lowercase, no hyphens, 3-24 chars
+  storage_account_logs_name = replace(lower("st${var.landing_zone}logs${var.environment}${var.location_short}"), "-", "")
 }
 
 resource "azurerm_resource_group" "this" {

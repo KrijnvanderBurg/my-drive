@@ -24,6 +24,25 @@ output "log_analytics_primary_shared_key" {
 }
 
 # =============================================================================
+# Storage Account Outputs (Log Export)
+# =============================================================================
+
+output "storage_account_logs_id" {
+  description = "ID of the storage account for log exports"
+  value       = azurerm_storage_account.logs.id
+}
+
+output "storage_account_logs_name" {
+  description = "Name of the storage account for log exports"
+  value       = azurerm_storage_account.logs.name
+}
+
+output "storage_container_logs_name" {
+  description = "Name of the storage container for log exports"
+  value       = azurerm_storage_container.logs.name
+}
+
+# =============================================================================
 # Key Vault Outputs
 # =============================================================================
 
