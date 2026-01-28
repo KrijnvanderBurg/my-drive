@@ -90,9 +90,3 @@ resource "azurerm_log_analytics_workspace_table" "container_logs_basic" {
   name         = "ContainerLogV2" # High-volume table
   plan         = "Basic"          # 50% cost reduction
 }
-
-resource "azurerm_log_analytics_workspace_table" "syslog_basic" {
-  workspace_id = azurerm_log_analytics_workspace.this.id
-  name         = "Syslog"
-  plan         = "Basic"
-}
