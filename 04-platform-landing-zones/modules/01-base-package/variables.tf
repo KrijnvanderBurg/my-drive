@@ -1,17 +1,30 @@
-variable "name" {
-  description = "Name of the spoke virtual network"
+# =============================================================================
+# Naming Variables
+# =============================================================================
+
+variable "landing_zone" {
+  description = "Landing zone identifier (e.g., 'drives')"
   type        = string
 }
 
-variable "resource_group_name" {
-  description = "Name of the resource group"
+variable "environment" {
+  description = "Environment (e.g., 'dev', 'prod')"
   type        = string
 }
 
-variable "hub_resource_group_name" {
-  description = "Name of the hub resource group for peering"
+variable "location_short" {
+  description = "Short location code (e.g., 'weu', 'gwc')"
   type        = string
 }
+
+variable "tenant_id" {
+  description = "Azure AD tenant ID"
+  type        = string
+}
+
+# =============================================================================
+# Hub Peering Variables
+# =============================================================================
 
 variable "hub_vnet_id" {
   description = "Hub VNet ID for peering"
@@ -23,10 +36,9 @@ variable "hub_vnet_name" {
   type        = string
 }
 
-variable "use_remote_gateways" {
-  description = "Use hub's gateways for spoke traffic"
-  type        = bool
-  default     = false
+variable "hub_resource_group_name" {
+  description = "Name of the hub resource group for peering"
+  type        = string
 }
 
 variable "location" {

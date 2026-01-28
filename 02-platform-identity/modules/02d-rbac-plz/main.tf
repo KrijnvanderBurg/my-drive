@@ -40,6 +40,13 @@ resource "azurerm_role_assignment" "tfstate" {
   principal_id         = var.principal_id
 }
 
+# Network Contributor on connectivity subscription for Network Manager scope
+resource "azurerm_role_assignment" "connectivity_network_contributor" {
+  scope                = var.connectivity_subscription_scope
+  role_definition_name = "Network Contributor"
+  principal_id         = var.principal_id
+}
+
 # Custom role for VNet peering only
 resource "azurerm_role_definition" "vnet_peering_only" {
   name  = "VNet Peering Only - PLZ Drives"

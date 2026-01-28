@@ -16,3 +16,8 @@ variable "tfstate_storage_account_id" {
   description = "The ID of the Terraform state storage account"
   type        = string
 }
+
+variable "connectivity_subscription_scope" {
+  description = "The scope of the connectivity subscription"
+  type        = string
+}

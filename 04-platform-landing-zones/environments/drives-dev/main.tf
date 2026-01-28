@@ -1,36 +1,37 @@
-module "vnet-spoke" {
-  source = "../../modules/01-vnet-spoke"
+# =============================================================================
+# Landing Zone
+# =============================================================================
+# Complete landing zone with Log Analytics, Spoke VNet, and Key Vault.
+# Names are generated automatically by the module following naming conventions.
+# =============================================================================
+
+module "landing_zone" {
+  source = "../../modules/01-base-package"
 
   providers = {
     azurerm              = azurerm
     azurerm.connectivity = azurerm.connectivity
   }
 
-  name                = "vnet-spoke-${local.landing_zone}-on-${local.environment}-${local.location_short}-01"
-  resource_group_name = "rg-connectivity-${local.landing_zone}-${local.environment}-${local.location_short}-01"
-  location            = local.location
-  address_space       = [local.spoke_cidr]
+  # Naming inputs
+  landing_zone   = local.landing_zone
+  environment    = local.environment
+  location_short = local.location_short
 
+  # Core configuration
+  location      = local.location
+  address_space = [local.spoke_cidr]
+  tenant_id     = local.tenant_id
+
+  # Hub peering
   hub_vnet_id             = local.hub_vnet_id
   hub_vnet_name           = local.hub_vnet_name
-  use_remote_gateways     = false # Set to true when gateways are deployed in the hub
   hub_resource_group_name = local.hub_resource_group_name
 
+  # Subnets
   lz_managed_subnets      = local.lz_managed_subnets
   azure_reserved_subnets  = local.azure_reserved_subnets
   azure_delegated_subnets = local.azure_delegated_subnets
-
-  tags = local.common_tags
-}
-
-module "key_vault" {
-  source = "../../modules/key-vault"
-
-  name                       = "kv-${local.landing_zone}-${local.environment}-${local.location_short}-01"
-  resource_group_name        = "rg-security-${local.landing_zone}-${local.environment}-${local.location_short}-01"
-  location                   = local.location
-  tenant_id                  = local.tenant_id
-  log_analytics_workspace_id = "" # Add Log Analytics workspace ID if diagnostic settings are enabled
 
   tags = local.common_tags
 }

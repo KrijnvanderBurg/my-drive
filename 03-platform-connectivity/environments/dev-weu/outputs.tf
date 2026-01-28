@@ -9,6 +9,7 @@ output "hub" {
     name                = module.hub.name
     resource_group_name = module.hub.resource_group_name
     address_space       = module.hub.address_space
+    subnets             = module.hub.subnets
   }
 }
 

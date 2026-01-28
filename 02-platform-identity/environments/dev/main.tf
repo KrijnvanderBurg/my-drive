@@ -67,22 +67,13 @@ module "rbac_platform_connectivity" {
   depends_on = [module.sp_platform_connectivity]
 }
 
-module "rbac_alz_drives" {
-  source = "../../modules/02c-rbac-alz-drives"
-
-  principal_id                 = module.sp_alz_drives.object_id
-  alz_drive_subscription_scope = local.alz_drive_subscription_scope
-  tfstate_storage_account_id   = local.tfstate_storage_account_id
-
-  depends_on = [module.sp_alz_drives]
-}
-
 module "rbac_plz_drives" {
   source = "../../modules/02d-rbac-plz"
 
-  principal_id                  = module.sp_plz_drives.object_id
-  plz_drives_subscription_scope = local.plz_drives_subscription_scope
-  tfstate_storage_account_id    = local.tfstate_storage_account_id
+  principal_id                    = module.sp_plz_drives.object_id
+  plz_drives_subscription_scope   = local.plz_drives_subscription_scope
+  connectivity_subscription_scope = local.pl_connectivity_subscription_scope
+  tfstate_storage_account_id      = local.tfstate_storage_account_id
 
   depends_on = [module.sp_plz_drives]
 }
@@ -91,7 +82,7 @@ module "rbac_plz_drives" {
 # Security Groups
 # =============================================================================
 module "sg_rbac_platform_contributors" {
-  source = "../../modules/06-entra-group"
+  source = "../../modules/03-entra-group"
 
   display_name       = "sg-rbac-pl-contributors-${local.environment}-na-01"
   description        = "Members have Contributor access to platform subscriptions via Azure RBAC"
@@ -102,7 +93,7 @@ module "sg_rbac_platform_contributors" {
 # Monitoring Alerts
 # =============================================================================
 module "monitoring_alerts" {
-  source = "../../modules/07-monitoring-alerts"
+  source = "../../modules/04-monitoring-alerts"
 
   environment     = local.environment
   location        = local.location

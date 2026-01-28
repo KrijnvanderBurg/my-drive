@@ -1,0 +1,92 @@
+# =============================================================================
+# Log Analytics Resources
+# =============================================================================
+
+resource "azurerm_log_analytics_workspace" "this" {
+  name                = local.log_analytics_name
+  resource_group_name = azurerm_resource_group.this.name
+  location            = azurerm_resource_group.this.location
+  sku                 = "PerGB2018"
+  retention_in_days   = 30
+
+  daily_quota_gb = 1 # Daily ingestion cap in GB (prevents unexpected costs)
+  tags           = var.tags
+}
+
+# =============================================================================
+# Storage Account for Log Export (Long-term retention)
+# =============================================================================
+
+resource "azurerm_storage_account" "logs" {
+  name                     = local.storage_account_logs_name
+  resource_group_name      = azurerm_resource_group.this.name
+  location                 = azurerm_resource_group.this.location
+  account_tier             = "Standard"
+  account_replication_type = "LRS" # Use LRS for cost savings
+  account_kind             = "StorageV2"
+
+  # Cost optimization: disable features not needed for log storage
+  min_tls_version                 = "TLS1_2"
+  allow_nested_items_to_be_public = false
+
+  tags = var.tags
+}
+
+resource "azurerm_storage_container" "logs" {
+  name                  = "law-export"
+  storage_account_id    = azurerm_storage_account.logs.id
+  container_access_type = "private"
+}
+
+# Lifecycle policy: Hot (30d) → Cool (90d) → Archive (indefinite)
+resource "azurerm_storage_management_policy" "logs_lifecycle" {
+  storage_account_id = azurerm_storage_account.logs.id
+
+  rule {
+    name    = "log-retention-policy"
+    enabled = true
+
+    filters {
+      prefix_match = ["law-export/"]
+      blob_types   = ["blockBlob"]
+    }
+
+    actions {
+      base_blob {
+        tier_to_cool_after_days_since_modification_greater_than    = 30 # Move to cool after 30 days
+        tier_to_archive_after_days_since_modification_greater_than = 60 # Archive after 60 days
+        delete_after_days_since_modification_greater_than          = 90 # Delete after 90 days (optional)
+      }
+    }
+  }
+}
+
+# =============================================================================
+# Log Analytics Data Export (Continuous export to Storage)
+# =============================================================================
+
+resource "azurerm_log_analytics_data_export_rule" "to_storage" {
+  name                    = "export-to-storage"
+  resource_group_name     = azurerm_resource_group.this.name
+  workspace_resource_id   = azurerm_log_analytics_workspace.this.id
+  destination_resource_id = azurerm_storage_account.logs.id
+  table_names = [
+    "AzureActivity",
+    "AzureDiagnostics",
+  ]
+  enabled = true
+
+  depends_on = [azurerm_storage_container.logs]
+}
+
+# =============================================================================
+# Basic Logs Configuration for High-Volume Tables
+# =============================================================================
+# Note: Basic Logs reduce ingestion costs by 50% but have limited query capabilities
+# Configure via azurerm_log_analytics_workspace_table resource
+
+resource "azurerm_log_analytics_workspace_table" "container_logs_basic" {
+  workspace_id = azurerm_log_analytics_workspace.this.id
+  name         = "ContainerLogV2" # High-volume table
+  plan         = "Basic"
+}
