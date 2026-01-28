@@ -24,20 +24,6 @@ output "log_analytics_primary_shared_key" {
 }
 
 # =============================================================================
-# Network Manager Outputs
-# =============================================================================
-
-output "network_manager_id" {
-  description = "ID of the Network Manager"
-  value       = azurerm_network_manager.this.id
-}
-
-output "verifier_workspace_id" {
-  description = "ID of the Verifier Workspace"
-  value       = azurerm_network_manager_verifier_workspace.this.id
-}
-
-# =============================================================================
 # Key Vault Outputs
 # =============================================================================
 
@@ -54,35 +40,6 @@ output "key_vault_name" {
 output "key_vault_uri" {
   description = "URI of the Key Vault"
   value       = azurerm_key_vault.this.vault_uri
-}
-
-# =============================================================================
-# Spoke VNet Outputs
-# =============================================================================
-
-output "id" {
-  description = "ID of the spoke virtual network"
-  value       = azurerm_virtual_network.this.id
-}
-
-output "name" {
-  description = "Name of the spoke virtual network"
-  value       = azurerm_virtual_network.this.name
-}
-
-output "resource_group_id" {
-  description = "ID of the resource group"
-  value       = azurerm_resource_group.this.id
-}
-
-output "resource_group_name" {
-  description = "Resource group name of the spoke virtual network"
-  value       = azurerm_resource_group.this.name
-}
-
-output "address_space" {
-  description = "Address space of the spoke virtual network"
-  value       = azurerm_virtual_network.this.address_space
 }
 
 # =============================================================================
