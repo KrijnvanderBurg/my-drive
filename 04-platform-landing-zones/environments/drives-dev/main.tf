@@ -33,8 +33,5 @@ module "landing_zone" {
   azure_reserved_subnets  = local.azure_reserved_subnets
   azure_delegated_subnets = local.azure_delegated_subnets
 
-  # Optional overrides
-  log_analytics_retention_in_days = 30
-
   tags = local.common_tags
 }
