@@ -1,17 +1,40 @@
-variable "name" {
-  description = "Name of the spoke virtual network"
+# =============================================================================
+# Naming Variables
+# =============================================================================
+
+variable "landing_zone" {
+  description = "Landing zone identifier (e.g., 'drives')"
   type        = string
 }
 
-variable "resource_group_name" {
-  description = "Name of the resource group"
+variable "environment" {
+  description = "Environment (e.g., 'dev', 'prod')"
   type        = string
 }
 
-variable "hub_resource_group_name" {
-  description = "Name of the hub resource group for peering"
+variable "location_short" {
+  description = "Short location code (e.g., 'weu', 'gwc')"
   type        = string
 }
+
+variable "tenant_id" {
+  description = "Azure AD tenant ID"
+  type        = string
+}
+
+# =============================================================================
+# Optional Overrides
+# =============================================================================
+
+variable "log_analytics_retention_in_days" {
+  description = "Data retention in days (30-730)"
+  type        = number
+  default     = 30
+}
+
+# =============================================================================
+# Hub Peering Variables
+# =============================================================================
 
 variable "hub_vnet_id" {
   description = "Hub VNet ID for peering"
@@ -20,6 +43,11 @@ variable "hub_vnet_id" {
 
 variable "hub_vnet_name" {
   description = "Hub VNet name for peering reference"
+  type        = string
+}
+
+variable "hub_resource_group_name" {
+  description = "Name of the hub resource group for peering"
   type        = string
 }
 
@@ -74,39 +102,4 @@ variable "azure_delegated_subnets" {
     })
   }))
   default = {}
-}
-
-# =============================================================================
-# Network Verification Configuration
-# =============================================================================
-
-variable "verifier_workspace_id" {
-  description = "Network Manager Verifier Workspace ID for embedded network verification"
-  type        = string
-}
-
-variable "verification_source_subnet_name" {
-  description = "Name of the source subnet for network verification (must be in lz_managed_subnets)"
-  type        = string
-}
-
-variable "verification_destination_subnet" {
-  description = "Destination subnet for network verification (e.g., hub shared services subnet)"
-  type = object({
-    id               = string
-    name             = string
-    address_prefixes = list(string)
-  })
-}
-
-variable "verification_destination_ports" {
-  description = "Destination ports to test in network verification"
-  type        = list(string)
-  default     = ["*"]
-}
-
-variable "verification_protocols" {
-  description = "Protocols to test in network verification"
-  type        = list(string)
-  default     = ["Any"]
 }

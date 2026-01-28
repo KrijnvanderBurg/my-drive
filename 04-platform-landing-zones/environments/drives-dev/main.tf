@@ -1,90 +1,40 @@
 # =============================================================================
-# Log Analytics
+# Landing Zone
 # =============================================================================
-# Centralized logging and monitoring workspace for the landing zone.
-# =============================================================================
-
-module "log_analytics" {
-  source = "../../modules/01-log-analytics"
-
-  name                = "law-${local.landing_zone}-${local.environment}-${local.location_short}-01"
-  resource_group_name = "rg-logs-${local.landing_zone}-${local.environment}-${local.location_short}-01"
-  location            = local.location
-  retention_in_days   = 30
-
-  tags = local.common_tags
-}
-
-# =============================================================================
-# Network Manager
-# =============================================================================
-# Network Manager with Verifier Workspace for landing zone connectivity testing.
-# Verification intents are embedded in the vnet-spoke module.
+# Complete landing zone with Log Analytics, Spoke VNet, and Key Vault.
+# Names are generated automatically by the module following naming conventions.
 # =============================================================================
 
-module "network_manager" {
-  source = "../../modules/02-network-manager"
-
-  name                    = "nm-${local.landing_zone}-${local.environment}-${local.location_short}-01"
-  verifier_workspace_name = "vw-${local.landing_zone}-${local.environment}-${local.location_short}-01"
-  resource_group_name     = "rg-netmgr-${local.landing_zone}-${local.environment}-${local.location_short}-01"
-  location                = local.location
-  scope_subscription_ids = [
-    local.subscription_scope,
-    local.connectivity_subscription_scope
-  ]
-
-  tags = local.common_tags
-}
-
-# =============================================================================
-# Spoke VNet
-# =============================================================================
-# Landing zone spoke virtual network with peering to hub and embedded
-# network verification from app subnet to hub shared services.
-# =============================================================================
-
-module "vnet_spoke" {
-  source = "../../modules/03-vnet-spoke"
+module "landing_zone" {
+  source = "../../modules/01-base-package"
 
   providers = {
     azurerm              = azurerm
     azurerm.connectivity = azurerm.connectivity
   }
 
-  name                = "vnet-spoke-${local.landing_zone}-on-${local.environment}-${local.location_short}-01"
-  resource_group_name = "rg-connectivity-${local.landing_zone}-${local.environment}-${local.location_short}-01"
-  location            = local.location
-  address_space       = [local.spoke_cidr]
+  # Naming inputs
+  landing_zone   = local.landing_zone
+  environment    = local.environment
+  location_short = local.location_short
 
+  # Core configuration
+  location      = local.location
+  address_space = [local.spoke_cidr]
+  tenant_id     = local.tenant_id
+
+  # Hub peering
   hub_vnet_id             = local.hub_vnet_id
   hub_vnet_name           = local.hub_vnet_name
   hub_resource_group_name = local.hub_resource_group_name
 
+  # Subnets
   lz_managed_subnets      = local.lz_managed_subnets
   azure_reserved_subnets  = local.azure_reserved_subnets
   azure_delegated_subnets = local.azure_delegated_subnets
 
-  # Network verification configuration
-  verifier_workspace_id           = module.network_manager.verifier_workspace_id
-  verification_source_subnet_name = local.verification_source_subnet_name
-  verification_destination_subnet = local.hub_subnets["snet-shared-services-co-${local.environment}-${local.location_short}-01"]
+  # Optional overrides
+  log_analytics_retention_in_days = 30
 
   tags = local.common_tags
 }
-
-# =============================================================================
-# Key Vault
-# =============================================================================
-
-# module "key_vault" {
-#   source = "../../modules/0-4key-vault"
-
-#   name                       = "kv-${local.landing_zone}-${local.environment}-${local.location_short}-01"
-#   resource_group_name        = "rg-security-${local.landing_zone}-${local.environment}-${local.location_short}-01"
-#   location                   = local.location
-#   tenant_id                  = local.tenant_id
-#   log_analytics_workspace_id = module.log_analytics.id
-
-#   tags = local.common_tags
-# }
