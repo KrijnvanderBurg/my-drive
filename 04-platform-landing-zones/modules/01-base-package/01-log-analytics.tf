@@ -7,12 +7,10 @@ resource "azurerm_log_analytics_workspace" "this" {
   resource_group_name = azurerm_resource_group.this.name
   location            = azurerm_resource_group.this.location
   sku                 = "PerGB2018"
-  retention_in_days   = var.log_analytics_retention_in_days # 7-30 days for cost optimization
+  retention_in_days   = 7
 
-  # Daily ingestion cap in GB (prevents unexpected costs)
-  daily_quota_gb = var.log_analytics_daily_quota_gb # e.g., 1, 5, 10 GB
-
-  tags = var.tags
+  daily_quota_gb = 1 # Daily ingestion cap in GB (prevents unexpected costs)
+  tags           = var.tags
 }
 
 # =============================================================================
@@ -28,7 +26,6 @@ resource "azurerm_storage_account" "logs" {
   account_kind             = "StorageV2"
 
   # Cost optimization: disable features not needed for log storage
-  enable_https_traffic_only       = true
   min_tls_version                 = "TLS1_2"
   allow_nested_items_to_be_public = false
 
@@ -37,7 +34,7 @@ resource "azurerm_storage_account" "logs" {
 
 resource "azurerm_storage_container" "logs" {
   name                  = "law-export"
-  storage_account_name  = azurerm_storage_account.logs.name
+  storage_account_id    = azurerm_storage_account.logs.id
   container_access_type = "private"
 }
 
@@ -56,9 +53,9 @@ resource "azurerm_storage_management_policy" "logs_lifecycle" {
 
     actions {
       base_blob {
-        tier_to_cool_after_days_since_modification_greater_than    = 30   # Move to cool after 30 days
-        tier_to_archive_after_days_since_modification_greater_than = 120  # Archive after 120 days
-        delete_after_days_since_modification_greater_than          = 2555 # Delete after 7 years (optional)
+        tier_to_cool_after_days_since_modification_greater_than    = 14 # Move to cool after 7 days
+        tier_to_archive_after_days_since_modification_greater_than = 30 # Archive after 30 days
+        delete_after_days_since_modification_greater_than          = 60 # Delete after 7 years (optional)
       }
     }
   }
@@ -73,8 +70,11 @@ resource "azurerm_log_analytics_data_export_rule" "to_storage" {
   resource_group_name     = azurerm_resource_group.this.name
   workspace_resource_id   = azurerm_log_analytics_workspace.this.id
   destination_resource_id = azurerm_storage_account.logs.id
-  table_names             = var.log_export_table_names # Selective tables only
-  enabled                 = true
+  table_names = [
+    "AzureActivity",
+    "AzureDiagnostics",
+  ]
+  enabled = true
 
   depends_on = [azurerm_storage_container.logs]
 }
@@ -86,7 +86,6 @@ resource "azurerm_log_analytics_data_export_rule" "to_storage" {
 # Configure via azurerm_log_analytics_workspace_table resource
 
 resource "azurerm_log_analytics_workspace_table" "container_logs_basic" {
-  count        = var.enable_basic_logs ? 1 : 0
   workspace_id = azurerm_log_analytics_workspace.this.id
   name         = "ContainerLogV2" # High-volume table
   plan         = "Basic"          # 50% cost reduction
@@ -96,7 +95,6 @@ resource "azurerm_log_analytics_workspace_table" "container_logs_basic" {
 }
 
 resource "azurerm_log_analytics_workspace_table" "syslog_basic" {
-  count             = var.enable_basic_logs ? 1 : 0
   workspace_id      = azurerm_log_analytics_workspace.this.id
   name              = "Syslog"
   plan              = "Basic"

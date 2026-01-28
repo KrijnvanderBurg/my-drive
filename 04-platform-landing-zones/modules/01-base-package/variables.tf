@@ -23,47 +23,6 @@ variable "tenant_id" {
 }
 
 # =============================================================================
-# Optional Overrides
-# =============================================================================
-
-variable "log_analytics_retention_in_days" {
-  description = "Data retention in days for Log Analytics (7-30 recommended for cost optimization)"
-  type        = number
-  default     = 30
-  validation {
-    condition     = var.log_analytics_retention_in_days >= 7 && var.log_analytics_retention_in_days <= 730
-    error_message = "Retention must be between 7 and 730 days"
-  }
-}
-
-variable "log_analytics_daily_quota_gb" {
-  description = "Daily ingestion quota in GB for cost control (-1 for unlimited)"
-  type        = number
-  default     = 5 # Adjust based on your environment size
-}
-
-variable "enable_basic_logs" {
-  description = "Enable Basic Logs tier for high-volume tables (50% cost reduction)"
-  type        = bool
-  default     = true
-}
-
-variable "log_export_table_names" {
-  description = "Log Analytics tables to export to storage (selective for cost optimization)"
-  type        = list(string)
-  default = [
-    "AzureActivity",
-    "AzureDiagnostics",
-  ]
-}
-
-variable "alert_action_group_id" {
-  description = "Action group ID for Log Analytics alerts (optional)"
-  type        = string
-  default     = null
-}
-
-# =============================================================================
 # Hub Peering Variables
 # =============================================================================
 
